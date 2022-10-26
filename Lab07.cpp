@@ -106,14 +106,22 @@ void callBack(const Interface* pUI, void* p)
    pDemo->angleShip += 0.02;
    pDemo->phaseStar++;
 
-   // seconds
+   // GOAL: Get an item to orbit the Earth
+ 
+   // seconds between each update (Find a way not to hard-code)
    int dTime = 48;
+   
+   // The velocity of the item
+   // Use gravity equation and others to calculate
    double velocity = 0;
 
+   // Adjust the position given the velocity and time
    Position currentSputnik;
    double xHubble = currentSputnik.getMetersX() + (velocity * dTime);
    double yHubble = currentSputnik.getMetersY() + (velocity * dTime);
    Position newSputnik = Position(xHubble, yHubble);
+
+   // Current error: position starts at rand, posisbly off the screen
 
    // TODO: Give + operator to Position class
    pDemo->ptSputnik = newSputnik;
