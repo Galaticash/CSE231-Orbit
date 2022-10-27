@@ -176,8 +176,6 @@ public:
       // Velocity required to remain in GEO orbit: -3,100.0 m/s 
       // The sign is to match earths rotation direction when starting directly above it
 
-
-
       //ptSputnik.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
       //ptSputnik.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
@@ -241,23 +239,28 @@ void callBack(const Interface* pUI, void* p)
    //pDemo->angleShip += 0.02;
    pDemo->phaseStar++;
 
-   // GOAL: Get an item to orbit the Earth
- 
-   // seconds between each update (Find a way not to hard-code)
-   int dTime = 48;
+   // GOAL: Get an item to orbit the Earth   
    
-   // The velocity of the item
-   // Use gravity equation and others so it orbits instead of having const velocity
-   double velocity = -3100.0;
-   // TODO: Velocity x/y should differ based on current position/gravity pull so it can maintain orbit
+   // TODO: Update inside dDemo's class, recalculate each frame?
+   // Calculates the current values give current position
+   double angle = gravityDirection(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());
+   double height = heightAboveEarth(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());
+   double totalAcc = gravityEquation(height);
+   double vAcc = verticalAcceleration(totalAcc, angle);
+   double hAcc = horizontalAcceleration(totalAcc, angle);
+
+   double velocity = -3100; // TODO: Change sign
+
+   double xVelocity = velocity * (hAcc > 0 ? - 1 : 1);
+   double yVelocity = velocity * (vAcc < 0 ? -1 : 1);
 
    // Adjust the position given the velocity and time
-   double xGPS = pDemo->ptGPS.getMetersX() + (velocity * dTime);
-   double yGPS = pDemo->ptGPS.getMetersY() + (velocity * dTime);
+   // TODO: Add acceleration. Should acceleration be the only change, calculating position and velocuity from that?
+   double xGPS = distanceFormula(pDemo->ptGPS.getMetersX(), xVelocity, hAcc);
+   double yGPS = distanceFormula(pDemo->ptGPS.getMetersY(), yVelocity, vAcc);
 
    // Update the GPS's current position
-   pDemo->ptGPS = Position(xGPS, yGPS);
-   
+   pDemo->ptGPS = Position(xGPS, yGPS);   
 
    //
    // draw everything
