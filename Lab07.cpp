@@ -11,11 +11,133 @@
  *      ??
  *****************************************************************/
 
+#include <cmath>
 #include <cassert>      // for ASSERT
 #include "uiInteract.h" // for INTERFACE
 #include "uiDraw.h"     // for RANDOM and DRAW*
-#include "position.h"      // for POINT
+#include "position.h"   // for POINT
 using namespace std;
+
+const double GRAVITY = -9.8067;           // m/s^2
+const double EARTH_RADIUS = 6378000.0;    // meters
+const double TIME = 48;                   // seconds
+
+/*************************************************************************
+ * GRAVITY DIRECTION
+ * Calculates the angle at which an object is pulled by gravity.
+ * Fromula: d = atan( xe - xs, ye - ys )
+ * d = direction of the pull of gravity      (radians)
+ * xe = horizontal position of the center of the earth : 0m
+ * ye = vertical position of the center of the earth : 0m
+ * xs = horizontal position of the satellite (meters)
+ * ys = vertical position of the satellite   (meters)
+ *************************************************************************/
+double gravityDirection(double xs, double ys) {
+   double d = atan2( ys, xs);
+   return d;
+}
+
+/*************************************************************************
+ * HEIGHT ABOVE EARTH
+ * Finds the height above the earth an object is.
+ * Formula: h = sqrt(x * x + y * y) - r
+ * h = distance between the surface of the earth and the object (meters)
+ * x = horizontal position of object   (meters)
+ * y = vertical position of object     (meters)
+ * r = radius of earth                 (meters)
+ *************************************************************************/
+double heightAboveEarth(double x, double y) {
+   double h = sqrt(x * x + y * y) - EARTH_RADIUS;
+   return h;
+}
+
+/*************************************************************************
+ * GRAVITY EQUATION
+ * This calculates the total acceleration due to earth's gravity
+ * Formula: g * ( r / ( r + h ) ) ^ 2 = gh
+ * gh = magnitude of acceleration due to gravity at altitude h (m/s^2)
+ * g  = gravity at sea level   (m/s^2)
+ * r  = radius of earth        (meters)
+ * h  = height above earth     (meters)
+ *************************************************************************/
+double gravityEquation(double h) {
+   // TODO: Figure out if it is better to repeat this equation or to use the square function
+   double gh = GRAVITY * pow(( EARTH_RADIUS / ( EARTH_RADIUS + h ) ), 2);
+   return gh;
+}
+
+/*************************************************************************
+ * HORIZONTAL ACCELERATION
+ * ddx = a * sin( angle )
+ * ddx = horizontal component of acceleration      (m/s^2)
+ * a = total acceleration                          (m/s^2)
+ * angle = angle of the direction of acceleration  (0 degrees is up)
+ *************************************************************************/
+double horizontalAcceleration(double a, double angle) {
+   double ddx = a * sin( angle );
+   return ddx;
+}
+
+/*************************************************************************
+ * VERTICAL ACCELERATION
+ * ddy = a * cos( angle )
+ * ddy = vertical component of acceleration        (m/s^2)
+ * a = total acceleration                          (m/s^2)
+ * angle = angle of the direction of acceleration  (0 degrees is up)
+ *************************************************************************/
+double verticalAcceleration(double a, double angle) {
+   double ddy = a * cos( angle );
+   return ddy;
+}
+
+/*************************************************************************
+ * DISTANCE FORMULA
+ * This formula is used for calculating the distance something travelled.
+ * Can be used for both vertical and horizontal distance.
+ * Formula: s = so + (v * t) + (.5 * a * t * t)
+ *     ex. (x = xo + (dx * t) + (.5 * ddx * t * t))
+ * s = distance            (meters)
+ * so = initial distance   (meters)
+ * v = velocity            (m/s)
+ * t = time                (seconds)
+ * a = acceleration        (m/s^2)
+ *************************************************************************/
+double distanceFormula(double so, double v, double a) {
+   double s = so + (v * TIME) + (.5 * a * TIME * TIME);
+   return s;
+}
+
+/*************************************************************************
+ * POSITION CONSTANT VELOCITY
+ * Compute the distance when given a constant velocity.
+ * Can be used for both horizontal and vertical distance.
+ * Formula: s = so + v * t
+ *     ex. (x = xo + dx * t)
+ * s  = distance           (meters)
+ * so = initial position   (meters)
+ * v  = velocity           (m/s)
+ * t  = time               (seconds)
+ *************************************************************************/
+double verticalConstantVelocity(double so, double v) {
+   double s = so + v * TIME;
+   return s;
+}
+
+/*************************************************************************
+ * VELOCITY CONSTANT ACCELERATION
+ * Compute the velocity when given a constant acceleration. 
+ * Can be used for both horizontal and vertical velocity.
+ * Formula: v = vo + a * t
+ *    ex. (dx = dxo + ddx * t)
+ * v = velocity            (m/s)
+ * vo = initial velocity   (m/s)
+ * a = acceleration        (m/s^2)
+ * t = time                (seconds)
+ *************************************************************************/
+double velocityConstantAcceleration(double vo, double a) {
+   double v = vo + a * TIME;
+   return v;
+}
 
 /*************************************************************************
  * Demo
@@ -27,12 +149,9 @@ public:
    Demo(Position ptUpperRight) :
       ptUpperRight(ptUpperRight)
    {
-      
+      /*
       ptHubble.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
       ptHubble.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
-
-      ptSputnik.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      ptSputnik.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
       ptStarlink.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
       ptStarlink.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
@@ -42,9 +161,25 @@ public:
 
       ptShip.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
       ptShip.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+      */
+      //ptGPS.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+      //ptGPS.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
-      ptGPS.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      ptGPS.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+      // Set a satellite directly above the earth in position for GEO orbit.
+      ptGPS.setMeters(0.0, 42164000.0);
+      double angle = gravityDirection(ptGPS.getMetersX(), ptGPS.getMetersY());
+      double height = heightAboveEarth(ptGPS.getMetersX(), ptGPS.getMetersY());
+      double totalAcc = gravityEquation(height);
+      double vAcc = verticalAcceleration(totalAcc, angle);
+      double hAcc = horizontalAcceleration(totalAcc, angle);
+
+      // Velocity required to remain in GEO orbit: -3,100.0 m/s 
+      // The sign is to match earths rotation direction when starting directly above it
+
+
+
+      //ptSputnik.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+      //ptSputnik.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
       ptStar.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
       ptStar.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
@@ -103,7 +238,7 @@ void callBack(const Interface* pUI, void* p)
 
    // rotate the earth
    pDemo->angleEarth += 0.01;
-   pDemo->angleShip += 0.02;
+   //pDemo->angleShip += 0.02;
    pDemo->phaseStar++;
 
    // GOAL: Get an item to orbit the Earth
@@ -112,20 +247,17 @@ void callBack(const Interface* pUI, void* p)
    int dTime = 48;
    
    // The velocity of the item
-   // Use gravity equation and others to calculate
-   double velocity = 0;
+   // Use gravity equation and others so it orbits instead of having const velocity
+   double velocity = -3100.0;
+   // TODO: Velocity x/y should differ based on current position/gravity pull so it can maintain orbit
 
    // Adjust the position given the velocity and time
-   Position currentSputnik;
-   double xHubble = currentSputnik.getMetersX() + (velocity * dTime);
-   double yHubble = currentSputnik.getMetersY() + (velocity * dTime);
-   Position newSputnik = Position(xHubble, yHubble);
+   double xGPS = pDemo->ptGPS.getMetersX() + (velocity * dTime);
+   double yGPS = pDemo->ptGPS.getMetersY() + (velocity * dTime);
 
-   // Current error: position starts at rand, posisbly off the screen
-
-   // TODO: Give + operator to Position class
-   pDemo->ptSputnik = newSputnik;
-
+   // Update the GPS's current position
+   pDemo->ptGPS = Position(xGPS, yGPS);
+   
 
    //
    // draw everything
@@ -134,13 +266,13 @@ void callBack(const Interface* pUI, void* p)
    Position pt;
 
    // draw satellites
-   drawCrewDragon(pDemo->ptCrewDragon, pDemo->angleShip);
-   drawHubble    (pDemo->ptHubble,     pDemo->angleShip);
-   drawSputnik   (pDemo->ptSputnik,    pDemo->angleShip);
-   drawStarlink  (pDemo->ptStarlink,   pDemo->angleShip);
-   drawShip      (pDemo->ptShip,       pDemo->angleShip, pUI->isSpace());
+   //drawCrewDragon(pDemo->ptCrewDragon, pDemo->angleShip);
+   //drawHubble    (pDemo->ptHubble,     pDemo->angleShip);
+   //drawSputnik   (pDemo->ptSputnik,    pDemo->angleShip);
+   //drawStarlink  (pDemo->ptStarlink,   pDemo->angleShip);
+   //drawShip      (pDemo->ptShip,       pDemo->angleShip, pUI->isSpace());
    drawGPS       (pDemo->ptGPS,        pDemo->angleShip);
-
+   /*
    // draw parts
    pt.setPixelsX(pDemo->ptCrewDragon.getPixelsX() + 20);
    pt.setPixelsY(pDemo->ptCrewDragon.getPixelsY() + 20);
@@ -154,7 +286,7 @@ void callBack(const Interface* pUI, void* p)
    pt.setPixelsX(pDemo->ptStarlink.getPixelsX() + 20);
    pt.setPixelsY(pDemo->ptStarlink.getPixelsY() + 20);
    drawStarlinkArray(pt, pDemo->angleShip);   // notice only two parameters are set
-
+   
    // draw fragments
    pt.setPixelsX(pDemo->ptSputnik.getPixelsX() + 20);
    pt.setPixelsY(pDemo->ptSputnik.getPixelsY() + 20);
@@ -162,7 +294,7 @@ void callBack(const Interface* pUI, void* p)
    pt.setPixelsX(pDemo->ptShip.getPixelsX() + 20);
    pt.setPixelsY(pDemo->ptShip.getPixelsY() + 20);
    drawFragment(pt, pDemo->angleShip);
-
+   */
    // draw a single star
    drawStar(pDemo->ptStar, pDemo->phaseStar);
 
