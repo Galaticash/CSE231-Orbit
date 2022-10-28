@@ -52,6 +52,8 @@ const int RGB_GOLD[] =       { 255, 255,   0 };
 const int RGB_TAN[] =        { 180, 150, 110 };
 const int RGB_GREEN[] =      {   0, 150,   0 };
 
+const double PI = 3.1415926; // Pi, to calculate circles
+
 /************************************************************************
  * ROTATE
  * Rotate a given point (point) around a given origin (center) by a given
@@ -735,6 +737,78 @@ void drawShip(const Position& center, double rotation, bool thrust)
                                    pointsShipBlack[iRectangle][iVertex].y, rotation));
    glResetColor();
    glEnd();
+}
+
+
+
+/************************************************************************
+ * DRAW LINE
+ * Draws a Line
+ *  INPUT one    The starting position of the line
+ *        two    The ending position of the line
+ *************************************************************************/
+void drawLine(const Position& one, const Position& two)
+{
+    // Draw in gold
+    glColor3f(RGB_GOLD[0], RGB_GOLD[1], RGB_GOLD[2]);
+
+    glBegin(GL_LINES);
+
+    glVertex2f(one.getPixelsX(), one.getPixelsY());
+    glVertex2f(two.getPixelsX(), two.getPixelsY());
+
+    glEnd();
+}
+
+/************************************************************************
+ * DRAW CIRCLE
+ * Draws a circle
+ *  INPUT center    The center of the circle
+ *        radius    How large the cirle is
+ * 
+ *  Modified from: github linusthe3rd's circles.cpp
+ *  Has commented out code for a filled circle
+ *************************************************************************/
+void drawCircle(const Position& center, const double radius)
+{
+    // Filled circle
+    /*
+    int triangleAmount = 20; //# of triangles used to draw circle
+
+    //GLfloat radius = 0.8f; //radius
+    GLfloat twicePi = 2.0f * PI;
+
+    double x = center.getPixelsX();
+    double y = center.getPixelsY();
+
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(x, y); // center of circle
+    for (int i = 0; i <= triangleAmount; i++) {
+        glVertex2f(
+            x + (radius * cos(i * twicePi / triangleAmount)),
+            y + (radius * sin(i * twicePi / triangleAmount))
+        );
+    }*/
+    
+    // Hollow circle, want to draw expected orbit
+    int lineAmount = 100; //# of triangles used to draw circle
+
+    //GLfloat radius = 0.8f; //radius
+    GLfloat twicePi = 2.0f * PI;
+    
+    // Draw in red
+    glColor3f(RGB_RED[0], RGB_RED[1], RGB_RED[2]);
+
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i <= lineAmount; i++) {
+        glVertex2f(
+            center.getPixelsX() + (radius * cos(i * twicePi / lineAmount)),
+            center.getPixelsY() + (radius * sin(i * twicePi / lineAmount))
+        );
+    }
+
+    glEnd();
+    
 }
 
 /************************************************************************

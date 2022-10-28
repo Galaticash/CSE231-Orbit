@@ -21,6 +21,13 @@ using namespace std;
 const double GRAVITY = -9.8067;           // m/s^2
 const double EARTH_RADIUS = 6378000.0;    // meters
 const double TIME = 48;                   // seconds
+const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
+
+// Orbital velocity for GEO
+const double INITIAL_VELOCITY_X = -3100.0;  // 3.1 km/s to the left
+const double INITIAL_VELOCITY_Y = 0;
+
+const double PI = 3.1415926;
 
 /*************************************************************************
  * GRAVITY DIRECTION
@@ -33,8 +40,11 @@ const double TIME = 48;                   // seconds
  * ys = vertical position of the satellite   (meters)
  *************************************************************************/
 double gravityDirection(double xs, double ys) {
-   double d = atan2( ys, xs);
-   return d;
+    // return 0; 0 is up, should be inital angle
+    double d = atan2(ys, xs);
+    //double d = atan2(0 - ys, 0 - xs); // Should it be 0 - ys? (nope, just makes it +90 instead of -90)
+    return d - 1.5708; // 
+    //return  ((d * 180 / PI) -90);   // Return the angle in degrees TESTING: -90 because 90 degrees off??
 }
 
 /*************************************************************************
@@ -166,7 +176,8 @@ public:
       //ptGPS.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
       // Set a satellite directly above the earth in position for GEO orbit.
-      ptGPS.setMeters(0.0, 42164000.0);
+      ptGPS.setMeters(0.0, GEO_HEIGHT);
+      
       double angle = gravityDirection(ptGPS.getMetersX(), ptGPS.getMetersY());
       double height = heightAboveEarth(ptGPS.getMetersX(), ptGPS.getMetersY());
       double totalAcc = gravityEquation(height);
@@ -175,6 +186,10 @@ public:
 
       // Velocity required to remain in GEO orbit: -3,100.0 m/s 
       // The sign is to match earths rotation direction when starting directly above it
+
+      // Initial velocities (x and y)
+      ptGPSVelocityX = INITIAL_VELOCITY_X;
+      ptGPSVelocityY = INITIAL_VELOCITY_Y;
 
       //ptSputnik.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
       //ptSputnik.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
@@ -200,6 +215,9 @@ public:
 
    double angleShip;
    double angleEarth;
+
+   double ptGPSVelocityX;
+   double ptGPSVelocityY;
 };
 
 /*************************************
@@ -239,25 +257,46 @@ void callBack(const Interface* pUI, void* p)
    //pDemo->angleShip += 0.02;
    pDemo->phaseStar++;
 
-   // GOAL: Get an item to orbit the Earth   
+   // GOAL: Get an item to orbit the Earth
    
+   // Draw an approximate orbit in red (starting height of GPS -> convert to pixels)
+   drawCircle(Position(0.0, 0.0), GEO_HEIGHT * (50 / EARTH_RADIUS));
+
    // TODO: Update inside dDemo's class, recalculate each frame?
    // Calculates the current values give current position
    double angle = gravityDirection(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());
+   cout << angle << endl;
+   
    double height = heightAboveEarth(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());
+
+   // Calculate the current acceleration
    double totalAcc = gravityEquation(height);
    double vAcc = verticalAcceleration(totalAcc, angle);
    double hAcc = horizontalAcceleration(totalAcc, angle);
 
-   double velocity = -3100; // TODO: Change sign
+   // Update the current velocity with the current acceleration
+   // TESTING: *10 to emphasize the effect of the acceleration
+   pDemo->ptGPSVelocityX = velocityConstantAcceleration(pDemo->ptGPSVelocityX, hAcc);
+   pDemo->ptGPSVelocityY = velocityConstantAcceleration(pDemo->ptGPSVelocityY, vAcc);
 
-   double xVelocity = velocity * (hAcc > 0 ? - 1 : 1);
-   double yVelocity = velocity * (vAcc < 0 ? -1 : 1);
+   // TODO: Y Velocity needs to be affected by gravity to orbit, overall velocity should be affected by gravity
+   // So acceleration isn't working?
+   
+   //pDemo->ptGPSVelocityX += hAcc * TIME;
+       //hAcc * pDemo->ptGPSVelocityX; // incorrect but funny
+       //(hAcc * TIME);
+   //pDemo->ptGPSVelocityY += vAcc * TIME;
+       //vAcc * pDemo->ptGPSVelocityY;  // incorrect but funny
+       //(vAcc * TIME);
+
+   // NOTE: not correct, will go around but not orbiting
+   //double xVelocity = -3100 * (hAcc > 0 ? - 1 : 1); // sign matching the acceleration
+   //double yVelocity = -3100 * (vAcc < 0 ? -1 : 1);
 
    // Adjust the position given the velocity and time
    // TODO: Add acceleration. Should acceleration be the only change, calculating position and velocuity from that?
-   double xGPS = distanceFormula(pDemo->ptGPS.getMetersX(), xVelocity, hAcc);
-   double yGPS = distanceFormula(pDemo->ptGPS.getMetersY(), yVelocity, vAcc);
+   double xGPS = distanceFormula(pDemo->ptGPS.getMetersX(), pDemo->ptGPSVelocityX, hAcc);
+   double yGPS = distanceFormula(pDemo->ptGPS.getMetersY(), pDemo->ptGPSVelocityY, vAcc);
 
    // Update the GPS's current position
    pDemo->ptGPS = Position(xGPS, yGPS);   
@@ -300,6 +339,9 @@ void callBack(const Interface* pUI, void* p)
    */
    // draw a single star
    drawStar(pDemo->ptStar, pDemo->phaseStar);
+
+   // Draw a line between the Earth and ptGPS
+   drawLine(Position(0.0, 0.0), pDemo->ptGPS);
 
    // draw the earth
    pt.setMeters(0.0, 0.0);

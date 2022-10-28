@@ -129,6 +129,11 @@ void drawStarlinkArray(const Position& center, double rotation, const Position& 
  *        thrust  Whether the thrusters are on
  *************************************************************************/
 void drawShip(const Position& center, double rotation, bool thrust);
+
+
+void drawCircle(const Position& center, const double raidus);
+void drawLine(const Position& one, const Position& two);
+
 /************************************************************************
  * DRAW Earth
  * Draw Earth
