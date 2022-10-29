@@ -22,11 +22,20 @@ const double GRAVITY = -9.8067;           // m/s^2
 const double EARTH_RADIUS = 6378000.0;    // meters
 const double TIME = 48;                   // seconds
 
+// TODO: I'm sure there's a better way to calculate this (using gl's framerate or something), but this will do for now
+const double FPS = 30;
+
+const double TIME_DILATION = 24 * 60;    // One minute in simulator = One day in real world
+const double SECONDS_DAY = 24 * 60 * 60; // 24 hours * 60 minutes * 60 seconds
+
 // Constants for GEO Orbit
 const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
-const double GEO_VELOCITY_X = 3100.0;  // moving 3.1 km/s to the left
+const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s to the left
 
-//const double PI = 3.1415926;
+const double PI = 3.1415926;
+
+const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY;
+
 
 // To show goal orbit and distance from Earth
 // Better to leave as a bool, or comment out?
@@ -267,7 +276,9 @@ void callBack(const Interface* pUI, void* p)
    //
 
    // rotate the earth
-   pDemo->angleEarth += 0.01;
+   pDemo->angleEarth += ROTATION_SPEED;
+
+
    //pDemo->angleShip += 0.02;
    pDemo->phaseStar++;
 
