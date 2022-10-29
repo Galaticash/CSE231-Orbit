@@ -21,13 +21,16 @@ using namespace std;
 const double GRAVITY = -9.8067;           // m/s^2
 const double EARTH_RADIUS = 6378000.0;    // meters
 const double TIME = 48;                   // seconds
+
+// Constants for GEO Orbit
 const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
+const double GEO_VELOCITY_X = 3100.0;  // moving 3.1 km/s to the left
 
-// Orbital velocity for GEO
-const double INITIAL_VELOCITY_X = -3100.0;  // 3.1 km/s to the left
-const double INITIAL_VELOCITY_Y = 0;
+//const double PI = 3.1415926;
 
-const double PI = 3.1415926;
+// To show goal orbit and distance from Earth
+// Better to leave as a bool, or comment out?
+const bool TESTING = false;
 
 /*************************************************************************
  * GRAVITY DIRECTION
@@ -153,58 +156,72 @@ double velocityConstantAcceleration(double vo, double a) {
 class Demo
 {
 public:
-   Demo(Position ptUpperRight) :
-      ptUpperRight(ptUpperRight)
-   {
-      /*
-      ptHubble.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      ptHubble.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+    Demo(Position ptUpperRight) :
+        ptUpperRight(ptUpperRight)
+    {
+        // Comment out all other items 
+        /*
+        ptHubble.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+        ptHubble.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
-      ptStarlink.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      ptStarlink.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+        ptStarlink.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+        ptStarlink.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
-      ptCrewDragon.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      ptCrewDragon.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+        ptCrewDragon.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+        ptCrewDragon.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
-      ptShip.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      ptShip.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
-      */
-      //ptGPS.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      //ptGPS.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+        ptShip.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+        ptShip.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
-      // Set a satellite directly above the earth in position for GEO orbit.
-      ptGPS.setMeters(0.0, GEO_HEIGHT);
-      
-      double angle = gravityDirection(ptGPS.getMetersX(), ptGPS.getMetersY());
-      double height = heightAboveEarth(ptGPS.getMetersX(), ptGPS.getMetersY());
-      double totalAcc = gravityEquation(height);
-      double vAcc = verticalAcceleration(totalAcc, angle);
-      double hAcc = horizontalAcceleration(totalAcc, angle);
+        //ptSputnik.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+        //ptSputnik.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
-      // Velocity required to remain in GEO orbit: -3,100.0 m/s 
-      // The sign is to match earths rotation direction when starting directly above it
+        // Creates a star at a random position
+        /*ptStar.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+        ptStar.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+        */
+        //ptGPS.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
+        //ptGPS.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
 
-      // Initial velocities (x and y)
-      ptGPSVelocityX = INITIAL_VELOCITY_X;
-      ptGPSVelocityY = INITIAL_VELOCITY_Y;
+        initializeGPS();
 
-      //ptSputnik.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      //ptSputnik.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+        angleShip = 0.0;
+        angleEarth = 0.0;
+        phaseStar = 0;
+    }
 
-      ptStar.setPixelsX(ptUpperRight.getPixelsX() * random(-0.5, 0.5));
-      ptStar.setPixelsY(ptUpperRight.getPixelsY() * random(-0.5, 0.5));
+    /************************************************************
+     * INITIALIZE GPS
+     * Create a GPS object in GEO orbit
+     ************************************************************/
+    void initializeGPS()
+    {
+        // Set a satellite directly above the earth in position for GEO orbit.
+        ptGPS.setMeters(0.0, GEO_HEIGHT);
 
-      angleShip = 0.0;
-      angleEarth = 0.0;
-      phaseStar = 0;
-   }
+        /*
+        * Moved to callback,
+        * TODO: Would be good to calculate here, but as member variables, or a method?
+        *
+        double angle = gravityDirection(ptGPS.getMetersX(), ptGPS.getMetersY());
+        double height = heightAboveEarth(ptGPS.getMetersX(), ptGPS.getMetersY());
+        double totalAcc = gravityEquation(height);
+        double vAcc = verticalAcceleration(totalAcc, angle);
+        double hAcc = horizontalAcceleration(totalAcc, angle);
+        */
+
+        // Velocity required to remain in GEO orbit: -3,100.0 m/s
+        // The sign is to match earths rotation direction when starting directly above it
+        ptGPSVelocityX = GEO_VELOCITY_X;
+        ptGPSVelocityY = 0;
+    }
 
    Position ptHubble;
    Position ptSputnik;
    Position ptStarlink;
    Position ptCrewDragon;
    Position ptShip;
-   Position ptGPS;
+   Position ptGPS;  // TODO: Make each item an object of it's own, with a position, velocity, etc
    Position ptStar;
    Position ptUpperRight;
 
@@ -256,14 +273,16 @@ void callBack(const Interface* pUI, void* p)
 
    // GOAL: Get an item to orbit the Earth
    
-   // Draw an approximate orbit in red (starting height of GPS -> convert to pixels)
-   drawCircle(Position(0.0, 0.0), GEO_HEIGHT * (50 / EARTH_RADIUS));
+   if (TESTING)
+   {
+       // Draw an approximate orbit in red (starting height of GPS -> convert to pixels)
+       drawCircle(Position(0.0, 0.0), GEO_HEIGHT * (50 / EARTH_RADIUS));
+   }
 
    // TODO: Update inside dDemo's class, recalculate each frame?
-   // Calculates the current values give current position
-   double angle = gravityDirection(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());
-   cout << angle << endl;
    
+   // Calculates the current values give current position
+   double angle = gravityDirection(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());   
    double height = heightAboveEarth(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());
 
    // Calculate the current acceleration
@@ -272,26 +291,10 @@ void callBack(const Interface* pUI, void* p)
    double hAcc = horizontalAcceleration(totalAcc, angle);
 
    // Update the current velocity with the current acceleration
-   // TESTING: *10 to emphasize the effect of the acceleration
    pDemo->ptGPSVelocityX = velocityConstantAcceleration(pDemo->ptGPSVelocityX, hAcc);
    pDemo->ptGPSVelocityY = velocityConstantAcceleration(pDemo->ptGPSVelocityY, vAcc);
 
-   // TODO: Y Velocity needs to be affected by gravity to orbit, overall velocity should be affected by gravity
-   // So acceleration isn't working?
-   
-   //pDemo->ptGPSVelocityX += hAcc * TIME;
-       //hAcc * pDemo->ptGPSVelocityX; // incorrect but funny
-       //(hAcc * TIME);
-   //pDemo->ptGPSVelocityY += vAcc * TIME;
-       //vAcc * pDemo->ptGPSVelocityY;  // incorrect but funny
-       //(vAcc * TIME);
-
-   // NOTE: not correct, will go around but not orbiting
-   //double xVelocity = -3100 * (hAcc > 0 ? - 1 : 1); // sign matching the acceleration
-   //double yVelocity = -3100 * (vAcc < 0 ? -1 : 1);
-
-   // Adjust the position given the velocity and time
-   // TODO: Add acceleration. Should acceleration be the only change, calculating position and velocuity from that?
+   // Adjust the position given the current position, velocity, and acceleration
    double xGPS = distanceFormula(pDemo->ptGPS.getMetersX(), pDemo->ptGPSVelocityX, hAcc);
    double yGPS = distanceFormula(pDemo->ptGPS.getMetersY(), pDemo->ptGPSVelocityY, vAcc);
 
@@ -333,12 +336,16 @@ void callBack(const Interface* pUI, void* p)
    pt.setPixelsX(pDemo->ptShip.getPixelsX() + 20);
    pt.setPixelsY(pDemo->ptShip.getPixelsY() + 20);
    drawFragment(pt, pDemo->angleShip);
-   */
+
    // draw a single star
    drawStar(pDemo->ptStar, pDemo->phaseStar);
+   */
 
-   // Draw a line between the Earth and ptGPS
-   drawLine(Position(0.0, 0.0), pDemo->ptGPS);
+   if (TESTING)
+   {
+       // Draw a line between the Earth and ptGPS
+       drawLine(Position(0.0, 0.0), pDemo->ptGPS);
+   }
 
    // draw the earth
    pt.setMeters(0.0, 0.0);
