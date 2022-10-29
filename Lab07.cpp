@@ -40,11 +40,8 @@ const double PI = 3.1415926;
  * ys = vertical position of the satellite   (meters)
  *************************************************************************/
 double gravityDirection(double xs, double ys) {
-    // return 0; 0 is up, should be inital angle
-    double d = atan2(ys, xs);
-    //double d = atan2(0 - ys, 0 - xs); // Should it be 0 - ys? (nope, just makes it +90 instead of -90)
-    return d - 1.5708; // 
-    //return  ((d * 180 / PI) -90);   // Return the angle in degrees TESTING: -90 because 90 degrees off??
+    double d = atan2(xs, ys);
+    return d;
 }
 
 /*************************************************************************
