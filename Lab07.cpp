@@ -8,7 +8,6 @@
  * 4. What was the hardest part? Be as specific as possible.
  *      The hardest part was realizing atan2()'s parameters are labelled incorrectly.
  *       In fact, it's the only math item that is ordered 'Y, X' instead of 'X, Y'.
- *       Another hard part was realizing
  * 5. How long did it take for you to complete the assignment?
  *      4 hours
  *****************************************************************/
@@ -211,17 +210,6 @@ public:
         // Set a satellite directly above the earth in position for GEO orbit.
         ptGPS.setMeters(0.0, GEO_HEIGHT);
 
-        /*
-        * Moved to callback,
-        * TODO: Would be good to calculate here, but as member variables, or a method?
-        *
-        double angle = gravityDirection(ptGPS.getMetersX(), ptGPS.getMetersY());
-        double height = heightAboveEarth(ptGPS.getMetersX(), ptGPS.getMetersY());
-        double totalAcc = gravityEquation(height);
-        double vAcc = verticalAcceleration(totalAcc, angle);
-        double hAcc = horizontalAcceleration(totalAcc, angle);
-        */
-
         // Velocity required to remain in GEO orbit: -3,100.0 m/s
         // The sign is to match earths rotation direction when starting directly above it
         ptGPSVelocityX = GEO_VELOCITY_X;
@@ -273,6 +261,7 @@ public:
    double angleShip;
    double angleEarth;
 
+   // Will later be moved to an Object class
    double ptGPSVelocityX;
    double ptGPSVelocityY;
 };
@@ -316,11 +305,12 @@ void callBack(const Interface* pUI, void* p)
 
    // GOAL: Get an item to orbit the Earth
    
+   /*
    if (SHOW_TESTING_VISUALS)
    {
        // Draw an approximate orbit in red (starting height of GPS -> convert to pixels)
        drawCircle(Position(0.0, 0.0), GEO_HEIGHT * (50 / EARTH_RADIUS));
-   }
+   }*/
 
    // Update the GPS's position
    pDemo->updateGPSPosition();
@@ -365,11 +355,11 @@ void callBack(const Interface* pUI, void* p)
    drawStar(pDemo->ptStar, pDemo->phaseStar);
    */
 
-   if (SHOW_TESTING_VISUALS)
+   /*if (SHOW_TESTING_VISUALS)
    {
        // Draw a line between the Earth and ptGPS
        drawLine(Position(0.0, 0.0), pDemo->ptGPS);
-   }
+   }*/
 
    // draw the earth
    pt.setMeters(0.0, 0.0);
