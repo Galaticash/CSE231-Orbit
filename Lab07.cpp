@@ -6,9 +6,11 @@
  * 3. Assignment Description:
  *      Simulate satellites orbiting the earth
  * 4. What was the hardest part? Be as specific as possible.
- *      ??
+ *      The hardest part was realizing atan2()'s parameters are labelled incorrectly.
+ *       In fact, it's the only math item that is ordered 'Y, X' instead of 'X, Y'.
+ *       Another hard part was realizing
  * 5. How long did it take for you to complete the assignment?
- *      ??
+ *      4 hours
  *****************************************************************/
 
 #include <cmath>
@@ -18,28 +20,29 @@
 #include "position.h"   // for POINT
 using namespace std;
 
+// Gravity constant
 const double GRAVITY = -9.8067;           // m/s^2
-const double EARTH_RADIUS = 6378000.0;    // meters
-const double TIME = 48;                   // seconds
+const double PI = 3.1415926;            // The value of Pi
 
-// TODO: I'm sure there's a better way to calculate this (using gl's framerate or something), but this will do for now
-const double FPS = 30;
-
+// Simulation Information
+// TODO: I'm sure there's a better way to calculate this
+//  (maybe using gl's framerate or something), but this will do for now
+const double FPS = 30;          // The number of frames drawn per second          
+const double TIME = 48;         // Real-world seconds between frames
 const double TIME_DILATION = 24 * 60;    // One minute in simulator = One day in real world
+
+// Planet Information
+const double EARTH_RADIUS = 6378000.0;    // meters
 const double SECONDS_DAY = 24 * 60 * 60; // 24 hours * 60 minutes * 60 seconds
+const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY;
 
 // Constants for GEO Orbit
 const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
-const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s to the left
-
-const double PI = 3.1415926;
-
-const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY;
-
+const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this example)
 
 // To show goal orbit and distance from Earth
 // Better to leave as a bool, or comment out?
-const bool TESTING = false;
+const bool SHOW_TESTING_VISUALS = false;
 
 /*************************************************************************
  * GRAVITY DIRECTION
@@ -225,6 +228,37 @@ public:
         ptGPSVelocityY = 0;
     }
 
+    /************************************************************
+    * UPDATE GPS POSITION
+    * Update the GPS's current position and velocity by calculating
+    *  its angle, height, and acceleration through various equations
+    ************************************************************/
+    void updateGPSPosition()
+    {
+        // TODO: This method will later be moved to object classes.
+        //  Can then update each specific object's values
+
+        // Calculates the current angle and distance from the Earth (0, 0)
+        double angle = gravityDirection(this->ptGPS.getMetersX(), this->ptGPS.getMetersY());
+        double height = heightAboveEarth(this->ptGPS.getMetersX(), this->ptGPS.getMetersY());
+
+        // Calculate the current acceleration
+        double totalAcc = gravityEquation(height);
+        double vAcc = verticalAcceleration(totalAcc, angle);
+        double hAcc = horizontalAcceleration(totalAcc, angle);
+
+        // Update the current velocity with the current acceleration
+        this->ptGPSVelocityX = velocityConstantAcceleration(this->ptGPSVelocityX, hAcc);
+        this->ptGPSVelocityY = velocityConstantAcceleration(this->ptGPSVelocityY, vAcc);
+
+        // Adjust the position given the current position, velocity, and acceleration
+        double xGPS = distanceFormula(this->ptGPS.getMetersX(), this->ptGPSVelocityX, hAcc);
+        double yGPS = distanceFormula(this->ptGPS.getMetersY(), this->ptGPSVelocityY, vAcc);
+
+        // Update the GPS's current position
+        this->ptGPS = Position(xGPS, yGPS);
+    }
+
    Position ptHubble;
    Position ptSputnik;
    Position ptStarlink;
@@ -277,40 +311,19 @@ void callBack(const Interface* pUI, void* p)
 
    // rotate the earth
    pDemo->angleEarth += ROTATION_SPEED;
-
-
    //pDemo->angleShip += 0.02;
    pDemo->phaseStar++;
 
    // GOAL: Get an item to orbit the Earth
    
-   if (TESTING)
+   if (SHOW_TESTING_VISUALS)
    {
        // Draw an approximate orbit in red (starting height of GPS -> convert to pixels)
        drawCircle(Position(0.0, 0.0), GEO_HEIGHT * (50 / EARTH_RADIUS));
    }
 
-   // TODO: Update inside dDemo's class, recalculate each frame?
-   
-   // Calculates the current values give current position
-   double angle = gravityDirection(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());   
-   double height = heightAboveEarth(pDemo->ptGPS.getMetersX(), pDemo->ptGPS.getMetersY());
-
-   // Calculate the current acceleration
-   double totalAcc = gravityEquation(height);
-   double vAcc = verticalAcceleration(totalAcc, angle);
-   double hAcc = horizontalAcceleration(totalAcc, angle);
-
-   // Update the current velocity with the current acceleration
-   pDemo->ptGPSVelocityX = velocityConstantAcceleration(pDemo->ptGPSVelocityX, hAcc);
-   pDemo->ptGPSVelocityY = velocityConstantAcceleration(pDemo->ptGPSVelocityY, vAcc);
-
-   // Adjust the position given the current position, velocity, and acceleration
-   double xGPS = distanceFormula(pDemo->ptGPS.getMetersX(), pDemo->ptGPSVelocityX, hAcc);
-   double yGPS = distanceFormula(pDemo->ptGPS.getMetersY(), pDemo->ptGPSVelocityY, vAcc);
-
-   // Update the GPS's current position
-   pDemo->ptGPS = Position(xGPS, yGPS);   
+   // Update the GPS's position
+   pDemo->updateGPSPosition();
 
    //
    // draw everything
@@ -352,7 +365,7 @@ void callBack(const Interface* pUI, void* p)
    drawStar(pDemo->ptStar, pDemo->phaseStar);
    */
 
-   if (TESTING)
+   if (SHOW_TESTING_VISUALS)
    {
        // Draw a line between the Earth and ptGPS
        drawLine(Position(0.0, 0.0), pDemo->ptGPS);
