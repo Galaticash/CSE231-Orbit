@@ -1,15 +1,8 @@
 /*************************************************************
- * 1. Name:
- *      Demo
- * 2. Assignment Name:
- *      Lab 07: Orbit Simulator
- * 3. Assignment Description:
- *      Simulate satellites orbiting the earth
- * 4. What was the hardest part? Be as specific as possible.
- *      The hardest part was realizing atan2()'s parameters are labelled incorrectly.
- *       In fact, it's the only math item that is ordered 'Y, X' instead of 'X, Y'.
- * 5. How long did it take for you to complete the assignment?
- *      4 hours
+ * Name:
+ *      Orbit
+ * Authors:
+ *      Ashley DeMott, Logan Huston
  *****************************************************************/
 
 #include <cmath>
@@ -19,8 +12,7 @@
 #include "position.h"   // for POINT
 using namespace std;
 
-// Gravity constant
-const double GRAVITY = -9.8067;           // m/s^2
+const double GRAVITY = -9.8067;           // Gravity constant in m/s^2
 const double PI = 3.1415926;            // The value of Pi
 
 // Simulation Information
@@ -42,123 +34,6 @@ const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this 
 // To show goal orbit and distance from Earth
 // Better to leave as a bool, or comment out?
 const bool SHOW_TESTING_VISUALS = false;
-
-/*************************************************************************
- * GRAVITY DIRECTION
- * Calculates the angle at which an object is pulled by gravity.
- * Fromula: d = atan( xe - xs, ye - ys )
- * d = direction of the pull of gravity      (radians)
- * xe = horizontal position of the center of the earth : 0m
- * ye = vertical position of the center of the earth : 0m
- * xs = horizontal position of the satellite (meters)
- * ys = vertical position of the satellite   (meters)
- *************************************************************************/
-double gravityDirection(double xs, double ys) {
-    double d = atan2(xs, ys);
-    return d;
-}
-
-/*************************************************************************
- * HEIGHT ABOVE EARTH
- * Finds the height above the earth an object is.
- * Formula: h = sqrt(x * x + y * y) - r
- * h = distance between the surface of the earth and the object (meters)
- * x = horizontal position of object   (meters)
- * y = vertical position of object     (meters)
- * r = radius of earth                 (meters)
- *************************************************************************/
-double heightAboveEarth(double x, double y) {
-   double h = sqrt(x * x + y * y) - EARTH_RADIUS;
-   return h;
-}
-
-/*************************************************************************
- * GRAVITY EQUATION
- * This calculates the total acceleration due to earth's gravity
- * Formula: g * ( r / ( r + h ) ) ^ 2 = gh
- * gh = magnitude of acceleration due to gravity at altitude h (m/s^2)
- * g  = gravity at sea level   (m/s^2)
- * r  = radius of earth        (meters)
- * h  = height above earth     (meters)
- *************************************************************************/
-double gravityEquation(double h) {
-   // TODO: Figure out if it is better to repeat this equation or to use the square function
-   double gh = GRAVITY * pow(( EARTH_RADIUS / ( EARTH_RADIUS + h ) ), 2);
-   return gh;
-}
-
-/*************************************************************************
- * HORIZONTAL ACCELERATION
- * ddx = a * sin( angle )
- * ddx = horizontal component of acceleration      (m/s^2)
- * a = total acceleration                          (m/s^2)
- * angle = angle of the direction of acceleration  (0 degrees is up)
- *************************************************************************/
-double horizontalAcceleration(double a, double angle) {
-   double ddx = a * sin( angle );
-   return ddx;
-}
-
-/*************************************************************************
- * VERTICAL ACCELERATION
- * ddy = a * cos( angle )
- * ddy = vertical component of acceleration        (m/s^2)
- * a = total acceleration                          (m/s^2)
- * angle = angle of the direction of acceleration  (0 degrees is up)
- *************************************************************************/
-double verticalAcceleration(double a, double angle) {
-   double ddy = a * cos( angle );
-   return ddy;
-}
-
-/*************************************************************************
- * DISTANCE FORMULA
- * This formula is used for calculating the distance something travelled.
- * Can be used for both vertical and horizontal distance.
- * Formula: s = so + (v * t) + (.5 * a * t * t)
- *     ex. (x = xo + (dx * t) + (.5 * ddx * t * t))
- * s = distance            (meters)
- * so = initial distance   (meters)
- * v = velocity            (m/s)
- * t = time                (seconds)
- * a = acceleration        (m/s^2)
- *************************************************************************/
-double distanceFormula(double so, double v, double a) {
-   double s = so + (v * TIME) + (.5 * a * TIME * TIME);
-   return s;
-}
-
-/*************************************************************************
- * POSITION CONSTANT VELOCITY
- * Compute the distance when given a constant velocity.
- * Can be used for both horizontal and vertical distance.
- * Formula: s = so + v * t
- *     ex. (x = xo + dx * t)
- * s  = distance           (meters)
- * so = initial position   (meters)
- * v  = velocity           (m/s)
- * t  = time               (seconds)
- *************************************************************************/
-double verticalConstantVelocity(double so, double v) {
-   double s = so + v * TIME;
-   return s;
-}
-
-/*************************************************************************
- * VELOCITY CONSTANT ACCELERATION
- * Compute the velocity when given a constant acceleration. 
- * Can be used for both horizontal and vertical velocity.
- * Formula: v = vo + a * t
- *    ex. (dx = dxo + ddx * t)
- * v = velocity            (m/s)
- * vo = initial velocity   (m/s)
- * a = acceleration        (m/s^2)
- * t = time                (seconds)
- *************************************************************************/
-double velocityConstantAcceleration(double vo, double a) {
-   double v = vo + a * TIME;
-   return v;
-}
 
 /*************************************************************************
  * Demo
@@ -246,6 +121,124 @@ public:
         // Update the GPS's current position
         this->ptGPS = Position(xGPS, yGPS);
     }
+
+    /*************************************************************************
+     * GRAVITY DIRECTION
+     * Calculates the angle at which an object is pulled by gravity.
+     * Fromula: d = atan( xe - xs, ye - ys )
+     * d = direction of the pull of gravity      (radians)
+     * xe = horizontal position of the center of the earth : 0m
+     * ye = vertical position of the center of the earth : 0m
+     * xs = horizontal position of the satellite (meters)
+     * ys = vertical position of the satellite   (meters)
+     *************************************************************************/
+    double gravityDirection(double xs, double ys) {
+        double d = atan2(xs, ys);
+        return d;
+    }
+
+    /*************************************************************************
+     * HEIGHT ABOVE EARTH
+     * Finds the height above the earth an object is.
+     * Formula: h = sqrt(x * x + y * y) - r
+     * h = distance between the surface of the earth and the object (meters)
+     * x = horizontal position of object   (meters)
+     * y = vertical position of object     (meters)
+     * r = radius of earth                 (meters)
+     *************************************************************************/
+    double heightAboveEarth(double x, double y) {
+        double h = sqrt(x * x + y * y) - EARTH_RADIUS;
+        return h;
+    }
+
+    /*************************************************************************
+     * GRAVITY EQUATION
+     * This calculates the total acceleration due to earth's gravity
+     * Formula: g * ( r / ( r + h ) ) ^ 2 = gh
+     * gh = magnitude of acceleration due to gravity at altitude h (m/s^2)
+     * g  = gravity at sea level   (m/s^2)
+     * r  = radius of earth        (meters)
+     * h  = height above earth     (meters)
+     *************************************************************************/
+    double gravityEquation(double h) {
+        // TODO: Figure out if it is better to repeat this equation or to use the square function
+        double gh = GRAVITY * pow((EARTH_RADIUS / (EARTH_RADIUS + h)), 2);
+        return gh;
+    }
+
+    /*************************************************************************
+     * HORIZONTAL ACCELERATION
+     * ddx = a * sin( angle )
+     * ddx = horizontal component of acceleration      (m/s^2)
+     * a = total acceleration                          (m/s^2)
+     * angle = angle of the direction of acceleration  (0 degrees is up)
+     *************************************************************************/
+    double horizontalAcceleration(double a, double angle) {
+        double ddx = a * sin(angle);
+        return ddx;
+    }
+
+    /*************************************************************************
+     * VERTICAL ACCELERATION
+     * ddy = a * cos( angle )
+     * ddy = vertical component of acceleration        (m/s^2)
+     * a = total acceleration                          (m/s^2)
+     * angle = angle of the direction of acceleration  (0 degrees is up)
+     *************************************************************************/
+    double verticalAcceleration(double a, double angle) {
+        double ddy = a * cos(angle);
+        return ddy;
+    }
+
+    /*************************************************************************
+     * DISTANCE FORMULA
+     * This formula is used for calculating the distance something travelled.
+     * Can be used for both vertical and horizontal distance.
+     * Formula: s = so + (v * t) + (.5 * a * t * t)
+     *     ex. (x = xo + (dx * t) + (.5 * ddx * t * t))
+     * s = distance            (meters)
+     * so = initial distance   (meters)
+     * v = velocity            (m/s)
+     * t = time                (seconds)
+     * a = acceleration        (m/s^2)
+     *************************************************************************/
+    double distanceFormula(double so, double v, double a) {
+        double s = so + (v * TIME) + (.5 * a * TIME * TIME);
+        return s;
+    }
+
+    /*************************************************************************
+     * POSITION CONSTANT VELOCITY
+     * Compute the distance when given a constant velocity.
+     * Can be used for both horizontal and vertical distance.
+     * Formula: s = so + v * t
+     *     ex. (x = xo + dx * t)
+     * s  = distance           (meters)
+     * so = initial position   (meters)
+     * v  = velocity           (m/s)
+     * t  = time               (seconds)
+     *************************************************************************/
+    double verticalConstantVelocity(double so, double v) {
+        double s = so + v * TIME;
+        return s;
+    }
+
+    /*************************************************************************
+     * VELOCITY CONSTANT ACCELERATION
+     * Compute the velocity when given a constant acceleration.
+     * Can be used for both horizontal and vertical velocity.
+     * Formula: v = vo + a * t
+     *    ex. (dx = dxo + ddx * t)
+     * v = velocity            (m/s)
+     * vo = initial velocity   (m/s)
+     * a = acceleration        (m/s^2)
+     * t = time                (seconds)
+     *************************************************************************/
+    double velocityConstantAcceleration(double vo, double a) {
+        double v = vo + a * TIME;
+        return v;
+    }
+
 
    Position ptHubble;
    Position ptSputnik;
