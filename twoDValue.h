@@ -5,7 +5,8 @@
 /*********************************************
  * 2D Value
  * A pair of values that represent a horizontal and
- * vertical direction.
+ * vertical direction. Dealing with zoom from Bro. Helfrich's
+ * position.h code.
  *********************************************/
 class TwoDValue
 {
@@ -21,18 +22,18 @@ public:
    
    // Setters
    void setMeters(double hMeters, double vMeters) { horizontal = hMeters; vertical = vMeters; }
-   void setMetersHorizontal(double hMeters) { horizontal = hMeters; }
-   void setMetersVertical(double vMeters) { vertical = vMeters; }
-   void setPixelsHorizontal(double hPixels) { horizontal = hPixels * metersFromPixels; }
-   void setPixelsVertical(double vPixels) { vertical = vPixels * metersFromPixels; }
+   void setMetersHorizontal(double hMeters)  { horizontal = hMeters; }
+   void setMetersVertical(double vMeters)    { vertical = vMeters; }
+   void setPixelsHorizontal(double hPixels)  { horizontal = hPixels * metersFromPixels; }
+   void setPixelsVertical(double vPixels)    { vertical = vPixels * metersFromPixels; }
    void addMetersHorizontal(double dhMeters) { setMetersHorizontal(getMetersHorizontal() + dhMeters); }
-   void addMetersVertical(double dvMeters) { setMetersVertical(getMetersVertical() + dvMeters); }
+   void addMetersVertical(double dvMeters)   { setMetersVertical(getMetersVertical() + dvMeters); }
    void addPixelsHorizontal(double dhPixels) { setPixelsHorizontal(getPixelsHorizontal() + dhPixels); }
-   void addPixelsVertical(double dvPixels) { setPixelsVertical(getPixelsVertical() + dvPixels); }
+   void addPixelsVertical(double dvPixels)   { setPixelsVertical(getPixelsVertical() + dvPixels); }
 
    // deal with the ratio of meters to pixels
-   void setZoom(double metersFromPixels) { this->metersFromPixels = metersFromPixels; }
-   double getZoom() const { return metersFromPixels; }
+   void setZoom(double metersFromPixels)     { this->metersFromPixels = metersFromPixels; }
+   double getZoom()              const { return metersFromPixels; }
 
 private:
    double horizontal;
