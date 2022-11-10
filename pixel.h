@@ -3,13 +3,14 @@
 #pragma once
 
 /*********************************************
- * Bullet
- * A fragment that is spawned in front of the spaceship.
+ * Pixel
+ *
  *********************************************/
-class Bulllet
+class Pixel
 {
 public:
 
 private:
 
 };
+
