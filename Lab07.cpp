@@ -35,6 +35,32 @@ const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this 
 // Better to leave as a bool, or comment out?
 const bool SHOW_TESTING_VISUALS = true;
 
+
+/*
+* Creating a Satelite, made of Parts
+* 
+vector<pixel> HubbleVisual1 = { Pixel(), ...};
+vector<pixel> HubbleVisual2 = { Pixel(), ...};
+
+Part HubblePart1 = Part(offset, rotaion, HubbleVisual1);
+Part HubblePart2 = Part(offset, rotation, HubbleVisual2);
+
+Satelite Hubble(startPosition, rotation, {HubblePart1, HubblePart2})
+Satelite Hubble(startPosition, rotation, { HubblePart1, HubblePart2 }, startingVelocity);
+
+3 Types of collisions:
+
+Earth - does nothing upon collision
+Fragment - destroyed upon collision
+
+New: Fragmented Object
+- A type of collision object that fragments into smaller pieces upon collision
+- Has number of Fragments to break into (and Satelite has a collection of Parts)
+- Would include Satelite and Part (siblings)
+
+*/
+
+
 /*************************************************************************
  * Demo
  * Test structure to capture the LM that will move around the screen
