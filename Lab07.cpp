@@ -33,7 +33,7 @@ const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this 
 
 // To show goal orbit and distance from Earth
 // Better to leave as a bool, or comment out?
-const bool SHOW_TESTING_VISUALS = false;
+const bool SHOW_TESTING_VISUALS = true;
 
 /*************************************************************************
  * Demo
@@ -298,12 +298,11 @@ void callBack(const Interface* pUI, void* p)
 
    // GOAL: Get an item to orbit the Earth
    
-   /*
    if (SHOW_TESTING_VISUALS)
    {
        // Draw an approximate orbit in red (starting height of GPS -> convert to pixels)
        drawCircle(Position(0.0, 0.0), GEO_HEIGHT * (50 / EARTH_RADIUS));
-   }*/
+   }
 
    // Update the GPS's position
    pDemo->updateGPSPosition();
@@ -348,11 +347,11 @@ void callBack(const Interface* pUI, void* p)
    drawStar(pDemo->ptStar, pDemo->phaseStar);
    */
 
-   /*if (SHOW_TESTING_VISUALS)
+   if (SHOW_TESTING_VISUALS)
    {
        // Draw a line between the Earth and ptGPS
        drawLine(Position(0.0, 0.0), pDemo->ptGPS);
-   }*/
+   }
 
    // draw the earth
    pt.setMeters(0.0, 0.0);
