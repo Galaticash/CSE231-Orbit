@@ -298,12 +298,11 @@ void callBack(const Interface* pUI, void* p)
 
    // GOAL: Get an item to orbit the Earth
    
-   /*
    if (SHOW_TESTING_VISUALS)
    {
        // Draw an approximate orbit in red (starting height of GPS -> convert to pixels)
        drawCircle(Position(0.0, 0.0), GEO_HEIGHT * (50 / EARTH_RADIUS));
-   }*/
+   }
 
    // Update the GPS's position
    pDemo->updateGPSPosition();
@@ -348,11 +347,11 @@ void callBack(const Interface* pUI, void* p)
    drawStar(pDemo->ptStar, pDemo->phaseStar);
    */
 
-   /*if (SHOW_TESTING_VISUALS)
+   if (SHOW_TESTING_VISUALS)
    {
        // Draw a line between the Earth and ptGPS
        drawLine(Position(0.0, 0.0), pDemo->ptGPS);
-   }*/
+   }
 
    // draw the earth
    pt.setMeters(0.0, 0.0);
