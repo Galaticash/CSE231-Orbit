@@ -4,10 +4,9 @@
 *
 ************************************/
 
-
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "../spaceship.h"
+#include "../satellite.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -19,42 +18,99 @@ namespace CollisionObjectTest
 
 		TEST_METHOD(TestCollisionObject)
 		{
-
+			GravityDown();
+			GravityUp();
+			GravityLeft();
+			GravityRight();
 		}
 
 		TEST_METHOD(GravityDown)
 		{
-			// Place a Satelite above the Earth
-			// Satelite should accelerate down
+			// SETUP - Place a Satelite above the Earth
+			//testSatelite = Satelite();
+
+			// EXERCISE - Get Position/Acceleration
+
+			
+			// VERIFY - Satelite should accelerate down
 
 
+			// TEARDOWN
 		}
 
 		TEST_METHOD(GravityUp)
 		{
-			// Place a Satelite beneath the Earth
-			// Satelite should accelerate up
+			// SETUP - Place a Satelite beneath the Earth
 
+
+			// EXERCISE - Get Position/Acceleration
+
+
+			// VERIFY - Satelite should accelerate up
+
+
+			// TEARDOWN
 		}
 
 		TEST_METHOD(GravityLeft)
 		{
+			// SETUP -  Place a Satelite to the right of Earth
 
-			// Place a Satelite to the rigth of Earth
-			// Satelite should accelerate to the left
+
+			// EXERCISE - Get Position/Acceleration
+
+
+			// VERIFY - Satelite should accelerate to the left
+
+
+			// TEARDOWN
 
 		}
 
 		TEST_METHOD(GravityRight)
 		{
-			// Place a Satelite to the left of Earth
-			// Satelite should accelerate to the right
+			// SETUP - Place a Satelite to the left of Earth
+
+
+			// EXERCISE - Get Position/Acceleration
+
+
+			// VERIFY - Satelite should accelerate to the right
+
+
+			// TEARDOWN
 
 		}
 
 		TEST_METHOD(GEO_Orbit)
 		{
 			// Place a Satelite in GEO orbit,
+			// SETUP - Place a Satelite above the Earth
+
+
+			// EXERCISE - Get Position/Acceleration
+
+
+			// VERIFY - Satelite should accelerate down
+
+
+			// TEARDOWN
+
+		}
+
+
+		TEST_METHOD(collision)
+		{
+			// SETUP - Place a Satelite above the Earth
+
+
+			// EXERCISE - Get Position/Acceleration
+
+
+			// VERIFY - Satelite should accelerate down
+
+
+			// TEARDOWN
 
 		}
 

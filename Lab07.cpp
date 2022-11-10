@@ -33,7 +33,7 @@ const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this 
 
 // To show goal orbit and distance from Earth
 // Better to leave as a bool, or comment out?
-const bool SHOW_TESTING_VISUALS = false;
+const bool SHOW_TESTING_VISUALS = true;
 
 /*************************************************************************
  * Demo
