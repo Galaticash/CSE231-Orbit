@@ -13,6 +13,7 @@
 
 #include <iostream> 
 #include <cmath>
+#include "twoDValue.h"
 
 class TestPosition;
 class Acceleration;
@@ -22,7 +23,7 @@ class Velocity;
  * Position
  * A single position on the field in Meters  
  *********************************************/
-class Position
+class Position : public TwoDValue
 {
 public:
    friend TestPosition;

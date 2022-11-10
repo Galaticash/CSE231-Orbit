@@ -12,6 +12,7 @@ class TwoDValue
 {
 public:
    // Constructors
+   TwoDValue() : horizontal(0.0), vertical(0.0) {}
    TwoDValue(double horizontal, double vertical);
 
    // Getters
