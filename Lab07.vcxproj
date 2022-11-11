@@ -147,13 +147,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="acceleration.h" />
+    <ClInclude Include="angle.h" />
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="collisionObject.h" />
     <ClInclude Include="dragon.h" />
     <ClInclude Include="earth.h" />
     <ClInclude Include="fragment.h" />
     <ClInclude Include="gps.h" />
     <ClInclude Include="hubble.h" />
+    <ClInclude Include="object.h" />
     <ClInclude Include="part.h" />
+    <ClInclude Include="pixel.h" />
     <ClInclude Include="position.h" />
     <ClInclude Include="satellite.h" />
     <ClInclude Include="spaceship.h" />
