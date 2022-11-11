@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #include "collisionObject.h"
@@ -13,10 +11,10 @@
 class Satellite : public CollisionObject
 {
 public:
-   // Constructors
-   Satellite();
+	// Constructors
+	Satellite() {};
 
 private:
-   int numFragments;
-   vector <Part> parts;
+	int numFragments;
+	vector <Part> parts;
 };
