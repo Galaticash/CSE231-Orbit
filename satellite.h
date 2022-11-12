@@ -13,6 +13,7 @@ class Satellite : public CollisionObject
 public:
 	// Constructors
 	Satellite() {};
+	Satellite(Position position) : CollisionObject(position) {};
 
 private:
 	int numFragments;

@@ -12,7 +12,8 @@ class Velocity : public TwoDValue
 {
 public:
    // constructors
-   Velocity(double horizontal, double vertical) : TwoDValue(horizontal, vertical) {}
+   Velocity() : TwoDValue() {};
+   Velocity(double horizontal, double vertical) : TwoDValue(horizontal, vertical) {};
 
 private:
 

@@ -12,7 +12,8 @@ class CollisionObject : public Object
 {
 public:
    // Constructors
-   CollisionObject();
+   CollisionObject() {};
+   CollisionObject(Position position) : Object(position) {};
 
    bool collided(CollisionObject otherObject) { return true; }
 
@@ -20,5 +21,5 @@ public:
 
 private:
    double radius;
-   
+
 };

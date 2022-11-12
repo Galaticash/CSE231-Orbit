@@ -23,7 +23,7 @@ namespace SatelliteTest
 
 		};*/
 
-		TEST_METHOD(Satellite)
+		TEST_METHOD(SatelliteTesting)
 		{
 			// The Satellites are correctly affected by gravity
 			GravityDown();
@@ -41,12 +41,15 @@ namespace SatelliteTest
 		TEST_METHOD(GravityDown)
 		{
 			// SETUP - Place a Satelite above the Earth
-			//testSatelite = Satelite();
+			Position initial = Position();
+			Satellite testSatellite = Satellite(initial);
 
-			// EXERCISE - Get Position/Acceleration
-
+			// EXERCISE - Update Position
+			testSatellite.update();
 			
 			// VERIFY - Satelite should accelerate down
+			testSatellite.getPosition(); // Turn into assert, Y is down
+			// Make sure x didn't move
 
 
 			// TEARDOWN
@@ -55,9 +58,9 @@ namespace SatelliteTest
 		TEST_METHOD(GravityUp)
 		{
 			// SETUP - Place a Satelite beneath the Earth
+			Satellite testSatellite = Satellite();
 
-
-			// EXERCISE - Get Position/Acceleration
+			// EXERCISE - Update Position
 
 
 			// VERIFY - Satelite should accelerate up
@@ -69,9 +72,9 @@ namespace SatelliteTest
 		TEST_METHOD(GravityLeft)
 		{
 			// SETUP -  Place a Satelite to the right of Earth
+			Satellite testSatellite = Satellite();
 
-
-			// EXERCISE - Get Position/Acceleration
+			// EXERCISE - Update Position
 
 
 			// VERIFY - Satelite should accelerate to the left
@@ -84,9 +87,9 @@ namespace SatelliteTest
 		TEST_METHOD(GravityRight)
 		{
 			// SETUP - Place a Satelite to the left of Earth
+			Satellite testSatellite = Satellite();
 
-
-			// EXERCISE - Get Position/Acceleration
+			// EXERCISE - Update Position
 
 
 			// VERIFY - Satelite should accelerate to the right
@@ -101,16 +104,18 @@ namespace SatelliteTest
 		{
 			// SETUP
 			// Two Satelites travelling towards eachother
+			Satellite crashOne = Satellite();
+			Satellite crashTwo = Satellite();
 
 
 			// EXERCISE - Update position until they hit eachother
-
+			
 
 			// VERIFY - Satelites break apart upon collision
-
+			crashOne.collided(crashTwo);
+			crashTwo.collided(crashOne);
 
 			// TEARDOWN
-
 		}
 
 		TEST_METHOD(CollisionMeeting)
@@ -118,6 +123,8 @@ namespace SatelliteTest
 			// SETUP
 			// Two Satelites travelling towards a single point,
 			//  a collision where they glance off eachother
+			Satellite crashOne = Satellite();
+			Satellite crashTwo = Satellite();
 
 
 			// EXERCISE - Update position until they hit eachother
@@ -134,7 +141,8 @@ namespace SatelliteTest
 		{
 			// SETUP
 			// A peaceful Satelite is crashed into by another Satelite
-
+			Satellite crashOne = Satellite();
+			Satellite crashTwo = Satellite();
 
 			// EXERCISE - Update position until they hit eachother
 
@@ -168,6 +176,7 @@ namespace SatelliteTest
 		{
 			// SETUP
 			// without gravity ?
+			Satellite testSatellite = Satellite();
 
 			// EXERCISE - Update position
 		

@@ -21,7 +21,9 @@ class Velocity;
 
 /*********************************************
  * Position
- * A single position on the field in Meters  
+ * A single position on the field in Meters
+ *
+ * TODO: Move methods/attributes up to TwoDValue (base class) 
  *********************************************/
 class Position : public TwoDValue
 {
@@ -74,6 +76,7 @@ inline double computeDistance(const Position& pos1, const Position& pos2)
                (pos1.getMetersY() - pos2.getMetersY()) * (pos1.getMetersY() - pos2.getMetersY()));
 }
 
+// *TODO: Move up to TwoDValue
 // stream I/O useful for debugging
 std::ostream & operator << (std::ostream & out, const Position& pt);
 std::istream & operator >> (std::istream & in,        Position& pt);
@@ -88,5 +91,3 @@ struct PT
    double x;
    double y;
 };
-
-

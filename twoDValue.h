@@ -12,8 +12,8 @@ class TwoDValue
 {
 public:
    // Constructors
-   TwoDValue();
-   TwoDValue(double horizontal, double vertical);
+   TwoDValue() : TwoDValue(0, 0) {};
+   TwoDValue(double h, double v) { this->horizontal = h; this->vertical = v; };
 
    // Getters
    double getMetersHorizontal()  const { return horizontal; }
@@ -36,8 +36,8 @@ public:
    void setZoom(double metersFromPixels)     { this->metersFromPixels = metersFromPixels; }
    double getZoom()              const { return metersFromPixels; }
 
-private:
-   double horizontal;
-   double vertical;
+protected:
+   double horizontal; // X
+   double vertical;  // Y
    static double metersFromPixels;
 };

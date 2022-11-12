@@ -18,17 +18,21 @@ class Object
 {
 public:
    // Constructors
-   Object();
-   Object(TwoDValue pos, TwoDValue vel, Angle angle);
+   // Use default constructor for any value not specified
+   Object() : Object(Position(), Velocity(), Angle()) {};
+   Object(Position pos) : Object(pos, Velocity(), Angle()) {};
+   Object(Position pos, Velocity vel) : Object(pos, vel, Angle()) {};
+   Object(Position pos, Velocity vel, Angle angle) { this->pos = pos; this->vel = vel; this->angle = angle; };
 
    // Getters
-   TwoDValue getPosition()    const { return pos; }
-   TwoDValue getVelocity()    const { return vel; }
+   Position getPosition()    const { return pos; }
+   Velocity getVelocity()    const { return vel; }
    Angle getAngle()     const { return angle; }
+   vector<Pixel>* getVisual() { return &visual; };
 
-private:
-   TwoDValue pos;
-   TwoDValue vel;
+protected:
+   Position pos;
+   Velocity vel;
    Angle angle;
    vector <Pixel> visual;
 };
