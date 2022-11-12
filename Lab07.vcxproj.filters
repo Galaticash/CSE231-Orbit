@@ -27,7 +27,7 @@
     <ClCompile Include="uiInteract.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="position.cpp">
+    <ClCompile Include="twoDValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="simulator.cpp">

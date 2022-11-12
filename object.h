@@ -6,7 +6,7 @@
 
 #include "position.h"
 #include "velocity.h"
-#include "acceleration.h"
+#include "acceleration.h" // remove class
 #include "angle.h"
 #include "colorRect.h"
 #include <vector>
@@ -23,12 +23,8 @@ class Object
 {
 public:
    // Constructors
-   // Use default constructor for any value not specified
-   Object() : Object(Position()) {};
-   Object(Position pos) : Object(pos, Velocity()) {};
-   Object(Position pos, Velocity vel) : Object(pos, vel, Angle()) {};
    // TODO: Create Angle class or use double **
-   Object(Position pos, Velocity vel, Angle angle) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
+   Object(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
 
    // Getters
    Position getPosition()    const { return pos; }
@@ -54,16 +50,15 @@ public:
       double hAcc = horizontalAcceleration(totalAcc, angle);
 
       // Update the current velocity with the current acceleration
-      this->vel.setMetersHorizontal(velocityConstantAcceleration(this->vel.getMetersHorizontal(), hAcc, time));
-      this->vel.setMetersVertical(velocityConstantAcceleration(this->vel.getMetersVertical(), vAcc, time));
+      this->vel.setMetersX(velocityConstantAcceleration(this->vel.getMetersX(), hAcc, time));
+      this->vel.setMetersY(velocityConstantAcceleration(this->vel.getMetersY(), vAcc, time));
 
       // Adjust the position given the current position, velocity, and acceleration
-      double xGPS = distanceFormula(this->pos.getMetersX(), this->vel.getMetersHorizontal(), hAcc, time);
-      double yGPS = distanceFormula(this->pos.getMetersY(), this->vel.getMetersVertical(), vAcc, time);
+      double xGPS = distanceFormula(this->pos.getMetersX(), this->vel.getMetersX(), hAcc, time);
+      double yGPS = distanceFormula(this->pos.getMetersY(), this->vel.getMetersY(), vAcc, time);
 
       // Update the current position
-      this->pos = Position(xGPS, yGPS);
-      
+      this->pos.setMeters(xGPS, yGPS);      
    }
 
    /*************************************************************************

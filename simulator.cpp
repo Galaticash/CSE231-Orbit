@@ -1,5 +1,25 @@
 #include "simulator.h"
 
+void Simulator::moveShip(double x, double y) {};
+
+/* For object in collisionObjs, update their position 
+   (according to the amount of time that has passed? 
+   Better to leave with Simulator instead of assuming 
+   all Objects will have the correct time */
+
+// ERROR: Weird, throwing a linking error when defined here
+/*
+void Simulator::update() {
+
+   // Update the phase of the stars (should each start at a random phase)
+   /*
+   for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
+   {
+      
+   }
+}*/
+
+
 vector<Object*> Simulator::getObjects() {
    // Returns the pointers for all the Objects to be drawn
    vector<Object*> objects;
@@ -19,21 +39,3 @@ vector<Object*> Simulator::getObjects() {
 
    return objects;
 }
-
-/* For object in collisionObjs, update their position (according to the amount of time that has passed? Better to leave with Simulator instead of assuming all object will have the correct time*/
-void Simulator::update() {
-
-   // Update the phase of the stars (should each start at a random phase)
-   /*
-   for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
-   {
-      
-   }*/
-
-   // Update the position of each Object (all other objects are CollisionObjects
-   for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
-   {
-      CollisionObject* obj = *it;
-      obj->update(TIME);
-   }
-};

@@ -95,7 +95,7 @@ void callBack(const Interface* pUI, void* p)
       // DEBUG: Get Object type and number of ColorRects
       Object* obj = *it;
 
-      cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
+      //cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
       
       string objType = typeid(*obj).name();
 
@@ -139,7 +139,7 @@ void addObjects(Simulator s)
 
 }
 
-double Position::metersFromPixels = 40.0;
+double TwoDValue::metersFromPixels = 40.0;
 
 /*********************************
  * Initialize the simulation and set it in motion

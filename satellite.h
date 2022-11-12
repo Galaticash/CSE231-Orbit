@@ -12,9 +12,7 @@ class Satellite : public CollisionObject
 {
 public:
 	// Constructors
-	Satellite() : Satellite(Position()) {};
-	Satellite(Position pos) : Satellite(pos, Velocity()) {};
-	Satellite(Position pos, Velocity vel) : CollisionObject(pos, vel) { this->numFragments = 0; };
+	Satellite(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->numFragments = 0; };
 
 private:
 	int numFragments;

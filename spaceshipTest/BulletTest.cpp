@@ -6,8 +6,8 @@
 
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "../spaceship.h"
-#include "../bullet.h"
+//#include "../spaceship.h"
+//#include "../bullet.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -16,7 +16,7 @@ namespace BulletTest
 	TEST_CLASS(BulletTest)
 	{
 	public:
-
+		/*
 		class DummyShip : public Spaceship
 		{
 			// Not controlled by user input
@@ -33,6 +33,7 @@ namespace BulletTest
 			// But also make sure the timer doesn't affect collisions
 			Collision();
 		}
+		*/
 
 
 		TEST_METHOD(ShootMoving)

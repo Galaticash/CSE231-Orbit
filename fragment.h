@@ -13,8 +13,7 @@
 class Fragment : public CollisionObject
 {
 public:
-   Fragment();
-   Fragment(TwoDValue pos, TwoDValue vel, Angle angle);
+   Fragment(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->lifetime = 0; };
 
    bool isExpired() { return true; }
 

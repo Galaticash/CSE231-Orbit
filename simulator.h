@@ -23,13 +23,19 @@ public:
 	void createStars() { /* For numStars, add new Star() to list of Stars */ };
 	void addCollider(CollisionObject* newObj) { this->collisionObjects.push_back(newObj); };
 
-	void moveShip(double x, double y) {};
+	void moveShip(double x, double y);
 
-	void update();
+	void update() {
+		// Update the position of each Object (all other objects are CollisionObjects
+		for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
+		{
+			CollisionObject* obj = *it;
+			obj->update(TIME);
+		}
+	};
 	vector<Object*> getObjects(); // Get all Objects to be drawn
 
-
-private:
+protected:
 	vector<CollisionObject*> collisionObjects;
 	Spaceship* Ship;
 	vector<Star> stars;

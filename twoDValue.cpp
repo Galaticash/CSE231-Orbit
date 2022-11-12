@@ -7,34 +7,15 @@
  *    Everything we need to know about a location on the screen.
  ************************************************************************/
 
-#include "position.h"
-#include <cassert>
-
-
-Position::Position(double x, double y) : x(0.0), y(0.0)
-{
-   setMetersX(x);
-   setMetersY(y);
-}
-
-/******************************************
- * POINT : ASSIGNMENT
- * Assign a point
- *****************************************/
-Position& Position::operator = (const Position& pt)
-{
-   x = pt.x;
-   y = pt.y;
-   return *this;
-}
+#include "twoDValue.h"
 
 /******************************************
  * POSITION insertion
  *       Display coordinates on the screen
  *****************************************/
-std::ostream& operator << (std::ostream& out, const Position& pt)
+std::ostream& operator << (std::ostream& out, const TwoDValue& twoD)
 {
-   out << "(" << pt.getMetersX() << "m , " << pt.getMetersY() << "m)";
+   out << "(" << twoD.getMetersX() << "m , " << twoD.getMetersY() << "m)";
    return out;
 }
    
@@ -42,14 +23,14 @@ std::ostream& operator << (std::ostream& out, const Position& pt)
 * POSITION extraction
 *       Prompt for coordinates
 ******************************************/
-std::istream& operator >> (std::istream& in, Position& pt)
+std::istream& operator >> (std::istream& in, TwoDValue& twoD)
 {
    double x;
    double y;
    in >> x >> y;
 
-   pt.setMetersX(x);
-   pt.setMetersY(y);
+   twoD.setMetersX(x);
+   twoD.setMetersY(y);
 
    return in;
 }
