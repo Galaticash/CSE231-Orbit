@@ -14,11 +14,7 @@ namespace SatelliteTest
 {
 	TEST_CLASS(SimulatorTest)
 	{
-	public:		
-		class testSatellite : public Satellite {
-			
-		};
-
+	public:
 		// Tolerance of floating point approximation
 		const double tolerance = 100.0;
 
@@ -31,20 +27,22 @@ namespace SatelliteTest
 			double difference = value - test;
 			return (difference >= -tolerence) && (difference <= tolerence);
 		}
-				
+		
 		TEST_METHOD(SimulatorTesting)
 		{
-			// The Satellites are correctly affected by gravity
+			// The Simulator's objects are affected by gravity
 			GravityDown();
 			GravityUp();
 			GravityLeft();
 			GravityRight();
 
-			// The Satellites collide with other objects
-			// *Including Fragmnets and other Satelites
+			// The Simultaor can properly detect collisions
 			CollisionHeadOn();
 			CollisionMeeting();
 			CollisionTBone();
+
+			// A Satellite can properly orbit in the Simulation
+			GEO_Orbit();
 		}
 
 		TEST_METHOD(GravityDown)
@@ -159,8 +157,7 @@ namespace SatelliteTest
 
 			// EXERCISE - Update position until they hit eachother
 			double time = 100;
-			crashOne.update(time);
-			crashTwo.update(time);
+			test.update(time, false);
 
 			// VERIFY - Satelites break apart upon collision
 			Assert::IsTrue(crashOne.getCollided());
@@ -180,8 +177,7 @@ namespace SatelliteTest
 
 			// EXERCISE - Update position until they hit eachother
 			double time = 100;
-			crashOne.update(time);
-			crashTwo.update(time);
+			test.update(time, false);
 
 			// VERIFY - Satelites break apart upon collision
 			Assert::IsTrue(crashOne.getCollided());
@@ -200,8 +196,7 @@ namespace SatelliteTest
 
 			// EXERCISE - Update position until they hit eachother
 			double time = 100;
-			crashOne.update(time);
-			crashTwo.update(time);
+			test.update(time, false);
 
 			// VERIFY - Satelites break apart upon collision
 			Assert::IsTrue(crashOne.getCollided());
