@@ -32,7 +32,7 @@ namespace SatelliteTest
 			return (difference >= -tolerence) && (difference <= tolerence);
 		}
 				
-		TEST_METHOD(SatelliteTesting)
+		TEST_METHOD(SimulatorTesting)
 		{
 			// The Satellites are correctly affected by gravity
 			GravityDown();
