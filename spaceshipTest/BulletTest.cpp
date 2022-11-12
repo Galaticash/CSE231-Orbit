@@ -6,6 +6,7 @@
 
 #include "pch.h"
 #include "CppUnitTest.h"
+#include "../simulator.h"
 //#include "../spaceship.h"
 //#include "../bullet.h"
 
@@ -16,6 +17,16 @@ namespace BulletTest
 	TEST_CLASS(BulletTest)
 	{
 	public:
+		// Tolerance of floating point approximation
+		const double tolerance = 100.0;
+
+		// utility funciton because floating point numbers are approximations
+		bool closeEnough(double value, double test, double tolerence) const
+		{
+			double difference = value - test;
+			return (difference >= -tolerence) && (difference <= tolerence);
+		}
+
 		/*
 		class DummyShip : public Spaceship
 		{
@@ -39,8 +50,22 @@ namespace BulletTest
 		TEST_METHOD(ShootMoving)
 		{
 			// SETUP - Have a Spaceship with a constant velocity
+			Simulator test = Simulator();
+
+			Position initial = Position();
+			double initialX = 0.0;
+			double initialY = 0.0;
+			initial.setMeters(initialX, initialY);
+
+			Velocity initialVel = Velocity();
+			double initialVelX = 0.0;
+			double initialVelY = 100.0;
+			initialVel.setMeters(initialVelX, initialVelY);
+
+			double angle = 0.0;
 
 			// EXERCISE - Shoot a Bullet
+			test.createBullet(initial, initialVel, angle);
 
 			// VERIFY - Bullet is moving at a constant velocity away from the Spacehip,
 			//           9000m/s faster than the ship
@@ -51,8 +76,22 @@ namespace BulletTest
 		TEST_METHOD(ShootStationary)
 		{
 			// SETUP - Have a stationary Spaceship
+			Simulator test = Simulator();
+
+			Position initial = Position();
+			double initialX = 0.0;
+			double initialY = 0.0;
+			initial.setMeters(initialX, initialY);
+
+			Velocity initialVel = Velocity();
+			double initialVelX = 0.0;
+			double initialVelY = 0.0;
+			initialVel.setMeters(initialVelX, initialVelY);
+
+			double angle = 0.0;
 
 			// EXERCISE - Shoot a Bullet
+			test.createBullet(initial, initialVel, angle);
 
 			// VERIFY - Bullet is moving 9000m/s away from the Spaceship
 
@@ -62,21 +101,27 @@ namespace BulletTest
 		TEST_METHOD(Expiration)
 		{
 			// SETUP - Have a lonely Spaceship
+			Simulator test = Simulator();
+			Bullet testbullet = Bullet();
 
 			// EXERCISE - Shoot a Bullet
 
 			// VERIFY - Make sure the Bullet is deleted after the timer runs out
-
+			// lifetime >= 70
+			
 			// TEARDOWN
 		}
 
 		TEST_METHOD(Collision)
 		{
 			// SETUP - Have a Spaceship facing another Collision Object to shoot at
+			Simulator test = Simulator();
+			Bullet testbullet = Bullet();
 
 			// EXERCISE - Shoot a Bullet
 
 			// VERIFY - Make sure the Bullet is deleted EVEN IF its timer has not run out
+			// lifetime <= 69
 
 			// TEARDOWN
 		}

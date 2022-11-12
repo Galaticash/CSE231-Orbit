@@ -22,6 +22,7 @@ public:
 	void createStars() { /* For numStars, add new Star() to list of Stars */ };
 	void addCollider(CollisionObject* newObj) { this->collisionObjects.push_back(newObj); };
 
+	void createBullet(Position pos, Velocity vel, double angle) {};
 	void moveShip(double x, double y);
 
 	// Given an amount of time (seconds), update all collision objects
@@ -55,5 +56,4 @@ protected:
 	Spaceship* Ship;
 	vector<Star> stars;
 	double timeDialation;
-
 };
