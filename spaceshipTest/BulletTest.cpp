@@ -8,7 +8,7 @@
 #include "CppUnitTest.h"
 #include "../simulator.h"
 //#include "../spaceship.h"
-//#include "../bullet.h"
+#include "../bullet.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -69,6 +69,7 @@ namespace BulletTest
 
 			// VERIFY - Bullet is moving at a constant velocity away from the Spacehip,
 			//           9000m/s faster than the ship
+			// bulletVel = 9100
 
 			// TEARDOWN
 		}
@@ -94,6 +95,7 @@ namespace BulletTest
 			test.createBullet(initial, initialVel, angle);
 
 			// VERIFY - Bullet is moving 9000m/s away from the Spaceship
+			// bulletVel = 9000
 
 			// TEARDOWN
 		}
@@ -102,12 +104,15 @@ namespace BulletTest
 		{
 			// SETUP - Have a lonely Spaceship
 			Simulator test = Simulator();
-			Bullet testbullet = Bullet();
+			Bullet testBullet = Bullet();
 
 			// EXERCISE - Shoot a Bullet
+			bool testExpiration = testBullet.isExpired(); 
 
 			// VERIFY - Make sure the Bullet is deleted after the timer runs out
-			// lifetime >= 70
+			Assert::IsTrue(testExpiration == true);
+			//Assert::IsTrue(testBullet->lifetime >= 70);
+
 			
 			// TEARDOWN
 		}
@@ -116,13 +121,14 @@ namespace BulletTest
 		{
 			// SETUP - Have a Spaceship facing another Collision Object to shoot at
 			Simulator test = Simulator();
-			Bullet testbullet = Bullet();
+			Bullet testBullet = Bullet();
 
 			// EXERCISE - Shoot a Bullet
+			bool testExpiration = testBullet.isExpired();
 
 			// VERIFY - Make sure the Bullet is deleted EVEN IF its timer has not run out
-			// lifetime <= 69
-
+			Assert::IsTrue(testExpiration == false);
+			//Assert::IsTrue(testBullet->lifetime <= 69);
 			// TEARDOWN
 		}
 
