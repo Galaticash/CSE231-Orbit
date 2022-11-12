@@ -8,7 +8,7 @@
 #include "CppUnitTest.h"
 #include "../simulator.h"
 //#include "../spaceship.h"
-//#include "../bullet.h"
+#include "../bullet.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
