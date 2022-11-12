@@ -11,8 +11,8 @@
 class Bullet : public Fragment
 {
 public:
-   Bullet();
-   Bullet(TwoDValue pos, TwoDValue vel, Angle angle);
+   Bullet() : Bullet(Position(), Velocity(), Angle()) {};
+   Bullet(Position pos, Velocity vel, Angle angle) : Fragment(pos, vel, 0.0) {};
    
 private:
 
