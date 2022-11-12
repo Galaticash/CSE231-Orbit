@@ -12,8 +12,9 @@ class CollisionObject : public Object
 {
 public:
    // Constructors
-   CollisionObject() {};
-   CollisionObject(Position position) : Object(position) {};
+   CollisionObject() : CollisionObject(Position()) {};
+   CollisionObject(Position position) : CollisionObject(position, Velocity()) {};
+   CollisionObject(Position pos, Velocity vel) : Object(pos, vel) { this->radius = 0.0; };
 
 
    bool collided(CollisionObject otherObject) { return true; }

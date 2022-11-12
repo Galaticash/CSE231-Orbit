@@ -230,18 +230,18 @@ void drawCrewDragonCenter(const Position& center, double rotation)
       glDrawRect(center, Position(), rects[i], rotation);
 }
 
-
 void drawObject(const Object* obj)
 {
    vector<ColorRect> pixels = obj->getVisual();
    Position center = obj->getPosition();
    double rotation = obj->getAngle();
+
    for (vector<ColorRect>::iterator it = pixels.begin(); it != pixels.end(); it++)
    {
       glDrawRect(center, Position(), *it, rotation);
+
    }
 }
-
 
 /************************************************************************
  * DRAW Crew Dragon Right array
@@ -669,9 +669,7 @@ void drawStarlink(const Position& center, double rotation)
  * DRAW Ship
  * Draw a spaceship on the screen
  *  INPUT center    The position of the ship
- *        rotation  Which direction it is point
- *        offset    For pieces of the satellite, this is the relative position of the center
- *                  of rotation when it is connected to the main satellite
+ *        rotation  Which direction it is pointing
  *        thrust    Whether the thrusters are on
  *************************************************************************/
 void drawShip(const Position& center, double rotation, bool thrust)
@@ -991,8 +989,3 @@ double random(double min, double max)
 
    return num;
 }
-
-
-
-
-

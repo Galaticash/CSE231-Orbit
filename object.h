@@ -24,10 +24,11 @@ class Object
 public:
    // Constructors
    // Use default constructor for any value not specified
-   Object() : Object(Position(), Velocity(), Angle()) {};
-   Object(Position pos) : Object(pos, Velocity(), Angle()) {};
+   Object() : Object(Position()) {};
+   Object(Position pos) : Object(pos, Velocity()) {};
    Object(Position pos, Velocity vel) : Object(pos, vel, Angle()) {};
-   Object(Position pos, Velocity vel, Angle angle) { this->pos = pos; this->vel = vel; this->angle = angle; };
+   // TODO: Create Angle class or use double **
+   Object(Position pos, Velocity vel, Angle angle) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
 
    // Getters
    Position getPosition()    const { return pos; }
@@ -36,10 +37,12 @@ public:
       //return angle; } // Have angle.getRadians and angle.getDegrees
    vector<ColorRect> getVisual() const { return visual; };
 
-   void update(double time)
+   virtual void update(double time)
    {
       // TODO: Pass time or Global Const?
       // *TODO: Check isCollided here? If !isCollided, else destroy?
+
+      // TODO: Update position and rotation
 
       // Calculates the current angle and distance from the Earth (0, 0)
       double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
@@ -60,6 +63,7 @@ public:
 
       // Update the current position
       this->pos = Position(xGPS, yGPS);
+      
    }
 
    /*************************************************************************
@@ -182,7 +186,8 @@ public:
 protected:
    Position pos;
    Velocity vel;
-   Angle angle;
+   double angle;
+   //Angle angle;
    vector <ColorRect> visual;
 };
 

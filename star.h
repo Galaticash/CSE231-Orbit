@@ -9,8 +9,12 @@
 class Star : public Object
 {
 public:
-   Star() : Object() {};
+   Star() : Star(Position()) {};
+   Star(Position pos) : Object(Position()) { this->phase = 0; };
+
+   void update(double time) { this->phase++; };
+   int getPhase() { return this->phase; };
 
 private:
-
+   int phase;
 };

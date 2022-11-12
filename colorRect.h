@@ -25,10 +25,7 @@ const int RGB_GREEN[] = { 0, 150,   0 };
 
 struct ColorRect
 {
-   // Offset
-   //Position pos;
-
-   // Size of the Rect
+   // Position of Rectangle's corners
    int x0;
    int y0;
    int x1;

@@ -17,6 +17,10 @@ using namespace std;
 // Better to leave as a bool, or comment out?
 const bool SHOW_TESTING_VISUALS = true;
 
+// Constants for GEO Orbit
+const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
+const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this example)
+
 /*
 * Creating a Satelite, made of Parts
 * 
@@ -88,8 +92,39 @@ void callBack(const Interface* pUI, void* p)
    int numObjs = 0;
    for (vector<Object*>::iterator it = simObjects.begin(); it != simObjects.end(); it++)
    {
-      drawObject(*it);
+      // DEBUG: Get Object type and number of ColorRects
+      Object* obj = *it;
+
+      cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
+      
+      string objType = typeid(*obj).name();
+
+      // TEST: Draw based on obj type, instead of rewriting the entire Draw class
+      if(objType == "class Spaceship")
+      {
+         drawShip(obj->getPosition(), obj->getAngle(), ((Spaceship*)obj)->getThrust());
+      }
+      else if(objType == "class Earth")
+      {
+         // ERROR: Earth is not rotating
+         drawEarth(obj->getPosition(), obj->getAngle());
+      }
+      else if (objType == "class Star")
+      {
+         drawStar(obj->getPosition(), ((Star*)obj)->getPhase());
+      }
+      else
+      {
+         // ERROR: No drawing instance for object
+      }
+
+      // Draw the ColorRects of the Object
+      // So far, Earth is the only one that draws, Spaceship in progress
+      //drawObject(obj);
    }
+   cout << endl;
+
+   drawShip(Position(0, GEO_HEIGHT), 0, 1);
 
    // Neato. Can now draw objects by copying their draw function into the Object..
    // so yeah, GPS will all have their own draw method, meaning they will be a class of their own
