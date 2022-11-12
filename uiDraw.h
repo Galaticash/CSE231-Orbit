@@ -21,6 +21,7 @@ using std::min;
 using std::max;
 
 #include <sstream>
+#include "object.h"
 
 
 #define GL_SILENCE_DEPRECATION
@@ -45,6 +46,13 @@ public:
 private:
    Position pt;
 };
+
+/************************************************************************
+ * DRAW OBJECT
+ * Draw an Object on the screen.
+ *   INPUT  obj     The Object to draw
+ *************************************************************************/
+void drawObject(const Object* obj);
 
 /************************************************************************
  * DRAW FRAGMENT

@@ -37,20 +37,9 @@
 
 #include "position.h"
 #include "uiDraw.h"
+#include "colorRect.h"
 
 using namespace std;
-
-// colors ueed in the simulator
-const int RGB_WHITE[] =      { 255, 255, 255 };
-const int RGB_LIGHT_GREY[] = { 196, 196, 196 };
-const int RGB_GREY[] =       { 128, 128, 128 };
-const int RGB_DARK_GREY[] =  { 64,   64,  64 };
-const int RGB_DEEP_BLUE[] =  { 64,   64, 156 };
-const int RGB_BLUE[] =       { 0,     0, 256 };
-const int RGB_RED[] =        { 255,   0,   0 };
-const int RGB_GOLD[] =       { 255, 255,   0 };
-const int RGB_TAN[] =        { 180, 150, 110 };
-const int RGB_GREEN[] =      {   0, 150,   0 };
 
 const double PI = 3.1415926; // Pi, to calculate circles
 
@@ -87,24 +76,6 @@ inline void glResetColor()
 {
    glColor3f((GLfloat)1.0 /* red % */, (GLfloat)1.0 /* green % */, (GLfloat)1.0 /* blue % */);
 }   
-
-/************************************************************
- * COLOR RECTANGLE
- * A structure used to conveniently specify a rectangle 
- * of a certain color
- ************************************************************/
-struct ColorRect
-{
-   int x0;
-   int y0;
-   int x1;
-   int y1;
-   int x2;
-   int y2;
-   int x3;
-   int y3;
-   const int* rgb;
-};
 
 /************************************************************************
 * GL COLOR
@@ -258,6 +229,19 @@ void drawCrewDragonCenter(const Position& center, double rotation)
    for (int i = 0; i < sizeof(rects)/sizeof(ColorRect); i++)
       glDrawRect(center, Position(), rects[i], rotation);
 }
+
+
+void drawObject(const Object* obj)
+{
+   vector<ColorRect> pixels = obj->getVisual();
+   Position center = obj->getPosition();
+   double rotation = obj->getAngle();
+   for (vector<ColorRect>::iterator it = pixels.begin(); it != pixels.end(); it++)
+   {
+      glDrawRect(center, Position(), *it, rotation);
+   }
+}
+
 
 /************************************************************************
  * DRAW Crew Dragon Right array
@@ -738,8 +722,6 @@ void drawShip(const Position& center, double rotation, bool thrust)
    glResetColor();
    glEnd();
 }
-
-
 
 /************************************************************************
  * DRAW LINE

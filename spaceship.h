@@ -11,7 +11,7 @@
 class Spaceship : public Satellite
 {
 public:
-   Spaceship();
+   Spaceship() : Satellite() {};
 
 private:
 

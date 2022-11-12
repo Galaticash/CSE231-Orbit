@@ -9,6 +9,7 @@
 class Angle
 {
 public:
+   Angle() {};
 
 private:
 

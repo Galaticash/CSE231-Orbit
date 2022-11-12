@@ -1,15 +1,15 @@
-
-
 #pragma once
-
 /*********************************************
  * Star
  * A star that exists in space. It is part of the background 
  * so it has no collision.
  *********************************************/
-class Star
+#include "object.h"
+
+class Star : public Object
 {
 public:
+   Star() : Object() {};
 
 private:
 

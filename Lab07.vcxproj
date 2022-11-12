@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Lab07.cpp" />
     <ClCompile Include="position.cpp" />
+    <ClCompile Include="simulator.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="uiDraw.cpp" />
     <ClCompile Include="uiInteract.cpp" />
@@ -154,10 +155,11 @@
     <ClInclude Include="earth.h" />
     <ClInclude Include="fragment.h" />
     <ClInclude Include="gps.h" />
+    <ClInclude Include="simulator.h" />
     <ClInclude Include="hubble.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="part.h" />
-    <ClInclude Include="pixel.h" />
+    <ClInclude Include="colorRect.h" />
     <ClInclude Include="position.h" />
     <ClInclude Include="satellite.h" />
     <ClInclude Include="spaceship.h" />

@@ -12,7 +12,7 @@ class Satellite : public CollisionObject
 {
 public:
 	// Constructors
-	Satellite() {};
+	Satellite() : Satellite(Position()) {};
 	Satellite(Position position) : CollisionObject(position) {};
 
 private:

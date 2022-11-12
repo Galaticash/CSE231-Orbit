@@ -15,6 +15,7 @@ public:
    CollisionObject() {};
    CollisionObject(Position position) : Object(position) {};
 
+
    bool collided(CollisionObject otherObject) { return true; }
 
    double getRadius() { return radius; }

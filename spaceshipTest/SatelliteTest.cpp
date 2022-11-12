@@ -3,9 +3,9 @@
 *
 *
 ************************************/
-
 #include "pch.h"
 #include "CppUnitTest.h"
+#include "../simulator.h"
 #include "../satellite.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -15,6 +15,11 @@ namespace SatelliteTest
 	TEST_CLASS(SatelliteTest)
 	{
 	public:
+		class testSimulator : public Simulator
+		{
+		public:
+			testSimulator() {};
+		};
 
 		/*
 		class testSatellite : public Satellite
@@ -41,12 +46,17 @@ namespace SatelliteTest
 		TEST_METHOD(GravityDown)
 		{
 			// SETUP - Place a Satelite above the Earth
-			Position initial = Position();
-			Satellite testSatellite = Satellite(initial);
+			testSimulator test = testSimulator();
 
-			// EXERCISE - Update Position
-			testSatellite.update();
-			
+			Position initial = Position();
+			initial.setMeters(0.0, 1000);
+
+			Satellite testSatellite = Satellite(initial);
+			test.addCollider(&testSatellite);
+
+			// EXERCISE - Update Simulation
+			test.update();
+
 			// VERIFY - Satelite should accelerate down
 			testSatellite.getPosition(); // Turn into assert, Y is down
 			// Make sure x didn't move
@@ -109,7 +119,7 @@ namespace SatelliteTest
 
 
 			// EXERCISE - Update position until they hit eachother
-			
+
 
 			// VERIFY - Satelites break apart upon collision
 			crashOne.collided(crashTwo);
@@ -179,7 +189,7 @@ namespace SatelliteTest
 			Satellite testSatellite = Satellite();
 
 			// EXERCISE - Update position
-		
+
 			// VERIFY - goes in a staight line
 
 			// TEARDOWN		
