@@ -1,5 +1,5 @@
 /***************************************
-* Satellite Test
+* Simulation Test
 *
 *
 ************************************/
@@ -12,24 +12,18 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace SatelliteTest
 {
-	TEST_CLASS(SatelliteTest)
+	TEST_CLASS(SimulatorTest)
 	{
-	public:
-		class testSimulator : public Simulator
-		{
-		public:
-			testSimulator() {};
-			void update() {
-				// Update the position of each Object (all other objects are CollisionObjects
-				for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
-				{
-					CollisionObject* obj = *it;
-					obj->update(TIME);
-				}
-			};
+	public:		
+		class testSatellite : public Satellite {
+			
 		};
-		
+
+		// Tolerance of floating point approximation
 		const double tolerance = 100.0;
+
+		const double GRAVITY_TEST_TIME = 10;
+		const double GRAVITY_DISTANCE = 40000000.0;
 
 		// utility funciton because floating point numbers are approximations
 		bool closeEnough(double value, double test, double tolerence) const
@@ -37,15 +31,7 @@ namespace SatelliteTest
 			double difference = value - test;
 			return (difference >= -tolerence) && (difference <= tolerence);
 		}
-
-		/*
-		class testSatellite : public Satellite
-		{
-
-
-		};*/
-
-		
+				
 		TEST_METHOD(SatelliteTesting)
 		{
 			// The Satellites are correctly affected by gravity
@@ -64,24 +50,24 @@ namespace SatelliteTest
 		TEST_METHOD(GravityDown)
 		{
 			// SETUP - Place a Satelite above the Earth
-			testSimulator test = testSimulator();
+			Simulator test = Simulator();
 
 			Position initial = Position();
 			double initialX = 0.0;
-			double initialY = 1000.0;
+			double initialY = GRAVITY_DISTANCE;
 			initial.setMeters(initialX, initialY);
 
 			Satellite testSatellite = Satellite(initial);
 			test.addCollider(&testSatellite);
 
 			// EXERCISE - Update Simulation
-			test.update();
+			test.update(GRAVITY_TEST_TIME);
 
 			// VERIFY - Satelite should accelerate down
 			// Make sure x didn't move (approximate for floating point)			
 			Assert::IsTrue(closeEnough(initialX, testSatellite.getPosition().getMetersX(), tolerance));
 			// Satelite should move down
-			Assert::IsTrue(testSatellite.getPosition().getMetersY() > testSatellite.getPosition().getMetersY());
+			Assert::IsTrue(initialY > testSatellite.getPosition().getMetersY());
 
 			// TEARDOWN
 		}
@@ -89,24 +75,24 @@ namespace SatelliteTest
 		TEST_METHOD(GravityUp)
 		{
 			// SETUP - Place a Satelite beneath the Earth
-			testSimulator test = testSimulator();
+			Simulator test = Simulator();
 
 			Position initial = Position();
 			double initialX = 0.0;
-			double initialY = 1000.0;
+			double initialY = -GRAVITY_DISTANCE;
 			initial.setMeters(initialX, initialY);
 
 			Satellite testSatellite = Satellite(initial);
 			test.addCollider(&testSatellite);
 
 			// EXERCISE - Update Simulation
-			test.update();
+			test.update(GRAVITY_TEST_TIME);
 
 			// VERIFY - Satelite should accelerate down
 			// Make sure x didn't move (approximate for floating point)			
 			Assert::IsTrue(closeEnough(initialX, testSatellite.getPosition().getMetersX(), tolerance));
 			// Satelite should move up
-			Assert::IsTrue(testSatellite.getPosition().getMetersY() > testSatellite.getPosition().getMetersY());
+			Assert::IsTrue(initialY < testSatellite.getPosition().getMetersY());
 
 			// TEARDOWN
 		}
@@ -114,24 +100,24 @@ namespace SatelliteTest
 		TEST_METHOD(GravityLeft)
 		{
 			// SETUP -  Place a Satelite to the right of Earth
-			testSimulator test = testSimulator();
+			Simulator test = Simulator();
 
 			Position initial = Position();
-			double initialX = 0.0;
-			double initialY = 1000.0;
+			double initialX = GRAVITY_DISTANCE;
+			double initialY = 0.0;
 			initial.setMeters(initialX, initialY);
 
 			Satellite testSatellite = Satellite(initial);
 			test.addCollider(&testSatellite);
 
 			// EXERCISE - Update Simulation
-			test.update();
+			test.update(GRAVITY_TEST_TIME);
 
 			// VERIFY - Satelite should accelerate down
 			// Make sure y didn't move (approximate for floating point)			
 			Assert::IsTrue(closeEnough(initialY, testSatellite.getPosition().getMetersY(), tolerance));
 			// Satelite should move left
-			Assert::IsTrue(testSatellite.getPosition().getMetersX() < testSatellite.getPosition().getMetersX());
+			Assert::IsTrue(initialX > testSatellite.getPosition().getMetersX());
 
 			// TEARDOWN
 		}
@@ -139,24 +125,24 @@ namespace SatelliteTest
 		TEST_METHOD(GravityRight)
 		{
 			// SETUP - Place a Satelite to the left of Earth
-			testSimulator test = testSimulator();
+			Simulator test = Simulator();
 
 			Position initial = Position();
-			double initialX = 0.0;
-			double initialY = 1000.0;
+			double initialX = -GRAVITY_DISTANCE;
+			double initialY = 0.0;
 			initial.setMeters(initialX, initialY);
 
 			Satellite testSatellite = Satellite(initial);
 			test.addCollider(&testSatellite);
 
 			// EXERCISE - Update Simulation
-			test.update();
+			test.update(GRAVITY_TEST_TIME);
 
 			// VERIFY - Satelite should accelerate down
 			// Make sure y didn't move (approximate for floating point)			
 			Assert::IsTrue(closeEnough(initialY, testSatellite.getPosition().getMetersY(), tolerance));
 			// Satelite should move right
-			Assert::IsTrue(testSatellite.getPosition().getMetersX() < testSatellite.getPosition().getMetersX());
+			Assert::IsTrue(initialX < testSatellite.getPosition().getMetersX());
 
 
 			// TEARDOWN
@@ -165,21 +151,20 @@ namespace SatelliteTest
 
 		TEST_METHOD(CollisionHeadOn)
 		{
-			// SETUP
-			testSimulator testSim = testSimulator();
-			
+			// SETUP			
+			Simulator test = Simulator();
 			// Two Satelites travelling towards eachother
 			Satellite crashOne = Satellite();
 			Satellite crashTwo = Satellite();
-			testSim.addCollider(&crashOne);
-			testSim.addCollider(&crashTwo);
 
 			// EXERCISE - Update position until they hit eachother
-			testSim.update();
+			double time = 100;
+			crashOne.update(time);
+			crashTwo.update(time);
 
 			// VERIFY - Satelites break apart upon collision
-			Assert::IsTrue(crashOne.collided(crashTwo));
-			Assert::IsTrue(crashTwo.collided(crashOne));
+			Assert::IsTrue(crashOne.getCollided());
+			Assert::IsTrue(crashTwo.getCollided());
 
 			// TEARDOWN
 		}
@@ -187,75 +172,99 @@ namespace SatelliteTest
 		TEST_METHOD(CollisionMeeting)
 		{
 			// SETUP
+			Simulator test = Simulator();
 			// Two Satelites travelling towards a single point,
 			//  a collision where they glance off eachother
 			Satellite crashOne = Satellite();
 			Satellite crashTwo = Satellite();
 
-
 			// EXERCISE - Update position until they hit eachother
-
+			double time = 100;
+			crashOne.update(time);
+			crashTwo.update(time);
 
 			// VERIFY - Satelites break apart upon collision
-			Assert::IsTrue(crashOne.collided(crashTwo));
-			Assert::IsTrue(crashTwo.collided(crashOne));
+			Assert::IsTrue(crashOne.getCollided());
+			Assert::IsTrue(crashTwo.getCollided());
 
 			// TEARDOWN
-
 		}
 
 		TEST_METHOD(CollisionTBone)
 		{
 			// SETUP
+			Simulator test = Simulator();
 			// A peaceful Satelite is crashed into by another Satelite
 			Satellite crashOne = Satellite();
 			Satellite crashTwo = Satellite();
 
 			// EXERCISE - Update position until they hit eachother
-
+			double time = 100;
+			crashOne.update(time);
+			crashTwo.update(time);
 
 			// VERIFY - Satelites break apart upon collision
-			Assert::IsTrue(crashOne.collided(crashTwo));
-			Assert::IsTrue(crashTwo.collided(crashOne));
+			Assert::IsTrue(crashOne.getCollided());
+			Assert::IsTrue(crashTwo.getCollided());
 
 			// TEARDOWN
-
 		}
-
-
+		
 		TEST_METHOD(GEO_Orbit)
 		{
 			// OPTIONAL, would need specific numbers
 			// Place a Satelite in GEO orbit,
 			// SETUP - Place a Satelite above the Earth
 
+			const double GEO_TEST_HEIGHT = 35786000.0 + 6378000.0; // GEO orbit, items here should match Earth's rotation
+			const double GEO_TEST_VEL_X = -3100.0;  // moving 3.1 km/s (to the left in this example)
 
-			// EXERCISE - Get Position/Acceleration
+			Simulator test = Simulator();
+			Satellite orbitTest = Satellite(Position(0.0, GEO_TEST_HEIGHT), Velocity(GEO_TEST_VEL_X, 0.0));
+			test.addCollider(&orbitTest);
 
+			// EXERCISE - Do an orbit around the Earth
+			double time = 600;
+			test.update(time);
 
-			// VERIFY - Satelite should accelerate down
+			// VERIFY - Correct position/velocity and didn't crash
+			Assert::IsFalse(orbitTest.getCollided());
 
+			Position expectedPos = Position(0.0, GEO_TEST_HEIGHT);
+			// TODO: Make a closeEnough function for 2DValues
+			Assert::IsTrue(closeEnough(expectedPos.getMetersX(), orbitTest.getPosition().getMetersX(), tolerance));
+			Assert::IsTrue(closeEnough(expectedPos.getMetersY(), orbitTest.getPosition().getMetersY(), tolerance));
+
+			// Velocity should also be about the same
+			Assert::IsTrue(closeEnough(GEO_TEST_VEL_X, orbitTest.getVelocity().getMetersX(), tolerance));
+			Assert::IsTrue(closeEnough(0, orbitTest.getVelocity().getMetersY(), tolerance));
 
 			// TEARDOWN
-
 		}
 
 		TEST_METHOD(ConstantVelocity)
 		{
 			// SETUP
-			// without gravity ?
-			Satellite testSatellite = Satellite(Position(0.0, 0.0), Velocity(0, 100));
+			Simulator test = Simulator();
 
-			// EXERCISE - Update position
+			double initialPosX = 0.0;
+			double initialPosY = 0.0;
+
+			double initialVelX = 0.0;
+			double initialVelY = 100.0;
+			Satellite testSatellite = Satellite(Position(initialPosX, initialPosY), Velocity(initialVelX, initialVelY));
+
+			// EXERCISE - Update position, without gravity
 			double time = 100; // Time in seconds
-			testSatellite.update(time);
+			test.update(time, false);
 
-			// VERIFY - Is moving in Y direction
-			testSatellite.getVelocity(); // Velocity hasn't changed, nothing acting on it
-
+			// VERIFY - Moved properly
+			double expectedPosY = initialPosY + (initialVelY * time);
+			Assert::IsTrue(closeEnough(expectedPosY, testSatellite.getPosition().getMetersY(), tolerance));
+			// Velocity hasn't changed, nothing acting on it
+			Assert::AreEqual(testSatellite.getVelocity().getMetersY(), initialVelY);
 
 			// TEARDOWN		
 		}
-
 	};
 }

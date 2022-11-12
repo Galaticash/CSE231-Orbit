@@ -14,7 +14,7 @@ public:
 	// Constructors
 	Satellite(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->numFragments = 0; };
 
-private:
+protected:
 	int numFragments;
 	vector <Part> parts;
 };

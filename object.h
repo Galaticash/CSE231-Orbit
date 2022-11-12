@@ -7,59 +7,67 @@
 #include "position.h"
 #include "velocity.h"
 #include "acceleration.h" // remove class
-#include "angle.h"
-#include "colorRect.h"
+#include "angle.h"   // Add/construct or just use double
+
+#include "colorRect.h"  // *Note: either reconstruct all into colorRects, or have a typeid switch case, and use existing
 #include <vector>
 
 using namespace std;
 
-/* TODO: Consts here or in Simulator? */
-
-const double GRAVITY = -9.8067;           // Gravity constant in m/s^2
-const double EARTH_RADIUS = 6378000.0;    // meters
-
-
 class Object
 {
 public:
-   // Constructors
-   // TODO: Create Angle class or use double **
+   // ** TODO: Create Angle class or use double **
    Object(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
 
-   // Getters
-   Position getPosition()    const { return pos; }
-   Velocity getVelocity()    const { return vel; }
-   double getAngle()     const { return 0.0; }
-      //return angle; } // Have angle.getRadians and angle.getDegrees
-   vector<ColorRect> getVisual() const { return visual; };
-
-   virtual void update(double time)
+   // Update the position, rotation, and other status of the object
+   virtual void update(double time, double gravity = 0.0, double planetRadius = 0.0)
    {
-      // TODO: Pass time or Global Const?
-      // *TODO: Check isCollided here? If !isCollided, else destroy?
+      // Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
+      // OR just pass the Earth in overall, get pos, radius, and gravity?
 
-      // TODO: Update position and rotation
+      double hAcc = 0.0;
+      double vAcc = 0.0;
 
-      // Calculates the current angle and distance from the Earth (0, 0)
-      double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
-      double height = heightAboveEarth(this->pos.getMetersX(), this->pos.getMetersY());
+      // If calculating gravity/orbiting around a planet,
+      //  calculate acceleartion and update current velocity
+      if (gravity <= 0.0)
+      {
+         // Calculates the current angle and distance from the Earth (0, 0)
+         double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
+         double height = heightAbovePlanet(this->pos.getMetersX(), this->pos.getMetersY(), planetRadius);
 
-      // Calculate the current acceleration
-      double totalAcc = gravityEquation(height);
-      double vAcc = verticalAcceleration(totalAcc, angle);
-      double hAcc = horizontalAcceleration(totalAcc, angle);
+         // Calculate the current acceleration
+         double totalAcc = gravityEquation(height, planetRadius, gravity);
+         double vAcc = verticalAcceleration(totalAcc, angle);
+         double hAcc = horizontalAcceleration(totalAcc, angle);
 
-      // Update the current velocity with the current acceleration
-      this->vel.setMetersX(velocityConstantAcceleration(this->vel.getMetersX(), hAcc, time));
-      this->vel.setMetersY(velocityConstantAcceleration(this->vel.getMetersY(), vAcc, time));
+         // Update the current velocity with the current acceleration
+         this->vel.setMetersX(velocityConstantAcceleration(this->vel.getMetersX(), hAcc, time));
+         this->vel.setMetersY(velocityConstantAcceleration(this->vel.getMetersY(), vAcc, time));
+      }
+
+      // Adjust the rotation
+      //this->angle +=
 
       // Adjust the position given the current position, velocity, and acceleration
       double xGPS = distanceFormula(this->pos.getMetersX(), this->vel.getMetersX(), hAcc, time);
       double yGPS = distanceFormula(this->pos.getMetersY(), this->vel.getMetersY(), vAcc, time);
 
       // Update the current position
-      this->pos.setMeters(xGPS, yGPS);      
+      this->pos.setMeters(xGPS, yGPS);
    }
+
+   // Getters and Setters
+   Position getPosition()    const { return pos; }
+   
+   //void addVelocity(Velocity v) { this->vel += v; }; // TODO: Add 2D Value +=/-= operators
+   void addVelocity(double velX, double velY) { this->vel.addMetersX(velX); this->vel.addMetersY(velY); };
+   Velocity getVelocity()    const { return vel; }
+  
+   double getAngle()     const { return 0.0; }
+      //return angle; } // Have angle.getRadians and angle.getDegrees
+   vector<ColorRect> getVisual() const { return visual; };
 
    /*************************************************************************
     * GRAVITY DIRECTION
@@ -71,6 +79,7 @@ public:
     * xs = horizontal position of the satellite (meters)
     * ys = vertical position of the satellite   (meters)
     *************************************************************************/
+    // TODO: Assumes Earth is located at (0, 0), calculate distance?
    double gravityDirection(double xs, double ys) {
       double d = atan2(xs, ys);
       return d;
@@ -85,8 +94,9 @@ public:
     * y = vertical position of object     (meters)
     * r = radius of earth                 (meters)
     *************************************************************************/
-   double heightAboveEarth(double x, double y) {
-      double h = sqrt(x * x + y * y) - EARTH_RADIUS;
+   // TODO: Assumes Earth is located at (0, 0), calculate distance?
+   double heightAbovePlanet(double x, double y, double radius) {
+      double h = sqrt(x * x + y * y) - radius;
       return h;
    }
 
@@ -99,9 +109,9 @@ public:
     * r  = radius of earth        (meters)
     * h  = height above earth     (meters)
     *************************************************************************/
-   double gravityEquation(double h) {
+   double gravityEquation(double h, double radius, double gravity) {
       // TODO: Figure out if it is better to repeat this equation or to use the square function
-      double gh = GRAVITY * pow((EARTH_RADIUS / (EARTH_RADIUS + h)), 2);
+      double gh = gravity * pow((radius / (radius + h)), 2);
       return gh;
    }
 

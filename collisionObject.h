@@ -15,14 +15,28 @@ public:
    //CollisionObject(Position pos, Velocity vel) : CollisionObject(pos, vel, 0.0) {};
    //CollisionObject(Position pos, Velocity vel, double angle) : Object(pos, vel, angle) { this->radius = 0.0; };
   // Or
-   CollisionObject(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : Object(pos, vel, angle) { this->radius = 0.0; };
+   CollisionObject(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : Object(pos, vel, angle) { this->radius = 0.0; this->collided = false; };
 
+	void update(double time, double gravity = 0.0, double planetRadius = 0.0) {
+		// If the object has not collided,
+		if (!collided)
+		{
+			// Calculate normally
+			Object::update(time, gravity, planetRadius);
+		}
+		else
+		{
+			// Has collided, TODO: destroy
+			return;
+		}
+	}
+	bool setCollided(bool c) { this->collided = c; }; // Simulator will check for collisions
+	bool getCollided() { return this->collided; };
 
-   bool collided(CollisionObject otherObject) { return true; }
+   double getRadius() { return radius; };
 
-   double getRadius() { return radius; }
-
-private:
+protected:
+   bool collided;
    double radius;
 
 };

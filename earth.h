@@ -27,10 +27,9 @@ public:
       createVisual(); // Populate the vector of ColorRects
    };
    
-   void update(double time) { 
-      // rotate the earth
+   void update(double time, double gravity = 0.0, double radius = 0.0) { 
+      // The Earth will not move, only rotate
       this->angle += ROTATION_SPEED;
-      //this->pos.addPixelsX(-5);
    }   
 
 private:
