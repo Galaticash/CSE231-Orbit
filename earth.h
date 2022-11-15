@@ -32,6 +32,9 @@ public:
       this->angle += ROTATION_SPEED;
    }   
 
+   // The Earth will not break apart
+   void breakApart() {};
+
 private:
    void createVisual()
    {

@@ -15,6 +15,9 @@ namespace SatelliteTest
 	TEST_CLASS(SimulatorTest)
 	{
 	public:
+
+		// TODO: Put copied code for testing in another file, include in all test files
+		
 		// Tolerance of floating point approximation
 		const double tolerance = 100.0;
 
@@ -50,12 +53,12 @@ namespace SatelliteTest
 			// SETUP - Place a Satelite above the Earth
 			Simulator test = Simulator();
 
-			Position initial = Position();
 			double initialX = 0.0;
 			double initialY = GRAVITY_DISTANCE;
-			initial.setMeters(initialX, initialY);
+			Position initial = Position(initialX, initialY);
 
 			Satellite testSatellite = Satellite(initial);
+			// testSatellite.pos = initial; // But inacessable???
 			test.addCollider(&testSatellite);
 
 			// EXERCISE - Update Simulation
@@ -75,10 +78,9 @@ namespace SatelliteTest
 			// SETUP - Place a Satelite beneath the Earth
 			Simulator test = Simulator();
 
-			Position initial = Position();
 			double initialX = 0.0;
 			double initialY = -GRAVITY_DISTANCE;
-			initial.setMeters(initialX, initialY);
+			Position initial = Position(initialX, initialY);
 
 			Satellite testSatellite = Satellite(initial);
 			test.addCollider(&testSatellite);
@@ -100,10 +102,9 @@ namespace SatelliteTest
 			// SETUP -  Place a Satelite to the right of Earth
 			Simulator test = Simulator();
 
-			Position initial = Position();
 			double initialX = GRAVITY_DISTANCE;
 			double initialY = 0.0;
-			initial.setMeters(initialX, initialY);
+			Position initial = Position(initialX, initialY);
 
 			Satellite testSatellite = Satellite(initial);
 			test.addCollider(&testSatellite);
@@ -125,10 +126,9 @@ namespace SatelliteTest
 			// SETUP - Place a Satelite to the left of Earth
 			Simulator test = Simulator();
 
-			Position initial = Position();
 			double initialX = -GRAVITY_DISTANCE;
 			double initialY = 0.0;
-			initial.setMeters(initialX, initialY);
+			Position initial = Position(initialX, initialY);
 
 			Satellite testSatellite = Satellite(initial);
 			test.addCollider(&testSatellite);

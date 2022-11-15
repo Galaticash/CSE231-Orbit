@@ -3,6 +3,7 @@
 #include "spaceship.h"
 #include "star.h"
 #include "earth.h"
+#include "fragment.h"
 
 // Simulation Information
 const double TIME = 48;         // Real-world seconds between frames
@@ -41,6 +42,27 @@ public:
 			// If gravity is turned off, passes 0 values
 			double gravity = gravityOn ? GRAVITY : 0.0;
 			double radius = gravityOn ? EARTH_RADIUS : 0.0;
+			if (obj->getCollided())
+			{
+				obj->breakApart(collisionObjects);
+					if (typeid(obj).name() == "class Satellite")
+					{
+
+						/*
+						vector<Part*> subParts = ((Satellite*)obj)->getSubParts();
+						for (vector<Part*>::iterator it = subParts.begin(); it != subParts.end(); it++)
+						{
+							this->addCollider(*it);
+						}*/
+					}
+
+					int numFragments = obj->getNumFragments();
+					for (int i = 0; i < numFragments; i++)
+					{
+						this->addCollider(new Fragment());
+					}				
+			}
+
 			obj->update(t, gravity, radius);
 
 			// TODO: If an object has been hit...

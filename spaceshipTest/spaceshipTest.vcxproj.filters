@@ -24,9 +24,27 @@
     <ClCompile Include="BulletTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SatelliteTestVS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SatelliteTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\testPosition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
