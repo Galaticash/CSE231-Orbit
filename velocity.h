@@ -1,8 +1,9 @@
-
-
 #pragma once
 
+#ifndef TWO_D_VALUE
+#define TWO_D_VALUE
 #include "twoDValue.h"
+#endif
 
 /*********************************************
  * Velocity
@@ -11,9 +12,7 @@
 class Velocity : public TwoDValue
 {
 public:
-   // constructors
-   Velocity() : TwoDValue() {};
-   Velocity(double horizontal, double vertical) : TwoDValue(horizontal, vertical) {};
+   Velocity(double horizontal = 0.0, double vertical = 0.0) : TwoDValue(horizontal, vertical) {};
 
 private:
 

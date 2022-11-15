@@ -1,5 +1,5 @@
 /***************************************
-* Bullet Test
+* Bullet Test VS
 * Test that a bullet will have the necessary info when
 * it is created, and that it is deestroyed properly.
 ************************************/

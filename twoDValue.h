@@ -1,21 +1,24 @@
 #pragma once
 
+#include <iostream> 
+#include <cmath>
+
+// The default zoom value for the simulator, will use if not set
+const double DEFAULT_ZOOM = 128000.0 /* 128km equals 1 pixel */;
+
 /*********************************************
  * 2D Value
  * A pair of values that represent a horizontal and
  * vertical direction. All from Bro. Helfrich's
  * position.h code.
  *********************************************/
-
-#include <iostream> 
-#include <cmath>
-
 class TwoDValue
 {
 public:
-   // Constructor
    // If no value given, assumes equals 0
-   TwoDValue(double newX = 0, double newY = 0) { this->x = newX; this->y = newY; };
+   // Sets Zoom to Default, can be adjusted later with setZoom()
+   TwoDValue(double newX = 0.0, double newY = 0.0) { /*this->setZoom(DEFAULT_ZOOM);*/ this->x = newX; this->y = newY; };
+   TwoDValue(const TwoDValue& pt) : TwoDValue(pt.x, pt.y) {};
 
    TwoDValue& operator = (const TwoDValue& twoD) {
       x = twoD.x;

@@ -18,7 +18,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimulatorTest.cpp">
+    <ClCompile Include="SimulatorTestVS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BulletTestVS.cpp">
@@ -27,7 +27,7 @@
     <ClCompile Include="SatelliteTestVS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="testRunner.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,13 +35,13 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SatelliteTest.h">
+    <ClInclude Include="testSatellite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test.h">
+    <ClInclude Include="testRunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="testPosition.h">

@@ -8,9 +8,9 @@
  ************************************************************************/
 
 #include "pch.h"
-#include "test.h"
+#include "testRunner.h"
 #include "testPosition.h"
-#include "SatelliteTest.h"
+#include "testSatellite.h"
 
 /*****************************************************************
  * TEST RUNNER

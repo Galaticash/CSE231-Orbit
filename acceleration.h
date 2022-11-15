@@ -1,8 +1,9 @@
-
-
 #pragma once
 
+#ifndef TWO_D_VALUE
+#define TWO_D_VALUE
 #include "twoDValue.h"
+#endif
 
 /*********************************************
  * Acceleration

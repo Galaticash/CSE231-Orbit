@@ -3,7 +3,7 @@
 #include "spaceship.h"
 #include "star.h"
 #include "earth.h"
-#include "fragment.h"
+#include "bullet.h"
 
 // Simulation Information
 const double TIME = 48;         // Real-world seconds between frames

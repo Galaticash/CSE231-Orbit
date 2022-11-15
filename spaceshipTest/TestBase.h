@@ -14,7 +14,7 @@ public:
    // A Method that will run all the Test's test
    virtual void run() {};
 
-private:
+protected:
    // utility funciton because floating point numbers are approximations
    bool closeEnough(double value, double test, double tolerence) const
    {

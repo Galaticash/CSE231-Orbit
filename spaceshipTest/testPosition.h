@@ -20,7 +20,8 @@ class TestPosition : public Test
 public:
    void run()
    {
-      Position().setZoom(1000.0 /* 1km equals 1 pixel */);
+      Position().setZoom(1000.0 /* 1km equals 1 pixel */);      
+      
       defaultConstructor();
       nonDefaultConstructor();
       copyConstructor();

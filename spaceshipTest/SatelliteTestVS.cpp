@@ -6,13 +6,13 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../simulator.h"
-#include "SatelliteTest.h"
+#include "testSatellite.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace SatelliteTestVS
 {
-	TEST_CLASS(SimulatorTest)
+	TEST_CLASS(SatelliteTest)
 	{
 	public:
 		/*
@@ -44,7 +44,7 @@ namespace SatelliteTestVS
 
 		TEST_METHOD(BreakApart)
 		{
-			TestSatellite().breakApart();
+			//TestSatellite().breakApart();
 
 		}
 

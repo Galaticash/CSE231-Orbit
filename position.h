@@ -10,7 +10,10 @@
  *    or the location on the field.
  ************************************************************************/
 
+#ifndef TWO_D_VALUE
+#define TWO_D_VALUE
 #include "twoDValue.h"
+#endif
 
 /* Should not know anything about vel, etc? Unless using the methods?
 class TestPosition;
@@ -29,8 +32,8 @@ class Position : public TwoDValue
 public:
    friend TestPosition;
    Position(double x = 0.0, double y = 0.0) : TwoDValue(x, y) {};
+   Position(const Position& pt) : TwoDValue(pt.x, pt.y) {};
 };
-
 
 /*********************************************
  * COMPUTE DISTANCE

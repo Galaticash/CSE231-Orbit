@@ -8,8 +8,8 @@ class TestSatellite : public Test {
 public:
 	void run()
 	{
+		Position().setZoom(1000.0);
 		breakApart();
-
 	};
 
 	void breakApart() {
