@@ -1,20 +1,26 @@
 #pragma once
+/*********************************************
+ * Satellite
+ * An object in space that can collide with other objects in
+ * space and be destroyed.
+ *********************************************/
 
 #include "collisionObject.h"
 #include "part.h"
 
-/*********************************************
- * Satellite
- * An object in space that can collide with other objects in 
- * space and be destroyed. 
- *********************************************/
+class TestSatellite;
+
 class Satellite : public CollisionObject
 {
 public:
-	// Constructors
-	Satellite(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->numFragments = 0; };
+	friend TestSatellite;
+	Satellite(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->numFragments = 3; };
+
+	vector<Part*> getSubParts() { return this->parts; };
+
+	// TODO: Will break into Parts, pass parts
+	void breakApart(vector<CollisionObject*>) { delete this; };
 
 protected:
-	int numFragments;
-	vector <Part> parts;
+	vector <Part*> parts;
 };

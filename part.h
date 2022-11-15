@@ -7,11 +7,10 @@
 
 #include "collisionObject.h"
 
-class Part : CollisionObject
+class Part : public CollisionObject
 {
 public:
-   Part(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { numFragments = 0; };
+   Part(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { numFragments = 2; };
 
 private:
-   int numFragments;
 };

@@ -18,9 +18,6 @@
     <ClCompile Include="Lab07.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="uiDraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,12 +32,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="testPosition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="uiDraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>

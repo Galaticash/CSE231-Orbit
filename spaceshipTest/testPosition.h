@@ -8,18 +8,14 @@
  ************************************************************************/
 
 #pragma once
-
-#include <iostream>
-#include "position.h"
-#include <cassert>
-
-using namespace std;
+#include "TestBase.h"
+#include "../position.h"
 
 /*******************************
  * TEST Position
  * A friend class for Position which contains the Position unit tests
  ********************************/
-class TestPosition
+class TestPosition : class Test
 {
 public:
    void run()
@@ -38,13 +34,6 @@ public:
    }
    
 private:
-   // utility funciton because floating point numbers are approximations
-   bool closeEnough(double value, double test, double tolerence) const
-   {
-      double difference = value - test;
-      return (difference >= -tolerence) && (difference <= tolerence);
-   }
-
    void defaultConstructor() const
    {  // setup
       // exercise
@@ -66,8 +55,8 @@ private:
    void copyConstructor() const
    {  // setup
       Position pos1;
-      pos1.setMetersX(4000.0);
-      pos1.setMetersY(2000.0);
+      pos1.x = 4000.0;
+      pos1.y = 2000.0;
       // exercise
       Position pos2(pos1);
       // verify
@@ -80,8 +69,8 @@ private:
    void assignment() const
    {  // setup
       Position pos1;
-      pos1.setMetersX(4000.0);
-      pos1.setMetersY(2000.0);
+      pos1.x = 4000.0;
+      pos1.y = 2000.0;
       // exercise
       Position pos2 = pos1;
       // verify
@@ -94,8 +83,8 @@ private:
    void setMeters() const
    {  // setup
       Position pos;
-      pos.setMetersX(0.0);
-      pos.setMetersY(0.0);
+      pos.x = 0.0;
+      pos.y = 0.0;
       // exercise
       pos.setMetersX(5000.0);
       pos.setMetersY(3000.0);
@@ -107,8 +96,8 @@ private:
    void setPixels() const
    {  // setup
       Position pos;
-      pos.setMetersX(0.0);
-      pos.setMetersY(0.0);
+      pos.x = 0.0;
+      pos.y = 0.0;
       // exercise
       pos.setPixelsX(6.0);
       pos.setPixelsY(12.0);
@@ -120,8 +109,8 @@ private:
    void addMeters() const
    {  // setup
       Position pos;
-      pos.setMetersX(800.0);
-      pos.setMetersY(1600.0);
+      pos.x = 800.0;
+      pos.y = 1600.0;
       // exercise
       pos.addMetersX(-400.0);
       pos.addMetersY(800.0);
@@ -133,8 +122,8 @@ private:
    void addPixels() const
    {  // setup
       Position pos;
-      pos.setMetersX(2000.0);
-      pos.setMetersY(4000.0);
+      pos.x = 2000.0;
+      pos.y = 4000.0;
       // exercise
       pos.addPixelsX(2);
       pos.addPixelsY(3);

@@ -52,15 +52,13 @@ namespace BulletTest
 			// SETUP - Have a Spaceship with a constant velocity
 			Simulator test = Simulator();
 
-			Position initial = Position();
 			double initialX = 0.0;
 			double initialY = 0.0;
-			initial.setMeters(initialX, initialY);
+			Position initial = Position(initialX, initialY);
 
-			Velocity initialVel = Velocity();
 			double initialVelX = 0.0;
 			double initialVelY = 100.0;
-			initialVel.setMeters(initialVelX, initialVelY);
+			Velocity initialVel = Velocity(initialVelX, initialVelY);
 
 			double angle = 0.0;
 
@@ -79,15 +77,13 @@ namespace BulletTest
 			// SETUP - Have a stationary Spaceship
 			Simulator test = Simulator();
 
-			Position initial = Position();
 			double initialX = 0.0;
 			double initialY = 0.0;
-			initial.setMeters(initialX, initialY);
+			Position initial = Position(initialX, initialY);
 
-			Velocity initialVel = Velocity();
 			double initialVelX = 0.0;
 			double initialVelY = 0.0;
-			initialVel.setMeters(initialVelX, initialVelY);
+			Velocity initialVel = Velocity(initialVelX, initialVelY);
 
 			double angle = 0.0;
 
@@ -131,6 +127,5 @@ namespace BulletTest
 			//Assert::IsTrue(testBullet->lifetime <= 69);
 			// TEARDOWN
 		}
-
 	};
 }
