@@ -15,7 +15,7 @@
  * TEST Position
  * A friend class for Position which contains the Position unit tests
  ********************************/
-class TestPosition : class Test
+class TestPosition : public Test
 {
 public:
    void run()

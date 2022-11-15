@@ -27,7 +27,7 @@
     <ClCompile Include="SatelliteTestVS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\test.cpp">
+    <ClCompile Include="test.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,10 +41,10 @@
     <ClInclude Include="TestBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\test.h">
+    <ClInclude Include="test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\testPosition.h">
+    <ClInclude Include="testPosition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

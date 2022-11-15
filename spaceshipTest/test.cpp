@@ -7,6 +7,7 @@
  *    The test runner for all the unit tests
  ************************************************************************/
 
+#include "pch.h"
 #include "test.h"
 #include "testPosition.h"
 #include "SatelliteTest.h"
