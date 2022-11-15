@@ -21,7 +21,7 @@
     <ClCompile Include="SimulatorTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BulletTest.cpp">
+    <ClCompile Include="BulletTestVS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SatelliteTestVS.cpp">
@@ -45,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="testPosition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,8 +3,10 @@
 * Header file for testing the bullet class.
 *****************************************/
 #pragma once
+#include "TestBase.h"
+#include "../bullet.h"
 
-class BulletTest {
+class BulletTest : public Test {
 public:
    void run() {
       shootMoving();

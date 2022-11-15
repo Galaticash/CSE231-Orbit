@@ -156,7 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BulletTest.cpp" />
+    <ClCompile Include="BulletTestVS.cpp" />
     <ClCompile Include="SatelliteTestVS.cpp" />
     <ClCompile Include="SimulatorTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -168,6 +168,7 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BulletTest.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SatelliteTest.h" />
     <ClInclude Include="test.h" />
