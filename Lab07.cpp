@@ -13,6 +13,8 @@
 #include "simulator.h"
 using namespace std;
 
+#include "spaceshipTest/testRunner.h"
+
 // To show goal orbit and distance from Earth
 // Better to leave as a bool, or comment out?
 const bool SHOW_TESTING_VISUALS = true;

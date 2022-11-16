@@ -25,7 +25,7 @@ public:
 		objects.push_back(&testSatellite);
 
 		// EXERCISE
-		testSatellite.breakApart(this);
+		testSatellite.breakApart();
 
 		// VERIFY
 		// Overall Satellite is destoryed, Parts are created

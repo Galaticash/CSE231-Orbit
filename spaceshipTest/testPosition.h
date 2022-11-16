@@ -20,6 +20,7 @@ class TestPosition : public Test
 public:
    void run()
    {
+      //cout << "Starting Position tests.." << endl;
       Position().setZoom(1000.0 /* 1km equals 1 pixel */);      
       
       defaultConstructor();
@@ -32,6 +33,7 @@ public:
       
       addPixels();
       addMeters();
+      //cout << "Finished Position tests!" << endl;
    }
    
 private:
