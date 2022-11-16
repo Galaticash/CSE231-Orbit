@@ -721,6 +721,16 @@ void drawShip(const Position& center, double rotation, bool thrust)
    glEnd();
 }
 
+
+void drawRadius(const Position& center, const double radius)
+{
+   //cout << "drawing.." << endl;
+
+   drawCircle(center, radius);
+   Position outer = Position(center.getMetersX() + radius, center.getMetersY());
+   drawLine(center, outer);
+};
+
 /************************************************************************
  * DRAW LINE
  * Draws a Line

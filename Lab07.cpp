@@ -97,13 +97,16 @@ void callBack(const Interface* pUI, void* p)
       // DEBUG: Get Object type and number of ColorRects
       Object* obj = *it;
 
+
       //cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
       
       string objType = typeid(*obj).name();
 
+
       // TEST: Draw based on obj type, instead of rewriting the entire Draw class
       if(objType == "class Spaceship")
       {
+         drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
          drawShip(obj->getPosition(), obj->getAngle(), ((Spaceship*)obj)->getThrust());
       }
       else if(objType == "class Earth")
@@ -117,7 +120,12 @@ void callBack(const Interface* pUI, void* p)
       }
       else if (objType == "class Satellite")
       {
+         drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
          drawHubble(obj->getPosition(), obj->getAngle());
+      }
+      else if (objType == "class Fragment")
+      {
+         drawFragment(obj->getPosition(), obj->getAngle());
       }
       else
       {
@@ -129,13 +137,17 @@ void callBack(const Interface* pUI, void* p)
       //drawObject(obj);
    }
 
+   //drawCircle(0.0, 50000.0);
+   drawCircle(Position(0.0, 0.0), GEO_HEIGHT);
+   drawStar(Position(0.0, EARTH_RADIUS * 1.5), 1);
+   //drawStar(GEO_HEIGHT, GEO_HEIGHT);
+
    //drawShip(Position(0, GEO_HEIGHT), 0, 1);
 
    // Neato. Can now draw objects by copying their draw function into the Object..
    // so yeah, GPS will all have their own draw method, meaning they will be a class of their own
    // Unless, can pass 2D int array of colors (see earth) and then make vector<ColorRect> all the same?
    //drawEarth(Position(50000000, 50000000), 0);
-
 }
 
 void addObjects(Simulator* s)

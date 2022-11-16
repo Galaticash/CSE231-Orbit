@@ -27,6 +27,7 @@ public:
 		vector<CollisionObject*>::iterator removeIt = find(collisionObjects.begin(), collisionObjects.end(), removeObj);
 		if (removeIt != collisionObjects.end())
 		{
+			//delete* removeIt;
 			this->collisionObjects.erase(removeIt);
 		}
 	};
@@ -38,6 +39,8 @@ public:
 	// Defaults to the assumed 48 seconds per frames if no values given
 	void update(double t = TIME, bool gravityOn = true)
 	{
+		vector<CollisionObject*> colliders;
+
 		// TODO: Pass Earth/Earth varaibles to objects?, tell them what is affecting their movement (gravity of Earth at position)
 		// Check for collisions between CollisionObjects
 		for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
@@ -49,11 +52,26 @@ public:
 				//assert((*objOneIt) != (*objTwoIt));
 				if ((*objOneIt)->isHit(*(*objTwoIt)))
 				{
+					// Tell the second object it was hit
 					(*objTwoIt)->setCollided(true);
-					//cout << "hit!";
+
+					// TODO: Check if in collisions list already
+
+					// Add both objects to the list of colliding objects
+					colliders.push_back(*objOneIt);
+					colliders.push_back(*objTwoIt);
 				}
 			}
 		}
+
+		// For every object that collided,
+		for (vector<CollisionObject*>::iterator it = colliders.begin(); it != colliders.end(); it++)
+		{
+			// Break the object apart, adding subParts to the Simulator's list of collisionObjects
+			CollisionObject* obj = *it;
+			obj->breakApart(this);
+		}
+		colliders.clear();
 
 		// TODO: Update all the Stars (what frame they are on/movement)
 		/*for (vector<Star*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
@@ -61,7 +79,7 @@ public:
 
 		}*/
 
-		// Update the position of each Object (all other objects are CollisionObjects
+		// Update the position of each CollisionObject
 		for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
 		{
 			CollisionObject* obj = *it;
@@ -69,16 +87,7 @@ public:
 			// If gravity is turned off, passes 0 values
 			double gravity = gravityOn ? GRAVITY : 0.0;
 			double radius = gravityOn ? EARTH_RADIUS : 0.0;
-			if (obj->getCollided())
-			{
-				obj->breakApart(this);
-			}
-
 			obj->update(t, gravity, radius);
-
-			// TODO: If an object has been hit...
-			// If it has parts/particles to create/break into,
-			// Make those parts, insert into collisionObjects, each going a different direction
 		}
 	}
 

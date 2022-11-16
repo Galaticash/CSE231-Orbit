@@ -15,7 +15,7 @@ class Satellite : public CollisionObject
 {
 public:
 	friend TestSatellite;
-	Satellite(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->numFragments = 3; /*this->radius = 1000.0;*/ };
+	Satellite(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->numFragments = 1; this->radius = 1000000.0; };
 
 	vector<Part*> getSubParts() { return this->parts; };
 
