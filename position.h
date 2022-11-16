@@ -33,6 +33,10 @@ public:
    friend TestPosition;
    Position(double x = 0.0, double y = 0.0) : TwoDValue(x, y) {};
    Position(const Position& pt) : TwoDValue(pt.x, pt.y) {};
+
+   double distanceBetween(const Position& other) {
+      return sqrt(pow((this->x - other.x), 2) + pow((this->y - other.y), 2));
+   }
 };
 
 /*********************************************

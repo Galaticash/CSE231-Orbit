@@ -7,7 +7,7 @@ void Simulator::moveShip(double x, double y) {};
    Better to leave with Simulator instead of assuming 
    all Objects will have the correct time */
 
-// ERROR: Weird, throwing a linking error when defined here
+// ERROR: Wierd, throwing a linking error when defined here
 /*
 void Simulator::update() {
 

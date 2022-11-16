@@ -113,6 +113,10 @@ void callBack(const Interface* pUI, void* p)
       {
          drawStar(obj->getPosition(), ((Star*)obj)->getPhase());
       }
+      else if (objType == "class Satellite")
+      {
+         drawHubble(obj->getPosition(), obj->getAngle());
+      }
       else
       {
          // ERROR: No drawing instance for object
@@ -122,9 +126,8 @@ void callBack(const Interface* pUI, void* p)
       // So far, Earth is the only one that draws, Spaceship in progress
       //drawObject(obj);
    }
-   cout << endl;
 
-   drawShip(Position(0, GEO_HEIGHT), 0, 1);
+   //drawShip(Position(0, GEO_HEIGHT), 0, 1);
 
    // Neato. Can now draw objects by copying their draw function into the Object..
    // so yeah, GPS will all have their own draw method, meaning they will be a class of their own
@@ -133,10 +136,10 @@ void callBack(const Interface* pUI, void* p)
 
 }
 
-void addObjects(Simulator s)
+void addObjects(Simulator* s)
 {
-   //s.addCollider(new Earth());
-
+   s->addCollider(new Satellite(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
+   s->addCollider(new Satellite(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
 }
 
 double TwoDValue::metersFromPixels = 40.0;
@@ -168,7 +171,7 @@ int main(int argc, char** argv)
 
    // Initialize the Simulator
    Simulator sim = Simulator();
-   addObjects(sim);
+   addObjects(&sim);
 
    // set everything into action
    ui.run(callBack, &sim);

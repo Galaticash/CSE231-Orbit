@@ -139,7 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="collisionObject.cpp" />
     <ClCompile Include="Lab07.cpp" />
+    <ClCompile Include="satellite.cpp" />
     <ClCompile Include="twoDValue.cpp" />
     <ClCompile Include="simulator.cpp" />
     <ClCompile Include="uiDraw.cpp" />

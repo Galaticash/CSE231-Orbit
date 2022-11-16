@@ -9,17 +9,17 @@
 #include "part.h"
 
 class TestSatellite;
+class Satellite;
 
 class Satellite : public CollisionObject
 {
 public:
 	friend TestSatellite;
-	Satellite(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->numFragments = 3; };
+	Satellite(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->numFragments = 3; /*this->radius = 1000.0;*/ };
 
 	vector<Part*> getSubParts() { return this->parts; };
 
-	// TODO: Will break into Parts, pass parts
-	void breakApart(vector<CollisionObject*>) { delete this; };
+	void breakApart(Simulator* sim);
 
 protected:
 	vector <Part*> parts;

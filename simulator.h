@@ -22,6 +22,14 @@ public:
 	};
 	void createStars() { /* For numStars, add new Star() to list of Stars */ };
 	void addCollider(CollisionObject* newObj) { this->collisionObjects.push_back(newObj); };
+	void removeCollider(CollisionObject* removeObj) { 
+		// If the given pointer is in the vector, remove it
+		vector<CollisionObject*>::iterator removeIt = find(collisionObjects.begin(), collisionObjects.end(), removeObj);
+		if (removeIt != collisionObjects.end())
+		{
+			this->collisionObjects.erase(removeIt);
+		}
+	};
 
 	void createBullet(Position pos, Velocity vel, double angle) {};
 	void moveShip(double x, double y);
@@ -31,8 +39,27 @@ public:
 	void update(double t = TIME, bool gravityOn = true)
 	{
 		// TODO: Pass Earth/Earth varaibles to objects?, tell them what is affecting their movement (gravity of Earth at position)
-		// TODO: Check for collisions between CollisionObjects
+		// Check for collisions between CollisionObjects
+		for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
+		{
+			// Check against every object except itself
+			for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
+			{
+				// If an Object has been hit, set collided of other object to true
+				//assert((*objOneIt) != (*objTwoIt));
+				if ((*objOneIt)->isHit(*(*objTwoIt)))
+				{
+					(*objTwoIt)->setCollided(true);
+					//cout << "hit!";
+				}
+			}
+		}
+
 		// TODO: Update all the Stars (what frame they are on/movement)
+		/*for (vector<Star*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
+		{
+
+		}*/
 
 		// Update the position of each Object (all other objects are CollisionObjects
 		for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
@@ -44,23 +71,7 @@ public:
 			double radius = gravityOn ? EARTH_RADIUS : 0.0;
 			if (obj->getCollided())
 			{
-				obj->breakApart(collisionObjects);
-					if (typeid(obj).name() == "class Satellite")
-					{
-
-						/*
-						vector<Part*> subParts = ((Satellite*)obj)->getSubParts();
-						for (vector<Part*>::iterator it = subParts.begin(); it != subParts.end(); it++)
-						{
-							this->addCollider(*it);
-						}*/
-					}
-
-					int numFragments = obj->getNumFragments();
-					for (int i = 0; i < numFragments; i++)
-					{
-						this->addCollider(new Fragment());
-					}				
+				obj->breakApart(this);
 			}
 
 			obj->update(t, gravity, radius);
