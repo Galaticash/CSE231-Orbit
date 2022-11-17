@@ -2,7 +2,7 @@
 
 #include "fragment.h"
 
-class BulletTest;
+class TestBullet;
 
 /*********************************************
  * Bullet
@@ -11,7 +11,7 @@ class BulletTest;
 class Bullet : public Fragment
 {
 public:
-   friend BulletTest;
+   friend TestBullet;
    Bullet() : Bullet(Position(), Velocity(), Angle()) {};
    Bullet(Position pos, Velocity vel, Angle angle) : Fragment(pos, vel, 0.0) {};
 };
