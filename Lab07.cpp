@@ -13,7 +13,7 @@
 #include "simulator.h"
 using namespace std;
 
-#include "spaceshipTest/testRunner.h"
+#include "spaceshipTest/testRunner.cpp" // Not a class
 
 // To show goal orbit and distance from Earth
 // Better to leave as a bool, or comment out?
@@ -123,6 +123,10 @@ void callBack(const Interface* pUI, void* p)
          drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
          drawHubble(obj->getPosition(), obj->getAngle());
       }
+      else if (objType == "class Part")
+      {
+         drawHubbleTelescope(obj->getPosition(), obj->getAngle());
+      }
       else if (objType == "class Fragment")
       {
          drawFragment(obj->getPosition(), obj->getAngle());
@@ -154,6 +158,8 @@ void addObjects(Simulator* s)
 {
    s->addCollider(new Satellite(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
    s->addCollider(new Satellite(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
+
+   s->addCollider(new Satellite(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 0.0)));
 }
 
 double TwoDValue::metersFromPixels = 40.0;
@@ -172,6 +178,9 @@ int WINAPI wWinMain(
 int main(int argc, char** argv)
 #endif // !_WIN32
 {
+   // Unit Tests
+   //testRunner();
+
    // Initialize OpenGL
    Position ptUpperRight;
    ptUpperRight.setZoom(128000.0 /* 128km equals 1 pixel */);

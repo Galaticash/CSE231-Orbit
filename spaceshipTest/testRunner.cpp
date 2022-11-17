@@ -18,6 +18,13 @@
  ****************************************************************/
 void testRunner()
 {
+   cout << "Running Position tests.." << endl;
+   // Runs Brother Helfrich's Position tests, 
+   //  slightly modified since Position now inherits from 2DValue
    TestPosition().run();
+
+   cout << "Running Satellite tests.." << endl;
    TestSatellite().run();
+
+   cout << "All tests complete.";
 }

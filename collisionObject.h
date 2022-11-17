@@ -28,11 +28,10 @@ public:
 		}
 		/*else
 		{
+			// If deleted in Simulator's update, interupts vector loop
 			//breakApart();
 		}*/
 	}
-
-	virtual void update(Simulator* sim);
 
 	bool isHit(const CollisionObject &other) {
 		double distanceBetween = this->pos.distanceBetween(other.pos);
@@ -40,6 +39,7 @@ public:
 		return this->collided;
 	};
 
+	// Getters and setters
 	void setCollided(bool c) { this->collided = c; }; // Simulator will check for collisions
 	bool getCollided() { return this->collided; };
 
@@ -52,6 +52,12 @@ public:
    double getRadius() { return radius; };
 
 protected:
+	void addObjects(Simulator* sim, vector<CollisionObject*> obj);
+
+	vector<Velocity> getSubPartVel(int subParts);
+	vector<Position> getSubPartPos(vector<Velocity> directions);
+
+
    bool collided;
    double radius;
 	int numFragments;

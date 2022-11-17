@@ -18,12 +18,15 @@ const double TIME_DILATION = 24 * 60;    // One minute in simulator = One day in
 const double SECONDS_DAY = 24 * 60 * 60; // 24 hours * 60 minutes * 60 seconds
 const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY;
 
+const double EARTH_RADIUS = 6378000.0;    // meters
+
 class Earth : public CollisionObject
 {
 public:
    Earth() : CollisionObject() {
       this->pos = Position(0, 0); 
       this->visual = vector<ColorRect>{};
+      this->radius = EARTH_RADIUS;
       createVisual(); // Populate the vector of ColorRects
    };
    
@@ -33,7 +36,7 @@ public:
    }   
 
    // The Earth will not break apart
-   void breakApart() {};
+   void breakApart(Simulator* sim) {};
 
 private:
    void createVisual()

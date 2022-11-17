@@ -27,14 +27,14 @@ vector<Object*> Simulator::getObjects() {
    // Get pointers for all the Stars
    for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
    {
-      Star addStar = *it;
-      objects.push_back(&addStar);
+      // Add a pointer to the Star (cast to Object*)
+      objects.push_back(&(*it));
    }
    // Get pointers for all of the Collision Objects
    for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
    {
-      CollisionObject* addObject = *it;
-      objects.push_back(addObject);
+      // Add the Collision Object pointer (cast to Object*)
+      objects.push_back(*it);
    }
 
    return objects;

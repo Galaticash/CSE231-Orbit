@@ -59,10 +59,12 @@ public:
    }
 
    // Getters and Setters
+   void setPosition(Position newPos) { this->pos = newPos; };
    Position getPosition()    const { return pos; }
    
    //void addVelocity(Velocity v) { this->vel += v; }; // TODO: Add 2D Value +=/-= operators
    void addVelocity(double velX, double velY) { this->vel.addMetersX(velX); this->vel.addMetersY(velY); };
+   void setVelocity(Velocity newVel) { this->vel = newVel; };
    Velocity getVelocity()    const { return vel; }
   
    double getAngle()     const { return 0.0; }

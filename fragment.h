@@ -14,6 +14,7 @@ public:
    Fragment(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->lifetime = 0; };
 
    bool isExpired() { return true; }
+   void breakApart(Simulator* sim);
 
 private:
    int lifetime;
