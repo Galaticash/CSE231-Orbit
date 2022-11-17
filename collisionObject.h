@@ -32,6 +32,8 @@ public:
 		}*/
 	}
 
+	virtual void update(Simulator* sim);
+
 	virtual bool isHit(const CollisionObject &other) {
 		double distanceBetween = this->pos.distanceBetween(other.pos);
 		this->collided = distanceBetween <= other.radius + this->radius;

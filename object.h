@@ -17,7 +17,7 @@ using namespace std;
 class Object
 {
 public:
-   // ** TODO: Create Angle class or use double **
+   // ** TODO: Update to use Angle class
    Object(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
 
    // Update the position, rotation, and other status of the object
