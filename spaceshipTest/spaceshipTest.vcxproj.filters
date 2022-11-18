@@ -47,7 +47,7 @@
     <ClInclude Include="testPosition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BulletTest.h">
+    <ClInclude Include="testBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

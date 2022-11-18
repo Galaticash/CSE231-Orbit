@@ -28,8 +28,8 @@ public:
 class stubDirectionUp : public dummyCollisionObject {
 public:
    double getAngle() const { return 0.0; };
-   Position getPosition() const { return Position(0.0, 0.0); }
-   Velocity getVelocity() const { return Velocity(0.0, 0.0); }
+   virtual Position getPosition() const { return Position(0.0, 0.0); }
+   virtual Velocity getVelocity() const { return Velocity(0.0, 0.0); }
 };
 
 // Stub for a ship that is pointed up, and has a velocity of 10,000 m/s.
@@ -54,15 +54,16 @@ private:
    {
       // Setup
       stubDirectionUp ship;
-      Position spawnPos;
+      Position spawnPos = ship.getPosition();
       spawnPos.addPixelsY(19.0);
       
       // Exercise
-      Bullet test(ship.getPosition() + spawnPos, ship.getVelocity(), ship.getAngle());
+      Bullet test(spawnPos, ship.getVelocity(), ship.getAngle());
+      
       // Verify
       assert(closeEnough(test.pos.getMetersX(), 0.0, 0.1));
-      assert(closeEnough(test.pos.getMetersY(), 19.0, 0.1));
-      assert(closeEnough(test.angle, 0.0, 0.1));
+      assert(closeEnough(test.pos.getPixelsY(), 19.0, 0.1));
+      assert(closeEnough(test.angle.getDegree(), 0.0, 0.1));
       assert(closeEnough(test.vel.getMetersX(), 0.0, 0.1));
       assert(closeEnough(test.vel.getMetersY(), 9000.0, 1.0));
    }  // Teardown
@@ -71,15 +72,16 @@ private:
    {
       // Setup
       stubMoveUp1000 ship;
-      Position spawnPos;
+      Position spawnPos = ship.getPosition();
       spawnPos.addPixelsY(19.0);
 
       // Exercise
-      Bullet test(ship.getPosition() + spawnPos, ship.getVelocity(), ship.getAngle());
+      Bullet test(spawnPos, ship.getVelocity(), ship.getAngle());
+      
       // Verify
       assert(closeEnough(test.pos.getMetersX(), 0.0, 0.1));
-      assert(closeEnough(test.pos.getMetersY(), 19.0, 0.1));
-      assert(closeEnough(test.angle, 0.0, 0.1));
+      assert(closeEnough(test.pos.getPixelsY(), 19.0, 0.1));
+      assert(closeEnough(test.angle.getDegree(), 0.0, 0.1));
       assert(closeEnough(test.vel.getMetersX(), 0.0, 0.1));
       assert(closeEnough(test.vel.getMetersY(), 10000.0, 1.0));
    }  // Teardown

@@ -18,7 +18,7 @@ class Object
 {
 public:
    // ** TODO: Update to use Angle class
-   Object(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
+   Object(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
 
    // Update the position, rotation, and other status of the object
    virtual void update(double time, double gravity = 0.0, double planetRadius = 0.0)
@@ -67,8 +67,7 @@ public:
    void setVelocity(Velocity newVel) { this->vel = newVel; };
    Velocity getVelocity()    const { return vel; }
   
-   double getAngle()     const { return 0.0; }
-      //return angle; } // Have angle.getRadians and angle.getDegrees
+   Angle getAngle()     const { return this->angle; }
    vector<ColorRect> getVisual() const { return visual; };
 
    /*************************************************************************
@@ -193,8 +192,7 @@ public:
 protected:
    Position pos;
    Velocity vel;
-   double angle;
-   //Angle angle;
+   Angle angle;
    vector <ColorRect> visual;
 };
 

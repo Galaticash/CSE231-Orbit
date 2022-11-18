@@ -24,7 +24,8 @@ void Angle::normalize()
    radAngle -= cycleOffset * (2.0 * M_PI);
 }
 
-double Angle::getDegAngle() const { return radAngle * 180.0 / M_PI; }
+void Angle::setDegree(double degree) { this->radAngle = degree * M_PI / 180.0; }
+double Angle::getDegree() const { return radAngle * 180.0 / M_PI; }
 
 Angle& Angle::operator+=(const double rhs)
 {

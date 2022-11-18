@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="angle.cpp" />
     <ClCompile Include="collisionObject.cpp" />
     <ClCompile Include="fragment.cpp" />
     <ClCompile Include="Lab07.cpp" />

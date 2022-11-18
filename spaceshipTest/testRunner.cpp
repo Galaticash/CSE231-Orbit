@@ -11,6 +11,7 @@
 #include "testRunner.h"
 #include "testPosition.h"
 #include "testSatellite.h"
+#include "testBullet.h"
 
 /*****************************************************************
  * TEST RUNNER
@@ -25,6 +26,9 @@ void testRunner()
 
    cout << "Running Satellite tests.." << endl;
    TestSatellite().run();
+
+   cout << "Running Bullet tests.." << endl;
+   TestBullet().run();
 
    cout << "All tests complete.";
 }

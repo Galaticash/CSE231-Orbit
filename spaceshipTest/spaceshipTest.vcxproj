@@ -168,8 +168,8 @@
     <ClCompile Include="testRunner.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BulletTest.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="testBullet.h" />
     <ClInclude Include="testSatellite.h" />
     <ClInclude Include="testRunner.h" />
     <ClInclude Include="TestBase.h" />

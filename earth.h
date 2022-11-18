@@ -32,7 +32,9 @@ public:
    
    void update(double time, double gravity = 0.0, double radius = 0.0) { 
       // The Earth will not move, only rotate
-      this->angle += ROTATION_SPEED;
+      Angle test;
+      test.setDegree(ROTATION_SPEED);
+      this->angle += test.getRadian();
    }   
 
    // The Earth will not break apart

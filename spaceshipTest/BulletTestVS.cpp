@@ -4,17 +4,16 @@
 * it is created, and that it is deestroyed properly.
 ************************************/
 
+
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../simulator.h"
-//#include "../spaceship.h"
-#include "BulletTest.h"
+#include "testBullet.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace BulletTestVS
 {
-
 	void ShootMoving()
 	{
 		// SETUP - Have a Spaceship with a constant velocity
@@ -28,7 +27,7 @@ namespace BulletTestVS
 		double initialVelY = 100.0;
 		Velocity initialVel = Velocity(initialVelX, initialVelY);
 
-		double angle = 0.0;
+		Angle angle = Angle(0.0);
 
 		// EXERCISE - Shoot a Bullet
 		test.createBullet(initial, initialVel, angle);

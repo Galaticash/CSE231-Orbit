@@ -234,12 +234,11 @@ void drawObject(const Object* obj)
 {
    vector<ColorRect> pixels = obj->getVisual();
    Position center = obj->getPosition();
-   double rotation = obj->getAngle();
+   Angle rotation = obj->getAngle();
 
    for (vector<ColorRect>::iterator it = pixels.begin(); it != pixels.end(); it++)
    {
-      glDrawRect(center, Position(), *it, rotation);
-
+      glDrawRect(center, Position(), *it, rotation.getDegree());
    }
 }
 

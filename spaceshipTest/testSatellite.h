@@ -56,32 +56,25 @@ public:
 			}
 
 		};
-		vector<Object*> getObjects() {
-			// Returns the pointers for all the Objects to be drawn
-			vector<Object*> objects;
+		vector<CollisionObject*> getCollisionObjects() { return this->collisionObjects; };
 
-			/* Ignores Stars */
-
-			// Translates CollisionObject pointers into Object Pointers
-			for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
-			{
-				objects.push_back(*it);
-			}
-			return objects;
-		};
-	
 		void clearObjects() { this->collisionObjects.clear(); this->collisionObjects = vector<CollisionObject*>{}; };
 	};
-
 
 	void run()
 	{
 		Position().setZoom(1000.0);
-		breakApart();
+		// Testing number of parts broken into
+		breakSubParts();
+
+		// Testing explosion directions
+		breakApartStatic();
+		breakApartY();
+		breakApartX();
 	};
 
-	// Check that the
-	void breakApart() {
+	// Check that the Satellite is breaking apart into the proper number of objects
+	void breakSubParts() {
 		// SETUP
 		FakeSimulator fakeSim = FakeSimulator();
 		fakeSim.clearObjects();
@@ -92,30 +85,93 @@ public:
 
 		// Create a Satellite and get the number of Parts
 		Satellite* testSatellite = new Satellite();
+		
+		// Set Position
 		testSatellite->pos.setMeters(initialX, initialY);
-		int numParts = sizeof(testSatellite->parts);
-		int numFragments = testSatellite->numFragments;
-		int expectedSubParts = numParts + numFragments;
+		
+		// Set collection of Parts
+		testSatellite->parts = { new Part(), new Part() };
+		
+		// Count up number of Parts and number of Fragments to break into
+		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
+
+		// Add the Satellite to the FakeSim and check that
+		//  it is the only Object there
+		fakeSim.addCollider(testSatellite);
+		assert(fakeSim.getCollisionObjects().size() == 1);
+
+		// EXERCISE - break apart the Satellite
+		testSatellite->breakApart(&fakeSim);
+
+		// VERIFY
+		// Satellite has broken into the correct number of SubParts
+		assert(fakeSim.getObjects().size() == expectedSubParts);
+		
+		// TEARDOWN	
+	}
+
+	// Check that the Satellite's subParts are set with the correct directions/velocities when the Satellite is not moving
+	void breakApartStatic() {
+		// SETUP 
+		FakeSimulator fakeSim = FakeSimulator();
+		fakeSim.clearObjects();
+
+		// Can change inital Position if needed
+		Position initialP = Position(0.0, 0.0);
+		Velocity initialV = Velocity(0.0, 0.0);
+
+		// Create a Satellite and get the number of Parts
+		Satellite* testSatellite = new Satellite();
+
+		// Set Position
+		testSatellite->pos.setMeters(initialP.getMetersX(), initialP.getMetersY());
+		// Set Velocity
+		testSatellite->vel.setMeters(initialV.getMetersX(), initialV.getMetersY());
+
+		// Set collection of Parts
+		testSatellite->parts = { new Part(), new Part() };
+		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
+
 
 		// Add the Satellite to the FakeSim and check that
 		//  it is the only Object there
 		fakeSim.addCollider(testSatellite);
 		assert(fakeSim.getObjects().size() == 1);
 
-		// EXERCISE
+		// EXERCISE - break apart the Satellite
 		testSatellite->breakApart(&fakeSim);
 
 		// VERIFY
-		// Satellite has broken into SubParts
-		assert(fakeSim.getObjects().size() == expectedSubParts);
-		
-		// Overall Satellite is destroyed, Parts are created
-		// Parts each have their own speed (randomly generated)
-		// Couldn't you just assert random speed is within bounds?
+		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
+		assert(collisionObjects.size() == expectedSubParts);
+		for (vector<CollisionObject*>::iterator it = collisionObjects.begin(); it != collisionObjects.end(); it++)
+		{
 
-		// Breakup Directions (stored as Angles)
-		// Is there a collision Direction? Does it know from what direction the other object hit it?
+		}		
 
-		// TEARDOWN	
+		// TEARDOWN
 	}
+
+	// Check that the Satellite's subParts are set with the correct directions/velocities when the Satellite is moving in the X direction
+	void breakApartX() {
+		// SETUP 
+
+		// EXERCISE
+
+		// VERIFY
+
+		// TEARDOWN
+	}
+
+	// Check that the Satellite's subParts are set with the correct directions/velocities when the Satellite is moving in the Y direction
+	void breakApartY() {
+		// SETUP 
+
+		// EXERCISE
+
+		// VERIFY
+
+		// TEARDOWN
+	}
+
 };

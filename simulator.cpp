@@ -19,7 +19,6 @@ void Simulator::update() {
    }
 }*/
 
-
 vector<Object*> Simulator::getObjects() {
    // Returns the pointers for all the Objects to be drawn
    vector<Object*> objects;

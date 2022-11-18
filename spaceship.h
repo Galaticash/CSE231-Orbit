@@ -11,9 +11,7 @@
 class Spaceship : public Satellite
 {
 public:
-   Spaceship() : Spaceship(Position()) {};
-   Spaceship(Position pos) : Spaceship(pos, Velocity()) {};
-   Spaceship(Position pos, Velocity vel) : Satellite(pos, vel) {
+   Spaceship(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Satellite(pos, vel, angle) {
       this->thrust = true;
       shipVisual();
    };

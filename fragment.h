@@ -11,11 +11,11 @@
 class Fragment : public CollisionObject
 {
 public:
-   Fragment(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { this->lifetime = 0; };
+   Fragment(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) { this->lifetime = 0; this->radius = 2; };
 
    bool isExpired() { return true; }
    void breakApart(Simulator* sim);
 
-private:
+protected:
    int lifetime;
 };

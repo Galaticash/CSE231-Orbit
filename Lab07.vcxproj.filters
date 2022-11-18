@@ -39,6 +39,9 @@
     <ClCompile Include="fragment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="angle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="uiDraw.h">

@@ -107,12 +107,12 @@ void callBack(const Interface* pUI, void* p)
       if(objType == "class Spaceship")
       {
          drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
-         drawShip(obj->getPosition(), obj->getAngle(), ((Spaceship*)obj)->getThrust());
+         drawShip(obj->getPosition(), obj->getAngle().getDegree(), ((Spaceship*)obj)->getThrust());
       }
       else if(objType == "class Earth")
       {
          // ERROR: Earth is not rotating
-         drawEarth(obj->getPosition(), obj->getAngle());
+         drawEarth(obj->getPosition(), obj->getAngle().getDegree());
       }
       else if (objType == "class Star")
       {
@@ -121,15 +121,15 @@ void callBack(const Interface* pUI, void* p)
       else if (objType == "class Satellite")
       {
          drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
-         drawHubble(obj->getPosition(), obj->getAngle());
+         drawHubble(obj->getPosition(), obj->getAngle().getDegree());
       }
       else if (objType == "class Part")
       {
-         drawHubbleTelescope(obj->getPosition(), obj->getAngle());
+         drawHubbleTelescope(obj->getPosition(), obj->getAngle().getDegree());
       }
       else if (objType == "class Fragment")
       {
-         drawFragment(obj->getPosition(), obj->getAngle());
+         drawFragment(obj->getPosition(), obj->getAngle().getDegree());
       }
       else
       {
@@ -159,7 +159,7 @@ void addObjects(Simulator* s)
    s->addCollider(new Satellite(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
    s->addCollider(new Satellite(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
 
-   s->addCollider(new Satellite(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 0.0)));
+   s->addCollider(new Satellite(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
 }
 
 double TwoDValue::metersFromPixels = 40.0;
@@ -179,7 +179,7 @@ int main(int argc, char** argv)
 #endif // !_WIN32
 {
    // Unit Tests
-   //testRunner();
+   testRunner();
 
    // Initialize OpenGL
    Position ptUpperRight;

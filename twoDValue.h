@@ -2,6 +2,7 @@
 
 #include <iostream> 
 #include <cmath>
+#include "angle.h"
 
 // The default zoom value for the simulator, will use if not set
 const double DEFAULT_ZOOM = 128000.0 /* 128km equals 1 pixel */;
@@ -39,7 +40,14 @@ public:
    void setPixelsX(double xPixels) { x = xPixels * metersFromPixels; }
    void setPixelsY(double yPixels) { y = yPixels * metersFromPixels; }
    
-   // Asjust meters/pixel value
+   // Given an overall change in Meters and an Angle (degrees), adjust x and y values
+   void addMeters(double change, Angle angle) {
+      double yVal = change * cos(angle.getDegree());
+      double xVal = change * sin(angle.getDegree());
+
+      this->addMetersX(xVal);
+      this->addMetersY(yVal);
+   };
    void addMetersX(double dxMeters) { setMetersX(getMetersX() + dxMeters); }
    void addMetersY(double dyMeters) { setMetersY(getMetersY() + dyMeters); }
    void addPixelsX(double dxPixels) { setPixelsX(getPixelsX() + dxPixels); }
@@ -65,6 +73,7 @@ std::istream& operator >> (std::istream& in, TwoDValue& twoD);
  * Trivial point
  *********************************************/
 // TODO: Remove? smaller version of Position class
+// Currenlty used in draw, can't remove until changed there
 struct PT
 {
    double x;

@@ -1,23 +1,17 @@
 #pragma once
-/*********************************************
- * Collision Object
- * A fragment that is spawned in front of the spaceship.
- *********************************************/
 
 #include "object.h"
 
 class Simulator;
 
+/*********************************************
+ * Collision Object
+ * A fragment that is spawned in front of the spaceship.
+ *********************************************/
 class CollisionObject : public Object
 {
 public:
-	// Constructors
-	//CollisionObject() : CollisionObject(Position()) {};
-	//CollisionObject(Position position) : CollisionObject(position, Velocity()) {};
-	//CollisionObject(Position pos, Velocity vel) : CollisionObject(pos, vel, 0.0) {};
-	//CollisionObject(Position pos, Velocity vel, double angle) : Object(pos, vel, angle) { this->radius = 0.0; };
-  // Or
-	CollisionObject(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : Object(pos, vel, angle) { this->radius = 0.0; this->collided = false; this->numFragments = 0; };
+	CollisionObject(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Object(pos, vel, angle) { this->radius = 0.0; this->collided = false; this->numFragments = 0; };
 
 	virtual void update(double time, double gravity = 0.0, double planetRadius = 0.0) {			
 		// If the object has not collided,
@@ -33,9 +27,9 @@ public:
 		}*/
 	}
 
-	virtual void update(Simulator* sim);
+	/* void update(Simulator* sim); */ // Too much exposure of Simulator's class to Collision Object
 
-	virtual bool isHit(const CollisionObject &other) {
+	bool isHit(const CollisionObject &other) {
 		double distanceBetween = this->pos.distanceBetween(other.pos);
 		this->collided = distanceBetween <= other.radius + this->radius;
 		return this->collided;
@@ -49,16 +43,15 @@ public:
 	// And remove itself from the list
 	virtual void breakApart(Simulator* sim);
 	
-	virtual int getNumFragments() const { return this->numFragments; };
+	int getNumFragments() const { return this->numFragments; };
 
-   virtual double getRadius() const { return radius; };
+   double getRadius() const { return radius; };
 
 protected:
 	void addObjects(Simulator* sim, vector<CollisionObject*> obj);
 
 	vector<Velocity> getSubPartVel(int subParts);
 	vector<Position> getSubPartPos(vector<Velocity> directions);
-
 
    bool collided;
    double radius;

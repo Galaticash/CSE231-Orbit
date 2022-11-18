@@ -32,7 +32,7 @@ public:
 		}
 	};
 
-	void createBullet(Position pos, Velocity vel, double angle) {};
+	void createBullet(Position pos, Velocity vel, Angle angle) {};
 	void moveShip(double x, double y);
 
 	// Given an amount of time (seconds), update all collision objects
@@ -43,7 +43,6 @@ public:
 		
 		// Check for collisions between the Simulator's collisionObjects
 		vector<CollisionObject*> colliders = getCollisions();
-
 
 		// For every Collision Object that has collided,
 		for (vector<CollisionObject*>::iterator it = colliders.begin(); it != colliders.end(); it++)
@@ -107,6 +106,22 @@ protected:
 
 						// Add both objects to the list of colliding objects
 						colliders.push_back(*objOneIt);
+						colliders.push_back(*objTwoIt);
+					}
+				}
+				else if ((!(*objOneIt)->getCollided() && (*objTwoIt)->getCollided()))
+				{
+					if ((*objOneIt)->isHit(*(*objTwoIt)))
+					{
+						// Add object to the list of colliding objects
+						colliders.push_back(*objOneIt);
+					}
+				}
+				else if ((!(*objTwoIt)->getCollided() && (*objOneIt)->getCollided()))
+				{
+					if ((*objTwoIt)->isHit(*(*objOneIt)))
+					{
+						// Add object to the list of colliding objects
 						colliders.push_back(*objTwoIt);
 					}
 				}
