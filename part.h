@@ -12,5 +12,5 @@
 class Part : public CollisionObject
 {
 public:
-   Part(Position pos = Position(), Velocity vel = Velocity(), double angle = 0.0) : CollisionObject(pos, vel, angle) { numFragments = 2; };
+   Part(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) { numFragments = 2; };
 };

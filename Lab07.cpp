@@ -11,6 +11,9 @@
 #include "uiDraw.h"     // for RANDOM and DRAW*
 #include "position.h"   // for POINT
 #include "simulator.h"
+
+#include "hubble.h"
+
 using namespace std;
 
 #include "spaceshipTest/testRunner.cpp" // Not a class
@@ -118,6 +121,22 @@ void callBack(const Interface* pUI, void* p)
       {
          drawStar(obj->getPosition(), ((Star*)obj)->getPhase());
       }
+      else if (objType == "class Hubble")
+      {
+         drawHubble(obj->getPosition(), obj->getAngle().getDegree());
+      }
+      else if (objType == "class HubbleComputer")
+      {
+         drawHubbleComputer(obj->getPosition(), obj->getAngle().getDegree());
+      }
+      else if (objType == "class HubbleLeft")
+      {
+         drawHubbleLeft(obj->getPosition(), obj->getAngle().getDegree());
+      }
+      else if (objType == "class HubbleRight")
+      {
+         drawHubbleRight(obj->getPosition(), obj->getAngle().getDegree());
+      }
       else if (objType == "class Satellite")
       {
          drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
@@ -160,6 +179,8 @@ void addObjects(Simulator* s)
    s->addCollider(new Satellite(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
 
    s->addCollider(new Satellite(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
+
+   s->addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
 }
 
 double TwoDValue::metersFromPixels = 40.0;
@@ -197,7 +218,7 @@ int main(int argc, char** argv)
    addObjects(&sim);
 
    // set everything into action
-   //ui.run(callBack, &sim);
+   ui.run(callBack, &sim);
 
    return 0;
 }
