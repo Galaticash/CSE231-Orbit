@@ -12,8 +12,7 @@
 class Acceleration : public TwoDValue
 {
 public:
-   // constructors
-   Acceleration(double horizontal, double vertical) : TwoDValue(horizontal, vertical) {}
+   Acceleration(double horizontal = 0.0, double vertical = 0.0) : TwoDValue(horizontal, vertical) {}
 
 private:
 

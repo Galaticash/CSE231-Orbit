@@ -8,19 +8,34 @@ class TestSatellite : public Test {
 // *Could friend VS test, but would have to look that up
 public:
 
+	void run()
+	{
+		// Set zoom to 1000.0 meters per pixel
+		Position().setZoom(1000.0);
+
+		// Testing number of parts broken into
+		breakSubParts();
+
+		// Testing explosion directions
+		breakApartStatic();
+		breakApartY();
+		breakApartX();
+	};
+
+private:
 	class DummySimulator : public Simulator {
 	public:
 		DummySimulator() {}; // Doesn't create Ship or Earth
 
-		// addCollider and removeCollider act as normal
+		// addCollider and removeCollider act as normal,
 		//  used to tell if breakApart works
 
-		// Only testing Satellite, no Stars, Ship, or Bullets
+		// Only testing Satellite. No Stars, Ship, or Bullets
 		void createStars() { assert(false);  };
 		void createBullet(Position pos, Velocity vel, double angle) { assert(false); };
 		void moveShip(double x, double y) { assert(false); };
 	
-		// TODO: update in Simulator should take no arguements,
+		// TODO: update() in Simulator should take no arguements,
 		//  the parameters are for testing purposes only (custom time, gravity on/off)
 	};
 
@@ -28,7 +43,7 @@ public:
 	public:
 		FakeSimulator() {};
 
-		// Only update Collision Objects
+		// Only update Collision Objects (Satellites, Parts, Fragments, Bullets)
 		void update(double t = TIME, bool gravityOn = true)
 		{
 			vector<CollisionObject*> colliders = getCollisions();
@@ -56,22 +71,14 @@ public:
 			}
 
 		};
+		
+		// Returns a list of Collision Object pointers
 		vector<CollisionObject*> getCollisionObjects() { return this->collisionObjects; };
 
+		// To clear the current list of Collision Objects
 		void clearObjects() { this->collisionObjects.clear(); this->collisionObjects = vector<CollisionObject*>{}; };
 	};
 
-	void run()
-	{
-		Position().setZoom(1000.0);
-		// Testing number of parts broken into
-		breakSubParts();
-
-		// Testing explosion directions
-		breakApartStatic();
-		breakApartY();
-		breakApartX();
-	};
 
 	// Check that the Satellite is breaking apart into the proper number of objects
 	void breakSubParts() {
@@ -155,10 +162,39 @@ public:
 	// Check that the Satellite's subParts are set with the correct directions/velocities when the Satellite is moving in the X direction
 	void breakApartX() {
 		// SETUP 
+		FakeSimulator fakeSim = FakeSimulator();
+		fakeSim.clearObjects();
+
+		// Can change inital Position if needed
+		Position initialP = Position(0.0, 0.0);
+		Velocity initialV = Velocity(1000.0, 0.0);
+
+		// Create a Satellite and get the number of Parts
+		Satellite* testSatellite = new Satellite();
+
+		// Set Position
+		testSatellite->pos.setMeters(initialP.getMetersX(), initialP.getMetersY());
+		// Set Velocity
+		testSatellite->vel.setMeters(initialV.getMetersX(), initialV.getMetersY());
+
+		// Set collection of Parts
+		testSatellite->parts = { new Part(), new Part() };
+		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
 
 		// EXERCISE
+		testSatellite->breakApart(&fakeSim);
 
 		// VERIFY
+		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
+		assert(collisionObjects.size() == expectedSubParts);
+
+		//vector<Velocity> = testSatellite.
+
+		// Check that all objects are travelling in different directions (Satellite's velocity added)
+		for (vector<CollisionObject*>::iterator it = collisionObjects.begin(); it != collisionObjects.end(); it++)
+		{
+
+		}
 
 		// TEARDOWN
 	}
@@ -166,10 +202,37 @@ public:
 	// Check that the Satellite's subParts are set with the correct directions/velocities when the Satellite is moving in the Y direction
 	void breakApartY() {
 		// SETUP 
+		FakeSimulator fakeSim = FakeSimulator();
+		fakeSim.clearObjects();
+
+		// Can change inital Position if needed
+		Position initialP = Position(0.0, 0.0);
+		Velocity initialV = Velocity(0.0, 1000.0);
+
+		// Create a Satellite and get the number of Parts
+		Satellite* testSatellite = new Satellite();
+
+		// Set Position
+		testSatellite->pos.setMeters(initialP.getMetersX(), initialP.getMetersY());
+		// Set Velocity
+		testSatellite->vel.setMeters(initialV.getMetersX(), initialV.getMetersY());
+
+		// Set collection of Parts
+		testSatellite->parts = { new Part(), new Part() };
+		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
 
 		// EXERCISE
+		testSatellite->breakApart(&fakeSim);
 
 		// VERIFY
+		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
+		assert(collisionObjects.size() == expectedSubParts);
+
+		// Check that all objects are travelling in different directions (Satellite's velocity added)
+		for (vector<CollisionObject*>::iterator it = collisionObjects.begin(); it != collisionObjects.end(); it++)
+		{
+
+		}
 
 		// TEARDOWN
 	}

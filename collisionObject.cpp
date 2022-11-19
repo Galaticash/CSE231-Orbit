@@ -19,22 +19,6 @@ void CollisionObject::breakApart(Simulator* sim)
 	delete this; // Delete self
 };
 
-/*
-void CollisionObject::update(Simulator* sim) {
-	// If the object has not collided,
-	if (!collided)
-	{
-		// Calculate normally
-		Object::update(TIME, GRAVITY, EARTH_RADIUS);
-	}
-	else
-	{
-		breakApart(sim);
-	}
-}
-*/
-
-
 void CollisionObject::addObjects(Simulator* sim, vector<CollisionObject*> obj) {
 	// For each sub Object the Collision Object will break into,
 	
@@ -48,8 +32,8 @@ void CollisionObject::addObjects(Simulator* sim, vector<CollisionObject*> obj) {
 	vector<Position>::iterator pos = startingPos.begin();
 	vector<Velocity>::iterator vel = directions.begin();
 
-	// All vectors should be the same size
-	//assert(parts.size() == directions.size() == startingPos.size());
+	// All vectors should be the same size (commented out, cassert not here)
+	assert((obj.size() == directions.size()) && (obj.size() == startingPos.size()) && (directions.size() == startingPos.size()));
 
 	// For each CollisionObject,
 	for (vector<CollisionObject*>::iterator part = obj.begin(); part != obj.end(); part++)
@@ -76,6 +60,8 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 		Velocity newVel = Velocity(this->vel);
 
 		// Add 5000 - 9000 m/s to speed, random direction
+		// Will use 6000 currenlty
+		newVel.addMeters(6000.0, newVel.getAngle());
 
 		velocities.push_back(newVel);
 	}

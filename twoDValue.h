@@ -7,6 +7,8 @@
 // The default zoom value for the simulator, will use if not set
 const double DEFAULT_ZOOM = 128000.0 /* 128km equals 1 pixel */;
 
+class TestTwoDValue;
+
 /*********************************************
  * 2D Value
  * A pair of values that represent a horizontal and
@@ -16,16 +18,34 @@ const double DEFAULT_ZOOM = 128000.0 /* 128km equals 1 pixel */;
 class TwoDValue
 {
 public:
+   friend TestTwoDValue;
+
    // If no value given, assumes equals 0
    // Sets Zoom to Default, can be adjusted later with setZoom()
    TwoDValue(double newX = 0.0, double newY = 0.0) { /*this->setZoom(DEFAULT_ZOOM);*/ this->x = newX; this->y = newY; };
    TwoDValue(const TwoDValue& pt) : TwoDValue(pt.x, pt.y) {};
 
    TwoDValue& operator = (const TwoDValue& twoD) {
-      x = twoD.x;
-      y = twoD.y;
+      this->x = twoD.x;
+      this->y = twoD.y;
       return *this;
    };
+
+   TwoDValue& operator += (const TwoDValue& twoD) {
+      this->x += twoD.x;
+      this->y += twoD.y;
+      return *this;
+   }
+
+   TwoDValue& operator -= (const TwoDValue& twoD) {
+      this->x -= twoD.x;
+      this->y -= twoD.y;
+      return *this;
+   }
+
+   bool operator == (const TwoDValue& twoD) {
+      return ((this->x == twoD.x) && (this->y += twoD.y));
+   }
 
    // Getters, for both Meters and Pixels
    double getMetersX()       const { return x; }
@@ -56,6 +76,16 @@ public:
    // deal with the ratio of meters to pixels
    void setZoom(double metersFromPixels) { this->metersFromPixels = metersFromPixels; }
    double getZoom() const { return metersFromPixels; }
+
+   // Get the hypotenuse of the x and y values
+   double getTotal() { return sqrt(pow(this->x, 2) + pow(this->y, 2)); }
+   
+   // Get the angle between the x and y values
+   Angle getAngle() { 
+      // Sin A = opposite / hyp
+      double sine = this->y / getTotal();
+      return Angle(asin(sine));
+   }
 
 protected:
    double x;

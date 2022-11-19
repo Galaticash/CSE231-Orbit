@@ -8,6 +8,11 @@
 #include "colorRect.h"  // *Note: either reconstruct all into colorRects, or have a typeid switch case, and use existing
 #include <vector>
 
+#ifndef C_ASSERT
+#define C_ASSERT
+#include <cassert>
+#endif  // To make assertions
+
 using namespace std;
 
 /*********************************************

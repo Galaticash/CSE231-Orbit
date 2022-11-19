@@ -10,6 +10,7 @@
 #include "pch.h"
 #include "testRunner.h"
 #include "testPosition.h"
+#include "testTwoDValue.h"
 #include "testSatellite.h"
 #include "testBullet.h"
 
@@ -23,6 +24,9 @@ void testRunner()
    // Runs Brother Helfrich's Position tests, 
    //  slightly modified since Position now inherits from 2DValue
    TestPosition().run();
+
+   cout << "Running TwoDValue tests.." << endl;
+   TestTwoDValue().run();
 
    cout << "Running Satellite tests.." << endl;
    TestSatellite().run();

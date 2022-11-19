@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
+
+#ifndef C_ASSERT
+#define C_ASSERT
 #include <cassert>
+#endif
 
 using namespace std;
 
