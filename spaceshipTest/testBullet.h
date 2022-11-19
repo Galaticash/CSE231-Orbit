@@ -55,7 +55,6 @@ private:
       // Setup
       stubDirectionUp ship;
       Position spawnPos = ship.getPosition();
-      spawnPos.addPixelsY(19.0);
       
       // Exercise
       Bullet test(spawnPos, ship.getVelocity(), ship.getAngle());
@@ -73,7 +72,6 @@ private:
       // Setup
       stubMoveUp1000 ship;
       Position spawnPos = ship.getPosition();
-      spawnPos.addPixelsY(19.0);
 
       // Exercise
       Bullet test(spawnPos, ship.getVelocity(), ship.getAngle());
@@ -106,7 +104,7 @@ private:
       // Exercise
       bool expired = test.isExpired();
       // Verify
-      assert(expired == true);
+      assert(expired == false);
       assert(test.lifetime > 0);
    }  // Teardown
 };
