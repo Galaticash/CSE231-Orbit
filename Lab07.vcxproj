@@ -158,6 +158,10 @@
     <ClInclude Include="earth.h" />
     <ClInclude Include="fragment.h" />
     <ClInclude Include="gps.h" />
+    <ClInclude Include="hubbleComputer.h" />
+    <ClInclude Include="HubbleLeft.h" />
+    <ClInclude Include="HubbleRight.h" />
+    <ClInclude Include="hubbleTelescope.h" />
     <ClInclude Include="simulator.h" />
     <ClInclude Include="hubble.h" />
     <ClInclude Include="object.h" />

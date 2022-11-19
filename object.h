@@ -14,6 +14,7 @@
 #endif  // To make assertions
 
 using namespace std;
+class TestSatellite;
 
 /*********************************************
  * Object
@@ -22,6 +23,8 @@ using namespace std;
 class Object
 {
 public:
+   friend TestSatellite;
+
    // ** TODO: Update to use Angle class
    Object(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
 

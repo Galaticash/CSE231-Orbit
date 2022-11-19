@@ -36,10 +36,14 @@ public:
       this->y += twoD.y;
       return *this;
    }
-
    TwoDValue& operator -= (const TwoDValue& twoD) {
       this->x -= twoD.x;
       this->y -= twoD.y;
+      return *this;
+   }
+   TwoDValue& operator *= (const double scale) {
+      this->x *= scale;
+      this->y *= scale;
       return *this;
    }
 

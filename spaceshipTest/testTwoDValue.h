@@ -12,10 +12,11 @@ public:
       copyConstructor();
       assignment();
 
-      // Addition and Subtraction
-      addTwoD();
-      subtractTwoD();
-      comparison();
+      // Operator overloads
+      addTwoD();        // Add two 2D values together
+      subtractTwoD();   // Subtract a 2D value from another
+      comparison();     // Compare two 2D values
+      multiplyScale();  // Scale a 2D value
 
       // Test get total/hypotenuse
       getHypotenuse();
@@ -103,6 +104,28 @@ private:
       // TEARDOWN
    }
    
+   void multiplyScale() 
+   {
+      // SETUP
+      TwoDValue initial;
+      initial.x = 300.0;
+      initial.y = 400.0;
+
+      double scale = 2.0;
+
+      double expectedX = initial.x * scale;
+      double expectedY = initial.y * scale;
+
+      // EXERCISE
+      initial *= scale;
+
+      // VERIFY
+      assert(closeEnough(expectedX, initial.x, .001));
+      assert(closeEnough(expectedY, initial.y, .001));
+
+      // TEARDOWN
+   }
+
    // Comparison
    void comparison() 
    {

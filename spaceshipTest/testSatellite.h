@@ -13,16 +13,50 @@ public:
 		// Set zoom to 1000.0 meters per pixel
 		Position().setZoom(1000.0);
 
+		// Testing updates to Position
+		updatePos();
+
 		// Testing number of parts broken into
 		breakSubParts();
 
 		// Testing explosion directions
 		breakApartStatic();
-		breakApartY();
 		breakApartX();
+		breakApartY();
 	};
 
 private:
+	// Check that custom updates (no gravity) adjust the Position correctly
+	void updatePos()
+	{
+		// SETUP
+		Position initialPos = Position(300.0, 300.0);
+		Velocity initialVel = Velocity(100.0, 0.0);
+
+		Satellite test;
+		// Setup Position
+		test.pos.setMetersX(initialPos.getMetersX());
+		test.pos.setMetersY(initialPos.getMetersY());
+		
+		// Setup Velocity
+		test.vel.setMetersX(initialVel.getMetersX());
+		test.vel.setMetersY(initialVel.getMetersY());
+
+		// Constants used for update
+		double time = 1;
+
+		// EXERCISE
+		test.update(time);
+
+		// VERIFY
+		double expectedPosX = initialPos.getMetersX() + (initialVel.getMetersX() * time);
+		double expectedPosY = initialPos.getMetersY() + (initialVel.getMetersY() * time);
+		assert(closeEnough(expectedPosX, test.pos.getMetersX(), .001));
+		assert(closeEnough(expectedPosY, test.pos.getMetersY(), .001));
+
+		// TEARDOWN	
+	}
+
 	class DummySimulator : public Simulator {
 	public:
 		DummySimulator() {}; // Doesn't create Ship or Earth
@@ -78,7 +112,6 @@ private:
 		// To clear the current list of Collision Objects
 		void clearObjects() { this->collisionObjects.clear(); this->collisionObjects = vector<CollisionObject*>{}; };
 	};
-
 
 	// Check that the Satellite is breaking apart into the proper number of objects
 	void breakSubParts() {
@@ -139,7 +172,6 @@ private:
 		testSatellite->parts = { new Part(), new Part() };
 		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
 
-
 		// Add the Satellite to the FakeSim and check that
 		//  it is the only Object there
 		fakeSim.addCollider(testSatellite);
@@ -181,6 +213,10 @@ private:
 		testSatellite->parts = { new Part(), new Part() };
 		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
 
+		// Find the expected part directions and positions
+		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
+		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
+
 		// EXERCISE
 		testSatellite->breakApart(&fakeSim);
 
@@ -188,12 +224,28 @@ private:
 		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
 		assert(collisionObjects.size() == expectedSubParts);
 
-		//vector<Velocity> = testSatellite.
-
 		// Check that all objects are travelling in different directions (Satellite's velocity added)
-		for (vector<CollisionObject*>::iterator it = collisionObjects.begin(); it != collisionObjects.end(); it++)
-		{
+		vector<Position>::iterator pos = expectedPositions.begin();
+		vector<Velocity>::iterator dir = expectedDirections.begin();
 
+		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
+		{
+			// Iterators changed into their classes
+			CollisionObject* testingX = (*obj);
+			Position expectedPos = *pos;
+			Velocity expectedVel = *dir;
+			
+			// Check Position
+			assert(closeEnough(testingX->pos.getMetersX(), expectedPos.getMetersX(), .001));
+			assert(closeEnough(testingX->pos.getMetersY(), expectedPos.getMetersY(), .001));
+			
+			// Check Velocity/Direction
+			assert(closeEnough(testingX->vel.getMetersX(), expectedVel.getMetersX(), .001));
+			assert(closeEnough(testingX->vel.getMetersY(), expectedVel.getMetersY(), .001));
+
+			// Move to next object
+			pos++;
+			dir++;
 		}
 
 		// TEARDOWN
@@ -203,7 +255,7 @@ private:
 	void breakApartY() {
 		// SETUP 
 		FakeSimulator fakeSim = FakeSimulator();
-		fakeSim.clearObjects();
+		fakeSim.clearObjects(); // Double check that there are no additional objects
 
 		// Can change inital Position if needed
 		Position initialP = Position(0.0, 0.0);
@@ -221,7 +273,11 @@ private:
 		testSatellite->parts = { new Part(), new Part() };
 		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
 
-		// EXERCISE
+		// Find the expected part directions and positions
+		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
+		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
+
+		// EXERCISE - Break apart the Satellite
 		testSatellite->breakApart(&fakeSim);
 
 		// VERIFY
@@ -229,12 +285,28 @@ private:
 		assert(collisionObjects.size() == expectedSubParts);
 
 		// Check that all objects are travelling in different directions (Satellite's velocity added)
-		for (vector<CollisionObject*>::iterator it = collisionObjects.begin(); it != collisionObjects.end(); it++)
-		{
+		vector<Position>::iterator pos = expectedPositions.begin();
+		vector<Velocity>::iterator dir = expectedDirections.begin();
 
+		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
+		{
+			CollisionObject* testingY = (*obj);
+			Position expectedPos = *pos;
+			Velocity expectedVel = *dir;
+
+			// Check Position
+			assert(closeEnough(testingY->pos.getMetersX(), expectedPos.getMetersX(), .001));
+			assert(closeEnough(testingY->pos.getMetersY(), expectedPos.getMetersY(), .001));
+
+			// Check Velocity/Direction
+			assert(closeEnough(testingY->vel.getMetersX(), expectedVel.getMetersX(), .001));
+			assert(closeEnough(testingY->vel.getMetersY(), expectedVel.getMetersY(), .001));
+
+			// Move to next object
+			pos++;
+			dir++;
 		}
 
 		// TEARDOWN
 	}
-
 };
