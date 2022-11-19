@@ -11,9 +11,9 @@
 class Fragment : public CollisionObject
 {
 public:
-   Fragment(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) { this->lifetime = 0; this->radius = 2; };
+   Fragment(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) { this->lifetime = 50; this->radius = 2; /*Lifetime is 50-100 frames*/ };
 
-   bool isExpired() { return true; }
+   bool isExpired() { if (lifetime <= 0) return true; else { lifetime--; return false; } }
    void breakApart(Simulator* sim);
 
 protected:
