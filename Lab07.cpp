@@ -197,7 +197,7 @@ int main(int argc, char** argv)
    addObjects(&sim);
 
    // set everything into action
-   ui.run(callBack, &sim);
+   //ui.run(callBack, &sim);
 
    return 0;
 }
