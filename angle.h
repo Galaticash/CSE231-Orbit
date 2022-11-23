@@ -17,15 +17,50 @@ class Angle
 public:
    Angle() : radAngle(0.0) {}
    Angle(double radAngle) : radAngle(radAngle) {}
-   
+  
+   // Set an Angle to another Angle
+   Angle& operator = (const Angle& twoD) {
+      this->radAngle = twoD.radAngle;
+      return *this;
+   };
+
+   // Addition operators for both Angles and doubles
+   Angle& operator +=(const double rhs);
+   Angle& operator += (const Angle& twoD) {
+      this->radAngle += twoD.radAngle;
+      normalize();
+      return *this;
+   }
+
+   // Scale an Angle
+   Angle& operator *= (const double scale)
+   {
+      this->radAngle *= scale;
+      normalize();
+      return *this;
+   }
+
+   // Subtraction operators for both Angles and doubles
+   Angle& operator -= (const Angle& twoD) {
+      this->radAngle -= twoD.radAngle;
+      normalize();
+      return *this;
+   }
+   Angle& operator-=(const double rhs);
+
+   // If two Angle's radAngle values are the same, same angle
+   bool operator == (const Angle& twoD) {
+      return this->radAngle == twoD.radAngle;
+   }
+
+   // Getters and Setters for Radians
    void setRadian(double radians) { this->radAngle = radians; };
    double getRadian() const { return radAngle; }
    
+   // Getters and Setters for Degrees
    void setDegree(double degrees);
    double getDegree() const;
 
-   Angle& operator+=(const double rhs);
-   Angle& operator-=(const double rhs);
 private:
    double radAngle;
    void normalize();

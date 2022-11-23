@@ -63,7 +63,7 @@ public:
    void setMetersY(double yMeters) { y = yMeters; }
    void setPixelsX(double xPixels) { x = xPixels * metersFromPixels; }
    void setPixelsY(double yPixels) { y = yPixels * metersFromPixels; }
-   
+
    // Given an overall change in Meters and an Angle (degrees), adjust x and y values
    void addMeters(double change, Angle angle) {
       double yVal = change * cos(angle.getDegree());
@@ -74,6 +74,15 @@ public:
    };
    void addMetersX(double dxMeters) { setMetersX(getMetersX() + dxMeters); }
    void addMetersY(double dyMeters) { setMetersY(getMetersY() + dyMeters); }
+   
+   // Given an overall change in Meters and an Angle (degrees), adjust x and y values
+   void addPixels(double change, Angle angle){
+      double yVal = change * cos(angle.getDegree());
+      double xVal = change * sin(angle.getDegree());
+
+      this->addPixelsX(xVal);
+      this->addPixelsY(yVal);
+   }
    void addPixelsX(double dxPixels) { setPixelsX(getPixelsX() + dxPixels); }
    void addPixelsY(double dyPixels) { setPixelsY(getPixelsY() + dyPixels); }
 
@@ -82,10 +91,14 @@ public:
    double getZoom() const { return metersFromPixels; }
 
    // Get the hypotenuse of the x and y values
-   double getTotal() { return sqrt(pow(this->x, 2) + pow(this->y, 2)); }
-   
+   double getTotal() {
+      if (x == 0 && y == 0)
+         return 0;
+      return sqrt(pow(this->x, 2) + pow(this->y, 2));
+   }
+
    // Get the angle between the x and y values
-   Angle getAngle() { 
+   Angle getAngle() {
       // Sin A = opposite / hyp
       double sine = this->y / getTotal();
       return Angle(asin(sine));

@@ -41,8 +41,37 @@ public:
 	{
 		// TODO: Pass Earth/Earth varaibles to objects?, tell them what is affecting their movement (gravity of Earth at position)
 		
+
+
 		// Check for collisions between the Simulator's collisionObjects
-		vector<CollisionObject*> colliders = getCollisions();
+		//  will update the destroyed bool for any that collide
+		updateCollisions();
+
+		vector<CollisionObject*> colliders = {};
+
+		// For every Collision Object,
+		for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
+		{
+			// If it has been marked for destruction,
+			//  either from a collision or a timer expiring:
+			if ((*it)->getDestroyed())
+			{
+				colliders.push_back(*it);
+			}
+
+			// Otherwise, has not been destroyed, update Position
+			else
+			
+			{
+				CollisionObject* obj = *it;
+
+				// If gravity is turned off, passes 0 values
+				double gravity = gravityOn ? GRAVITY : 0.0;
+				double radius = gravityOn ? planet->getRadius() : 0.0;
+
+				obj->update(t, gravity, radius);
+			}
+		}
 
 		// For every Collision Object that has collided,
 		for (vector<CollisionObject*>::iterator it = colliders.begin(); it != colliders.end(); it++)
@@ -54,22 +83,10 @@ public:
 		colliders.clear();
 
 		// TODO: Update all the Stars (what frame they are on/movement)
-		/*for (vector<Star*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
+		/*for (vector<Star*>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
 		{
-
+			(*it).update()
 		}*/
-
-		// Update the position of each CollisionObject
-		for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
-		{
-			CollisionObject* obj = *it;
-
-			// If gravity is turned off, passes 0 values
-			double gravity = gravityOn ? GRAVITY : 0.0;
-			double radius = gravityOn ? planet->getRadius() : 0.0;
-
-			obj->update(t, gravity, radius);
-		}
 	}
 
 	vector<Object*> getObjects(); // Get all Objects to be drawn
@@ -81,52 +98,36 @@ protected:
 	vector<Star> stars;	// All the stars to display
 	double timeDialation;
 
-
-	vector<CollisionObject*> getCollisions() {
-		vector<CollisionObject*> colliders;
-
+	void updateCollisions() {
 		// For every Collison Object in the Simulator's collisionObjects,
 		for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
 		{
 			// Check against every object except itself
 			for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
 			{
-				// Should never check collisions against self
-				//assert((*objOneIt) != (*objTwoIt)); // TODO: assert not included
-
-				// TODO: Change for odd number collisions? 3rd object
-				// If neither object has been involved in a collision yet,
-				if (!(*objOneIt)->getCollided() && !(*objTwoIt)->getCollided())
+				if (!(*objOneIt)->getDestroyed() && !(*objTwoIt)->getDestroyed())
 				{
 					// Check if the two Objects have hit eachother,
 					if ((*objOneIt)->isHit(*(*objTwoIt)))
 					{
-						// Tell the second object it was hit
-						(*objTwoIt)->setCollided(true);
-
-						// Add both objects to the list of colliding objects
-						colliders.push_back(*objOneIt);
-						colliders.push_back(*objTwoIt);
+						// Tell the second object it was also hit
+						(*objTwoIt)->setDestroyed(true);
 					}
 				}
-				else if ((!(*objOneIt)->getCollided() && (*objTwoIt)->getCollided()))
+				// If ObjOne has not been hit, but ObjTwo has already been hit,
+				else if ((!(*objOneIt)->getDestroyed() && (*objTwoIt)->getDestroyed()))
 				{
-					if ((*objOneIt)->isHit(*(*objTwoIt)))
-					{
-						// Add object to the list of colliding objects
-						colliders.push_back(*objOneIt);
-					}
+					// Check if ObjOne has been hit
+					(*objOneIt)->isHit(*(*objTwoIt));
+					
 				}
-				else if ((!(*objTwoIt)->getCollided() && (*objOneIt)->getCollided()))
+				// If ObjOne has not been hit, but ObjTwo has already been hit,
+				else if ((!(*objTwoIt)->getDestroyed() && (*objOneIt)->getDestroyed()))
 				{
-					if ((*objTwoIt)->isHit(*(*objOneIt)))
-					{
-						// Add object to the list of colliding objects
-						colliders.push_back(*objTwoIt);
-					}
+					// Check if ObjTwo has been hit
+					(*objTwoIt)->isHit(*(*objOneIt));
 				}
 			}
 		}
-		return colliders;
 	};
 };

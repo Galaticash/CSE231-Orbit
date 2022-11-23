@@ -13,13 +13,8 @@ class Satellite : public CollisionObject
 {
 public:
 	friend TestSatellite;
-	Satellite(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) { this->numFragments = 1; this->radius = 1000000.0; };
+	Satellite(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) { this->numFragments = 2; this->radius = 1000000.0; };
 
-	//void setSubParts(vector<Part*> newParts) { this->parts.clear(); this->parts = newParts; };
-	vector<Part*> getSubParts() { return this->parts; };
-
-	void breakApart(Simulator* sim);
-
-protected:
-	vector <Part*> parts;
+	// The Satellite will break into Parts (depending on type of Satellite: Hubble, Starlink)
+	void breakApart(Simulator* sim); 
 };

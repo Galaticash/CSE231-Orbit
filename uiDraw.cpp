@@ -234,7 +234,7 @@ void drawObject(const Object* obj)
 {
    vector<ColorRect> pixels = obj->getVisual();
    Position center = obj->getPosition();
-   Angle rotation = obj->getAngle();
+   Angle rotation = obj->getRotation();
 
    for (vector<ColorRect>::iterator it = pixels.begin(); it != pixels.end(); it++)
    {

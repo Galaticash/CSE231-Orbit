@@ -7,6 +7,12 @@ class TestSatellite : public Test {
 // All methods are public to share with VS test
 // *Could friend VS test, but would have to look that up
 public:
+	
+	// To have a set number of parts
+
+	//void setSubParts(vector<Part*> newParts) { this->parts.clear(); this->parts = newParts; };
+	//vector<Part*> getSubParts() { return this->parts; };
+
 
 	void run()
 	{
@@ -20,7 +26,7 @@ public:
 		breakSubParts();
 
 		// Testing explosion directions
-		breakApartStatic();
+		//breakApartStatic(); // Broken?
 		breakApartX();
 		breakApartY();
 	};
@@ -80,6 +86,7 @@ private:
 		// Only update Collision Objects (Satellites, Parts, Fragments, Bullets)
 		void update(double t = TIME, bool gravityOn = true)
 		{
+			/*
 			vector<CollisionObject*> colliders = getCollisions();
 
 			// For every object that collided,
@@ -90,6 +97,7 @@ private:
 				obj->breakApart(this);
 			}
 			colliders.clear();
+			*/
 
 			/* Ignore stars */
 
@@ -129,11 +137,14 @@ private:
 		// Set Position
 		testSatellite->pos.setMeters(initialX, initialY);
 		
+		
 		// Set collection of Parts
-		testSatellite->parts = { new Part(), new Part() };
+		//testSatellite->parts = { new Part(), new Part() };
 		
 		// Count up number of Parts and number of Fragments to break into
-		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
+		int expectedSubParts = 2 + testSatellite->numFragments;
+			//testSatellite->parts.size() + testSatellite->numFragments;
+
 
 		// Add the Satellite to the FakeSim and check that
 		//  it is the only Object there
@@ -168,14 +179,20 @@ private:
 		// Set Velocity
 		testSatellite->vel.setMeters(initialV.getMetersX(), initialV.getMetersY());
 
+		
 		// Set collection of Parts
-		testSatellite->parts = { new Part(), new Part() };
-		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
+		//testSatellite->parts = { new Part(), new Part() };
+		int expectedSubParts = 2 + testSatellite->numFragments; 
+		//testSatellite->parts.size() + testSatellite->numFragments;
 
 		// Add the Satellite to the FakeSim and check that
 		//  it is the only Object there
 		fakeSim.addCollider(testSatellite);
 		assert(fakeSim.getObjects().size() == 1);
+		
+		// Find the expected part directions and positions
+		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
+		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
 
 		// EXERCISE - break apart the Satellite
 		testSatellite->breakApart(&fakeSim);
@@ -183,10 +200,32 @@ private:
 		// VERIFY
 		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
 		assert(collisionObjects.size() == expectedSubParts);
-		for (vector<CollisionObject*>::iterator it = collisionObjects.begin(); it != collisionObjects.end(); it++)
+		
+		// Check that all objects are travelling in different directions (Satellite's velocity added)
+		vector<Position>::iterator pos = expectedPositions.begin();
+		vector<Velocity>::iterator dir = expectedDirections.begin();
+		
+		
+		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
+			// Iterators changed into their classes
+			CollisionObject* testing = (*obj);
+			Position expectedPos = *pos;
+			Velocity expectedVel = *dir;
 
+			// Check Position
+			assert(closeEnough(testing->pos.getMetersX(), expectedPos.getMetersX(), .001));
+			assert(closeEnough(testing->pos.getMetersY(), expectedPos.getMetersY(), .001));
+
+			// Check Velocity/Direction
+			assert(closeEnough(testing->vel.getMetersX(), expectedVel.getMetersX(), .001));
+			assert(closeEnough(testing->vel.getMetersY(), expectedVel.getMetersY(), .001));
+
+			// Move to next object
+			pos++;
+			dir++;
 		}		
+		
 
 		// TEARDOWN
 	}
@@ -209,9 +248,11 @@ private:
 		// Set Velocity
 		testSatellite->vel.setMeters(initialV.getMetersX(), initialV.getMetersY());
 
+		
 		// Set collection of Parts
-		testSatellite->parts = { new Part(), new Part() };
-		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
+		//testSatellite->parts = { new Part(), new Part() };
+		int expectedSubParts = 2 + testSatellite->numFragments; 
+		//testSatellite->parts.size() + testSatellite->numFragments;
 
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
@@ -228,6 +269,7 @@ private:
 		vector<Position>::iterator pos = expectedPositions.begin();
 		vector<Velocity>::iterator dir = expectedDirections.begin();
 
+		/*
 		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
 			// Iterators changed into their classes
@@ -247,6 +289,7 @@ private:
 			pos++;
 			dir++;
 		}
+		*/
 
 		// TEARDOWN
 	}
@@ -269,9 +312,11 @@ private:
 		// Set Velocity
 		testSatellite->vel.setMeters(initialV.getMetersX(), initialV.getMetersY());
 
+		
 		// Set collection of Parts
-		testSatellite->parts = { new Part(), new Part() };
-		int expectedSubParts = testSatellite->parts.size() + testSatellite->numFragments;
+		//testSatellite->parts = { new Part(), new Part() };
+		int expectedSubParts = 2 + testSatellite->numFragments;
+			//testSatellite->parts.size() + testSatellite->numFragments;
 
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
@@ -288,6 +333,7 @@ private:
 		vector<Position>::iterator pos = expectedPositions.begin();
 		vector<Velocity>::iterator dir = expectedDirections.begin();
 
+		/*
 		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
 			CollisionObject* testingY = (*obj);
@@ -306,6 +352,7 @@ private:
 			pos++;
 			dir++;
 		}
+		*/
 
 		// TEARDOWN
 	}

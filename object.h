@@ -26,7 +26,7 @@ public:
    friend TestSatellite;
 
    // ** TODO: Update to use Angle class
-   Object(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) { this->pos = pos; this->vel = vel; this->angle = 0.0; };
+   Object(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) { this->pos = pos; this->vel = vel; this->rotationAngle = 0.0; };
 
    // Update the position, rotation, and other status of the object
    virtual void update(double time, double gravity = 0.0, double planetRadius = 0.0)
@@ -56,7 +56,7 @@ public:
       }
 
       // Adjust the rotation
-      //this->angle +=
+      //this->rotationAngle +=
 
       // Adjust the position given the current position, velocity, and acceleration
       double xGPS = distanceFormula(this->pos.getMetersX(), this->vel.getMetersX(), hAcc, time);
@@ -75,7 +75,7 @@ public:
    void setVelocity(Velocity newVel) { this->vel = newVel; };
    Velocity getVelocity()    const { return vel; }
   
-   Angle getAngle()     const { return this->angle; }
+   Angle getRotation()     const { return this->rotationAngle; }
    vector<ColorRect> getVisual() const { return visual; };
 
    /*************************************************************************
@@ -200,7 +200,7 @@ public:
 protected:
    Position pos;
    Velocity vel;
-   Angle angle;
+   Angle rotationAngle;
    vector <ColorRect> visual;
 };
 

@@ -34,8 +34,10 @@ public:
       // The Earth will not move, only rotate
       Angle test;
       test.setDegree(ROTATION_SPEED);
-      this->angle += test.getRadian();
-   }   
+      this->rotationAngle += test.getRadian();
+   }
+
+   bool getDestroyed() { return false; };
 
    // The Earth will not break apart
    void breakApart(Simulator* sim) {};

@@ -11,33 +11,29 @@ class Simulator;
 class CollisionObject : public Object
 {
 public:
-	CollisionObject(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Object(pos, vel, angle) { this->radius = 0.0; this->collided = false; this->numFragments = 0; };
+	CollisionObject(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Object(pos, vel, angle) { this->radius = 0.0; this->destroyed = false; this->numFragments = 0; };
 
 	virtual void update(double time, double gravity = 0.0, double planetRadius = 0.0) {			
 		// If the object has not collided,
-		if (!collided)
+		if (!destroyed)
 		{
 			// Calculate normally
 			Object::update(time, gravity, planetRadius);
 		}
-		/*else
-		{
-			// If deleted in Simulator's update, interupts vector loop
-			//breakApart();
-		}*/
 	}
-
-	/* void update(Simulator* sim); */ // Too much exposure of Simulator's class to Collision Object
 
 	bool isHit(const CollisionObject &other) {
 		double distanceBetween = this->pos.distanceBetween(other.pos);
-		this->collided = distanceBetween <= other.radius + this->radius;
-		return this->collided;
+		// Only one change and it breaks, trying to solve destroy -> false possible error
+		// if (distanceBetween <= other.radius + this->radius) { this->destroyed = true; }
+
+		this->destroyed = distanceBetween <= other.radius + this->radius;
+		return this->destroyed;
 	};
 
 	// Getters and setters
-	void setCollided(bool c) { this->collided = c; }; // Simulator will check for collisions
-	bool getCollided() { return this->collided; };
+	void setDestroyed(bool destroy) { this->destroyed = destroy; }; // Simulator will check for collisions
+	virtual bool getDestroyed() { return this->destroyed; };
 
 	// Normal Collision Objects will breakApart through deletion
 	// And remove itself from the list
@@ -53,7 +49,7 @@ protected:
 	vector<Velocity> getSubPartVel(int subParts);
 	vector<Position> getSubPartPos(vector<Velocity> directions);
 
-   bool collided;
-   double radius;
-	int numFragments;
+	bool destroyed;     // If the current Object is to be destroyed (from a collision or timer expiring)
+   double radius;      // How large this object is, used to check if another object is touching it
+	int numFragments;   // The number of fragments this object will break into
 };

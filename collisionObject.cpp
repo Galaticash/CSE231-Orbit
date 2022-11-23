@@ -59,9 +59,16 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 		// Initial direction
 		Velocity newVel = Velocity(this->vel);
 
-		// Add 5000 - 9000 m/s to speed, random direction
-		// Will use 6000 currenlty
-		newVel.addMeters(6000.0, newVel.getAngle());
+		// Figure out which direction to add the velocity
+		// Based on CollisionObject's velocity
+		Angle newAngle = newVel.getAngle();
+
+		// Plus a direction from the number of subParts
+		newAngle += Angle(i * PI / subParts); // Ex: +1/4PI, +2/4PI... etc or 1/3PI + 2/3PI.. etc
+		newAngle += Angle(PI);
+
+		// Add 5000 - 9000 m/s to speed
+		newVel.addMeters(6000.0, newAngle);
 
 		velocities.push_back(newVel);
 	}
@@ -79,8 +86,8 @@ vector<Position> CollisionObject::getSubPartPos(vector<Velocity> directions) {
 		Position newPos = Position(this->pos);
 
 		// 4 pixels in direction of travel
-		// Find x and Y from Velocity
-		//newPos.addPixelsX(4);
+		// Find X and Y from Angle of the current Velocity
+		newPos.addPixels(4, (*it).getAngle());
 
 		positions.push_back(newPos);
 	}

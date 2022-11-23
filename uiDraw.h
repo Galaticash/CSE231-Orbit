@@ -34,7 +34,7 @@ class ogstream : public std::ostringstream
 {
 public:
    ogstream(const Position& pt) : pt(pt) {}
-   ~ogstream() { flush(); }; 
+   ~ogstream() { flush(); };
    void flush();
 
    void setPosition(const Position& pt) { flush(); this->pt = pt; }

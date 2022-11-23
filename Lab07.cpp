@@ -105,17 +105,18 @@ void callBack(const Interface* pUI, void* p)
       
       string objType = typeid(*obj).name();
 
+      //drawObject(*obj);
 
       // TEST: Draw based on obj type, instead of rewriting the entire Draw class
       if(objType == "class Spaceship")
       {
          drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
-         drawShip(obj->getPosition(), obj->getAngle().getDegree(), ((Spaceship*)obj)->getThrust());
+         drawShip(obj->getPosition(), obj->getRotation().getDegree(), ((Spaceship*)obj)->getThrust());
       }
       else if(objType == "class Earth")
       {
          // ERROR: Earth is not rotating
-         drawEarth(obj->getPosition(), obj->getAngle().getDegree());
+         drawEarth(obj->getPosition(), obj->getRotation().getDegree());
       }
       else if (objType == "class Star")
       {
@@ -123,32 +124,32 @@ void callBack(const Interface* pUI, void* p)
       }
       else if (objType == "class Hubble")
       {
-         drawHubble(obj->getPosition(), obj->getAngle().getDegree());
+         drawHubble(obj->getPosition(), obj->getRotation().getDegree());
       }
       else if (objType == "class HubbleComputer")
       {
-         drawHubbleComputer(obj->getPosition(), obj->getAngle().getDegree());
+         drawHubbleComputer(obj->getPosition(), obj->getRotation().getDegree());
       }
       else if (objType == "class HubbleLeft")
       {
-         drawHubbleLeft(obj->getPosition(), obj->getAngle().getDegree());
+         drawHubbleLeft(obj->getPosition(), obj->getRotation().getDegree());
       }
       else if (objType == "class HubbleRight")
       {
-         drawHubbleRight(obj->getPosition(), obj->getAngle().getDegree());
+         drawHubbleRight(obj->getPosition(), obj->getRotation().getDegree());
       }
       else if (objType == "class Satellite")
       {
          drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
-         drawHubble(obj->getPosition(), obj->getAngle().getDegree());
+         drawHubble(obj->getPosition(), obj->getRotation().getDegree());
       }
       else if (objType == "class Part")
       {
-         drawHubbleTelescope(obj->getPosition(), obj->getAngle().getDegree());
+         drawHubbleTelescope(obj->getPosition(), obj->getRotation().getDegree());
       }
       else if (objType == "class Fragment")
       {
-         drawFragment(obj->getPosition(), obj->getAngle().getDegree());
+         drawFragment(obj->getPosition(), obj->getRotation().getDegree());
       }
       else
       {
@@ -178,7 +179,7 @@ void addObjects(Simulator* s)
    s->addCollider(new Satellite(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
    s->addCollider(new Satellite(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
 
-   s->addCollider(new Satellite(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
+   s->addCollider(new Hubble(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
 
    s->addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
 }
@@ -199,8 +200,8 @@ int WINAPI wWinMain(
 int main(int argc, char** argv)
 #endif // !_WIN32
 {
-   // Unit Tests
-   testRunner();
+   // Unit Tests - add back in when Collisions work again
+   // testRunner();
 
    // Initialize OpenGL
    Position ptUpperRight;

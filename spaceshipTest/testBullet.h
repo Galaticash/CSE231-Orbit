@@ -62,7 +62,7 @@ private:
       // Verify
       assert(closeEnough(test.pos.getMetersX(), 0.0, 0.1));
       assert(closeEnough(test.pos.getPixelsY(), 19.0, 0.1));
-      assert(closeEnough(test.angle.getDegree(), 0.0, 0.1));
+      assert(closeEnough(test.rotationAngle.getDegree(), 0.0, 0.1));
       assert(closeEnough(test.vel.getMetersX(), 0.0, 0.1));
       assert(closeEnough(test.vel.getMetersY(), 9000.0, 1.0));
    }  // Teardown
@@ -79,7 +79,7 @@ private:
       // Verify
       assert(closeEnough(test.pos.getMetersX(), 0.0, 0.1));
       assert(closeEnough(test.pos.getPixelsY(), 19.0, 0.1));
-      assert(closeEnough(test.angle.getDegree(), 0.0, 0.1));
+      assert(closeEnough(test.rotationAngle.getDegree(), 0.0, 0.1));
       assert(closeEnough(test.vel.getMetersX(), 0.0, 0.1));
       assert(closeEnough(test.vel.getMetersY(), 10000.0, 1.0));
    }  // Teardown

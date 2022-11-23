@@ -6,7 +6,7 @@ public:
    void run()
    {
       TwoDValue().setZoom(1000.0); /* 1km equals 1 pixel */
-      
+
       // Copied from Position tests, 
       //  constructor and getter/setter tests
       copyConstructor();
@@ -55,7 +55,7 @@ private:
       assert(twoD2.getMetersX() == 4000.0);
       assert(twoD2.getMetersY() == 2000.0);
    }  // teardown
-   
+
    // Addition and subtraction
    void addTwoD()
    {
@@ -77,7 +77,7 @@ private:
       // VERIFY
       assert(closeEnough(expectedX, initial.x, .001));
       assert(closeEnough(expectedY, initial.y, .001));
-      
+
       // TEARDOWN
    }
    void subtractTwoD()
@@ -96,6 +96,7 @@ private:
 
       // EXERCISE
       initial -= change;
+      //initial -= change; // Show tests are working
 
       // VERIFY
       assert(closeEnough(expectedX, initial.x, .001));
@@ -103,8 +104,8 @@ private:
 
       // TEARDOWN
    }
-   
-   void multiplyScale() 
+
+   void multiplyScale()
    {
       // SETUP
       TwoDValue initial;
@@ -127,7 +128,7 @@ private:
    }
 
    // Comparison
-   void comparison() 
+   void comparison()
    {
       // SETUP
       double valueX = 300.0;
@@ -184,8 +185,8 @@ private:
 
       // EXERCISE - TwoDValue.getAngle()
       // Get the Angle between x and y
-      Angle testA = test.getAngle(); 
-      
+      Angle testA = test.getAngle();
+
       // VERIFY
       assert(closeEnough(45.0, testA.getDegree(), .001));
 
@@ -225,10 +226,10 @@ private:
 
       // EXERCISE
       double h = test.getTotal();
-     
+
       // VERIFY
       assert(closeEnough(expected, h, .001));
-  
+
       // TEARDOWN
    }
 };
