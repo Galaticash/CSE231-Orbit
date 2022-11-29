@@ -68,7 +68,7 @@ private:
 		void createBullet(Position pos, Velocity vel, double angle) { assert(false); };
 		void moveShip(double x, double y) { assert(false); };
 	
-		// TODO: update() in Simulator should take no arguements,
+		// TODO: update() in Simulator should take no arguments,
 		//  the parameters are for testing purposes only (custom time, gravity on/off)
 	};
 

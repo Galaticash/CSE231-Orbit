@@ -9,10 +9,10 @@
 #include <cassert>      // for ASSERT
 #include "uiInteract.h" // for INTERFACE
 #include "uiDraw.h"     // for RANDOM and DRAW*
-//#include "position.h"   // for POINT
+
 #include "simulator.h"  // The orbit simulator
 
-// Specific Satellites
+// Specific Satellites - move to Simulator later
 #include "hubble.h"
 #include "starlink.h"
 #include "sputnik.h"
@@ -21,8 +21,7 @@ using namespace std;
 
 #include "spaceshipTest/testRunner.cpp" // Test cases, not a class
 
-// To show goal orbit and distance from Earth
-// Better to leave as a bool, or comment out?
+// To show collision circles
 const bool SHOW_TESTING_VISUALS = false;
 
 // Constants for GEO Orbit
@@ -138,19 +137,26 @@ void callBack(const Interface* pUI, void* p)
 *  **************************************/
 void addObjects(Simulator* s)
 {
-   //s->addCollider(new Hubble(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
+   s->addCollider(new Hubble(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
    
-   //s->addCollider(new StarlinkBody(Position(-10888386.068, 40737174.459), Velocity(-3100.0, 0.0)));
+   s->addCollider(new StarlinkBody(Position(-10888386.068, 40737174.459), Velocity(-3100.0, 0.0)));
    
    // Added quicker collision
-   //s->addCollider(new Hubble(Position(-13595100.4029, 39923965.84268), Velocity(2938.822, 984.102)));
+   s->addCollider(new Hubble(Position(-13595100.4029, 39923965.84268), Velocity(2938.822, 984.102)));
 
-   //s->addCollider(new Starlink(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
-   //s->addCollider(new HubbleLeft(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
-   //s->addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
+   s->addCollider(new Starlink(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
+   s->addCollider(new HubbleLeft(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
+   s->addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
+
+   s->addCollider(new HubbleLeft(Position(-15000000.4029, -39000000.84268), Velocity(-3100.0, 0.0)));
+   s->addCollider(new HubbleLeft(Position(-13595100.4029, -40000000.84268), Velocity(-3100.0, 0.0)));
+
+
+
 
    /* Actual Objects to add: */
 
+   /*
    // Starlink
    s->addCollider(new Starlink(Position(-36515095.13, 21082000.0), Velocity(2050.0, 2684.68)));
 
@@ -170,6 +176,7 @@ void addObjects(Simulator* s)
 
    // StarLink
    s->addCollider(new Hubble(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));
+   */
 }
 
 double TwoDValue::metersFromPixels = 40.0;

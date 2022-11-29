@@ -89,7 +89,7 @@ public:
 
 			// DEBUG: What objects have been destroyed
 			string objType = typeid(*obj).name();
-			cout << objType << "destroyed" << endl;
+			cout << objType << " destroyed" << endl;
 
 			obj->breakApart(this);
 		}
@@ -115,7 +115,7 @@ protected:
 		// If there is a change in movement,
 		if (!(dx == 0.0 && dy == 0.0))
 		{
-			//this->ship.
+			this->ship->setThrust(true);
 
 			// Adjust the velocity of the Spaceship
 			double scale = 250.0; // TODO: Figure out movement scale
@@ -124,6 +124,7 @@ protected:
 			// TODO: Add rotation
 			// TODO: movement is very finiky
 		}
+		this->ship->setThrust(false);
 	}
 
 	void updateCollisions() {

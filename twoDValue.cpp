@@ -1,10 +1,10 @@
 /***********************************************************************
  * Source File:
- *    Point : The representation of a position on the screen
+ *    twoDValue : A type of value with two dimensions
  * Author:
- *    Br. Helfrich
+ *    Br. Helfrich, modified for twoDValue by Ashley DeMott
  * Summary:
- *    Everything we need to know about a location on the screen.
+ *    ostream operators for twoDValue
  ************************************************************************/
 
 #include "twoDValue.h"

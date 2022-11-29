@@ -3,10 +3,8 @@
 void Simulator::getInput(const Interface* pUI) 
 {
    // Check that the Spaceship is still in the Simulation
-   // Surprised it didn't crash after destroyed, but should have a check
    if (this->ship != NULL)
    {
-      // move by a little
       double shipX = 0.0;
       double shipY = 0.0;
 
@@ -33,20 +31,24 @@ void Simulator::getInput(const Interface* pUI)
       if (!(shipX == 0.0 && shipY == 0.0))
          cout << endl;
 
-      // Add velocity to the Ship according to the user's input
+      // Add Velocity to the Ship according to the user's input
       moveShip(shipX, shipY);
 
-      // Check for bullet shooting
+      // Check for Bullet shooting
       if (pUI->isSpace())
       {
          // Create a new bullet in front of the Spaceship
          createBullet(this->ship->getPosition(), this->ship->getVelocity(), this->ship->getRotation());
       }
-
    }   
+
+   /*
+   if (pUI)
+   {
+   }
+   */
+
 }
-
-
 
 vector<Object*> Simulator::getObjects() {
    // Returns the pointers for all the Objects to be drawn
