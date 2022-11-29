@@ -232,12 +232,17 @@ void drawCrewDragonCenter(const Position& center, double rotation)
 
 void drawObject(const Object* obj)
 {
+   // Draw the ColorRects of the Object
+   // So far, Earth is the only one that draws, Spaceship in progress 
+   
    vector<ColorRect> pixels = obj->getVisual();
    Position center = obj->getPosition();
    Angle rotation = obj->getRotation();
 
+   // For each of the object's color rectangles,
    for (vector<ColorRect>::iterator it = pixels.begin(); it != pixels.end(); it++)
    {
+      // Draw the rectangle, given the center, an offset (currently none), color rectangle, and rotation
       glDrawRect(center, Position(), *it, rotation.getDegree());
    }
 }
@@ -760,6 +765,9 @@ void drawLine(const Position& one, const Position& two)
  *************************************************************************/
 void drawCircle(const Position& center, const double radius)
 {
+   // TODO: Radius is drawn in Pixels, currently given as Meters
+   //double radius = radiusM / 128000.0;
+
     // Filled circle
     /*
     int triangleAmount = 20; //# of triangles used to draw circle

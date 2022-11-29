@@ -12,10 +12,11 @@ class Spaceship : public Satellite
 {
 public:
    Spaceship(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Satellite(pos, vel, angle) {
-      this->thrust = true;
-      shipVisual();
+      this->thrust = false;
+      //shipVisual(); // Other way of drawing, remove if not used
    };
 
+   void setThrust(bool t) {  this->thrust = t; }
    bool getThrust() { return this->thrust; };
 
 private:

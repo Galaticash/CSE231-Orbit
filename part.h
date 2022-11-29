@@ -1,5 +1,4 @@
 #pragma once
-
 #include "collisionObject.h"
 
 /*********************************************
@@ -12,5 +11,10 @@
 class Part : public CollisionObject
 {
 public:
-   Part(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) { numFragments = 2; };
+   Part(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle)
+   { 
+      this->numFragments = 2;
+      this->radius = 10; // Pixels
+      //this->radius = 1250000.0; // Meters
+   };
 };

@@ -143,6 +143,7 @@
     <ClCompile Include="collisionObject.cpp" />
     <ClCompile Include="fragment.cpp" />
     <ClCompile Include="Lab07.cpp" />
+    <ClCompile Include="random.h" />
     <ClCompile Include="satellite.cpp" />
     <ClCompile Include="twoDValue.cpp" />
     <ClCompile Include="simulator.cpp" />
@@ -173,6 +174,8 @@
     <ClInclude Include="sputnik.h" />
     <ClInclude Include="star.h" />
     <ClInclude Include="starlink.h" />
+    <ClInclude Include="StarlinkArray.h" />
+    <ClInclude Include="StarlinkBody.h" />
     <ClInclude Include="twoDValue.h" />
     <ClInclude Include="uiDraw.h" />
     <ClInclude Include="uiInteract.h" />

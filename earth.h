@@ -1,10 +1,4 @@
 #pragma once
-
-/*********************************************
- * Earth
- * A planet in the orbital simulator. It has gravity and
- * can be collided with, but can't be destroyed.
- *********************************************/
 #include "collisionObject.h"
 
 const double PI = 3.1415926;            // The value of Pi
@@ -20,13 +14,19 @@ const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY;
 
 const double EARTH_RADIUS = 6378000.0;    // meters
 
+/*********************************************
+ * Earth
+ * A planet in the orbital simulator. It has gravity and
+ * can be collided with, but can't be destroyed.
+ *********************************************/
 class Earth : public CollisionObject
 {
 public:
+   // Earth is placed at 0.0, 0.0 with a velocity of 0.0, 0.0
    Earth() : CollisionObject() {
       this->pos = Position(0, 0); 
       this->visual = vector<ColorRect>{};
-      this->radius = EARTH_RADIUS;
+      this->radius = (EARTH_RADIUS / DEFAULT_ZOOM);
       createVisual(); // Populate the vector of ColorRects
    };
    

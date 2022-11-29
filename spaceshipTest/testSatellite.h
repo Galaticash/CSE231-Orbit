@@ -7,13 +7,6 @@ class TestSatellite : public Test {
 // All methods are public to share with VS test
 // *Could friend VS test, but would have to look that up
 public:
-	
-	// To have a set number of parts
-
-	//void setSubParts(vector<Part*> newParts) { this->parts.clear(); this->parts = newParts; };
-	//vector<Part*> getSubParts() { return this->parts; };
-
-
 	void run()
 	{
 		// Set zoom to 1000.0 meters per pixel
@@ -52,7 +45,7 @@ private:
 		double time = 1;
 
 		// EXERCISE
-		test.update(time);
+		test.update(time, 0.0, 0.0);
 
 		// VERIFY
 		double expectedPosX = initialPos.getMetersX() + (initialVel.getMetersX() * time);
@@ -137,14 +130,9 @@ private:
 		// Set Position
 		testSatellite->pos.setMeters(initialX, initialY);
 		
-		
-		// Set collection of Parts
-		//testSatellite->parts = { new Part(), new Part() };
-		
 		// Count up number of Parts and number of Fragments to break into
-		int expectedSubParts = 2 + testSatellite->numFragments;
-			//testSatellite->parts.size() + testSatellite->numFragments;
-
+		vector<CollisionObject*> parts = { new Part(), new Part() };
+		int expectedSubParts = parts.size() + testSatellite->numFragments;
 
 		// Add the Satellite to the FakeSim and check that
 		//  it is the only Object there
@@ -152,7 +140,7 @@ private:
 		assert(fakeSim.getCollisionObjects().size() == 1);
 
 		// EXERCISE - break apart the Satellite
-		testSatellite->breakApart(&fakeSim);
+		testSatellite->breakApart(&fakeSim, parts);
 
 		// VERIFY
 		// Satellite has broken into the correct number of SubParts
@@ -181,9 +169,8 @@ private:
 
 		
 		// Set collection of Parts
-		//testSatellite->parts = { new Part(), new Part() };
-		int expectedSubParts = 2 + testSatellite->numFragments; 
-		//testSatellite->parts.size() + testSatellite->numFragments;
+		vector<CollisionObject*> parts = { new Part(), new Part() };
+		int expectedSubParts = parts.size() + testSatellite->numFragments;
 
 		// Add the Satellite to the FakeSim and check that
 		//  it is the only Object there
@@ -195,7 +182,7 @@ private:
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
 
 		// EXERCISE - break apart the Satellite
-		testSatellite->breakApart(&fakeSim);
+		testSatellite->breakApart(&fakeSim, parts);
 
 		// VERIFY
 		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
@@ -250,8 +237,8 @@ private:
 
 		
 		// Set collection of Parts
-		//testSatellite->parts = { new Part(), new Part() };
-		int expectedSubParts = 2 + testSatellite->numFragments; 
+		vector<CollisionObject*> parts = { new Part(), new Part() };
+		int expectedSubParts = parts.size() + testSatellite->numFragments;
 		//testSatellite->parts.size() + testSatellite->numFragments;
 
 		// Find the expected part directions and positions
@@ -259,7 +246,7 @@ private:
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
 
 		// EXERCISE
-		testSatellite->breakApart(&fakeSim);
+		testSatellite->breakApart(&fakeSim, parts);
 
 		// VERIFY
 		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
@@ -268,8 +255,9 @@ private:
 		// Check that all objects are travelling in different directions (Satellite's velocity added)
 		vector<Position>::iterator pos = expectedPositions.begin();
 		vector<Velocity>::iterator dir = expectedDirections.begin();
+		
+		// Error: unsorted somehow? Should just be push back, same order
 
-		/*
 		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
 			// Iterators changed into their classes
@@ -289,7 +277,7 @@ private:
 			pos++;
 			dir++;
 		}
-		*/
+		
 
 		// TEARDOWN
 	}
@@ -314,8 +302,8 @@ private:
 
 		
 		// Set collection of Parts
-		//testSatellite->parts = { new Part(), new Part() };
-		int expectedSubParts = 2 + testSatellite->numFragments;
+		vector<CollisionObject*> parts = { new Part(), new Part() };
+		int expectedSubParts = parts.size() + testSatellite->numFragments;
 			//testSatellite->parts.size() + testSatellite->numFragments;
 
 		// Find the expected part directions and positions
@@ -323,7 +311,7 @@ private:
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
 
 		// EXERCISE - Break apart the Satellite
-		testSatellite->breakApart(&fakeSim);
+		testSatellite->breakApart(&fakeSim, parts);
 
 		// VERIFY
 		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
@@ -333,7 +321,6 @@ private:
 		vector<Position>::iterator pos = expectedPositions.begin();
 		vector<Velocity>::iterator dir = expectedDirections.begin();
 
-		/*
 		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
 			CollisionObject* testingY = (*obj);
@@ -352,7 +339,6 @@ private:
 			pos++;
 			dir++;
 		}
-		*/
 
 		// TEARDOWN
 	}

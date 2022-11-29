@@ -21,13 +21,6 @@ namespace SatelliteTestVS
 
 		const double GRAVITY_TEST_TIME = 10;
 		const double GRAVITY_DISTANCE = 40000000.0;
-
-		// utility funciton because floating point numbers are approximations
-		bool closeEnough(double value, double test, double tolerence) const
-		{
-			double difference = value - test;
-			return (difference >= -tolerence) && (difference <= tolerence);
-		}
 		*/
 
 		TEST_METHOD(SatelliteTesting)

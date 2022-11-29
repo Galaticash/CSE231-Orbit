@@ -1,19 +1,23 @@
 #include "collisionObject.h"
 #include "simulator.h"
 
-void CollisionObject::breakApart(Simulator* sim)
+void CollisionObject::breakApart(Simulator* sim, vector<CollisionObject*> subParts)
 {
+	// Given a list of all the Collision Objects 
+	//  that this Collision Object will break into,
+	//  (If none given, creates empty list)
+
 	// For each fragment the Collision Object will break into,
 	int numFragments = this->getNumFragments();
-
-	// Create a vector with all the Fragments
-	vector<CollisionObject*> fragments;
 	for (int i = 0; i < numFragments; i++)
 	{
-		fragments.push_back(new Fragment());
+		// Add a Fragment to list of SubParts
+		subParts.push_back(new Fragment());
 	}
-	
-	addObjects(sim, fragments);
+
+	// Add all Parts and Fragments to the Simulator
+	// Fragments and Parts will go in different directions
+	addObjects(sim, subParts);
 
 	sim->removeCollider(this); // Remove pointer to self
 	delete this; // Delete self
@@ -58,14 +62,16 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 	{
 		// Initial direction
 		Velocity newVel = Velocity(this->vel);
-
+		
 		// Figure out which direction to add the velocity
 		// Based on CollisionObject's velocity
 		Angle newAngle = newVel.getAngle();
 
+		Angle difference = Angle(((i * PI) / subParts));
+		//Angle((PI + (i * PI) / subParts));
+
 		// Plus a direction from the number of subParts
-		newAngle += Angle(i * PI / subParts); // Ex: +1/4PI, +2/4PI... etc or 1/3PI + 2/3PI.. etc
-		newAngle += Angle(PI);
+		newAngle += difference; // Ex: +1/4PI, +2/4PI... etc or 1/3PI + 2/3PI.. etc
 
 		// Add 5000 - 9000 m/s to speed
 		newVel.addMeters(6000.0, newAngle);

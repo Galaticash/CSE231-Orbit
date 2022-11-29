@@ -1,0 +1,8 @@
+MOST IMPORTANT: Should Satellites be drawn using uiDraw or should each draw function be given to the Satellites? Issue bc that requires passing in lots of varibles, I propose using colorRects/Shapes to pass to uiDraw so it can draw it without exposing how things are drawn to the Satellite/Collision Object classes
+The current method works, but is very iffy. Creates a connection between the object and the method in uiDraw instead of having that all that information already in the Satellite classes
+
+Could change ColorRects -> Shapes - made up of points, has a fill color
+
+Should the Simulator know where the upper right of the Screen is? I think that was previously given.
+
+After some refactoring, the Satellite class has become unecessary. Maybe too much stuff was put into the Collision Object class?

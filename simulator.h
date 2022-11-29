@@ -1,5 +1,6 @@
 #pragma once
 
+#include "uiInteract.h"
 #include "spaceship.h"
 #include "star.h"
 #include "earth.h"
@@ -32,60 +33,72 @@ public:
 		}
 	};
 
-	void createBullet(Position pos, Velocity vel, Angle angle) {};
-	void moveShip(double x, double y);
+	void createBullet(Position pos, Velocity vel, Angle angle) 
+	{
+		cout << "shoot" << endl;
+		this->collisionObjects.push_back(new Bullet(pos, vel, angle));	
+	};
+	void getInput(const Interface* pUI); // Also moves the ship, could be a sub method?
+
+	/* For object in collisionObjs, update their position
+	(according to the amount of time that has passed?
+	Better to leave with Simulator instead of assuming
+	all Objects will have the correct time */
 
 	// Given an amount of time (seconds), update all collision objects
 	// Defaults to the assumed 48 seconds per frames if no values given
-	void update(double t = TIME, bool gravityOn = true)
+	void update(double t = TIME, bool gravityOn = true) // TODO: parameters were for testing, so no variables, stick with default?
 	{
-		// TODO: Pass Earth/Earth varaibles to objects?, tell them what is affecting their movement (gravity of Earth at position)
-		
-
-
 		// Check for collisions between the Simulator's collisionObjects
 		//  will update the destroyed bool for any that collide
 		updateCollisions();
 
-		vector<CollisionObject*> colliders = {};
+		vector<CollisionObject*> destroyObjs = {};
 
-		// For every Collision Object,
+		// For every Collision Object in the Simulator,
 		for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
 		{
 			// If it has been marked for destruction,
-			//  either from a collision or a timer expiring:
+			//  (either from a collision or a timer expiring)
 			if ((*it)->getDestroyed())
 			{
-				colliders.push_back(*it);
+				// Add to list of objects to break apart
+				destroyObjs.push_back(*it);
 			}
 
 			// Otherwise, has not been destroyed, update Position
-			else
-			
+			else			
 			{
-				CollisionObject* obj = *it;
+				// TODO: Pass Earth/Earth varaibles to objects?, tell them what is affecting their movement (gravity of Earth at position)
 
+				// TODO: on/off values were also for testing, move to TestSim
 				// If gravity is turned off, passes 0 values
 				double gravity = gravityOn ? GRAVITY : 0.0;
-				double radius = gravityOn ? planet->getRadius() : 0.0;
+				// Convert planet's radius from pixels into meters
+				double radius = gravityOn ? (planet->getRadius() * DEFAULT_ZOOM) : 0.0;
 
-				obj->update(t, gravity, radius);
+				(*it)->update(t, gravity, radius);
 			}
 		}
 
-		// For every Collision Object that has collided,
-		for (vector<CollisionObject*>::iterator it = colliders.begin(); it != colliders.end(); it++)
+		// For every Collision Object that has been marked for destruction,
+		for (vector<CollisionObject*>::iterator it = destroyObjs.begin(); it != destroyObjs.end(); it++)
 		{
-			// Break the object apart, adding subParts to the Simulator's list of collisionObjects
+			// Break the object apart, adding their subParts to the Simulator's list of collisionObjects
 			CollisionObject* obj = *it;
+
+			// DEBUG: What objects have been destroyed
+			string objType = typeid(*obj).name();
+			cout << objType << "destroyed" << endl;
+
 			obj->breakApart(this);
 		}
-		colliders.clear();
+		destroyObjs.clear();
 
 		// TODO: Update all the Stars (what frame they are on/movement)
 		/*for (vector<Star*>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
 		{
-			(*it).update()
+			(*it)->update()
 		}*/
 	}
 
@@ -97,6 +110,21 @@ protected:
 	Earth* planet; // Could be modified to use different Planets
 	vector<Star> stars;	// All the stars to display
 	double timeDialation;
+
+	void moveShip(double dx, double dy) {
+		// If there is a change in movement,
+		if (!(dx == 0.0 && dy == 0.0))
+		{
+			//this->ship.
+
+			// Adjust the velocity of the Spaceship
+			double scale = 250.0; // TODO: Figure out movement scale
+			this->ship->addVelocity(dx * scale, dy * scale);
+
+			// TODO: Add rotation
+			// TODO: movement is very finiky
+		}
+	}
 
 	void updateCollisions() {
 		// For every Collison Object in the Simulator's collisionObjects,
@@ -118,8 +146,7 @@ protected:
 				else if ((!(*objOneIt)->getDestroyed() && (*objTwoIt)->getDestroyed()))
 				{
 					// Check if ObjOne has been hit
-					(*objOneIt)->isHit(*(*objTwoIt));
-					
+					(*objOneIt)->isHit(*(*objTwoIt));					
 				}
 				// If ObjOne has not been hit, but ObjTwo has already been hit,
 				else if ((!(*objTwoIt)->getDestroyed() && (*objOneIt)->getDestroyed()))

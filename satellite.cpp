@@ -1,15 +1,18 @@
 #include "satellite.h"
 #include "simulator.h"
 
-void Satellite::breakApart(Simulator* sim)
+/*
+	NOTE: This version makes Satellite class unecessary, just use CollisionObject's version
+	No real uniqueness about Satellite, only the 'types' of Satellites act differently
+	(But just calling CollisionObject::breakApart() with different subParts parameters)
+*/
+
+void Satellite::breakApart(Simulator* sim, vector<CollisionObject*> subParts)
 {	
-	// The Parts this Satellite will break into
-	// Assumes 2 random Parts
-	vector<CollisionObject*> subParts = { new Part(), new Part() };
+	// Given a list of all the Parts this Satellite will break into,
+	//  where each type of Satellite has its own unique Parts list
 
-	// Add all Parts to the Simulator
-	addObjects(sim, subParts);
-
-	// Add all the Fragments, and delete itself
-	CollisionObject::breakApart(sim);
+	// Add all the Fragments (from numFragments), 
+	//  add them to the simulator, then delete self
+	CollisionObject::breakApart(sim, subParts);
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "object.h"
+//#include "random.h"
 
 class Simulator;
 
@@ -11,23 +12,30 @@ class Simulator;
 class CollisionObject : public Object
 {
 public:
-	CollisionObject(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Object(pos, vel, angle) { this->radius = 0.0; this->destroyed = false; this->numFragments = 0; };
+	CollisionObject(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Object(pos, vel, angle) 
+	{ 
+		this->radius = 0.0; 
+		this->destroyed = false; 
+		this->numFragments = 0; 
+	};
 
-	virtual void update(double time, double gravity = 0.0, double planetRadius = 0.0) {			
+	virtual void update(double time, double gravity, double planetRadius) {			
 		// If the object has not collided,
-		if (!destroyed)
+		if (!destroyed) // TODO: this line technically doesn't have to be here, assert instead?
 		{
-			// Calculate normally
+			// Update normally
 			Object::update(time, gravity, planetRadius);
 		}
 	}
 
 	bool isHit(const CollisionObject &other) {
-		double distanceBetween = this->pos.distanceBetween(other.pos);
-		// Only one change and it breaks, trying to solve destroy -> false possible error
+		double pixelsBetween = this->pos.pixelsBetween(other.pos);
+		
+		// TODO: Prevent destroy from being reset to false
+		// ERROR: This line causes a crash,
 		// if (distanceBetween <= other.radius + this->radius) { this->destroyed = true; }
 
-		this->destroyed = distanceBetween <= other.radius + this->radius;
+		this->destroyed = pixelsBetween <= other.radius + this->radius;
 		return this->destroyed;
 	};
 
@@ -36,11 +44,11 @@ public:
 	virtual bool getDestroyed() { return this->destroyed; };
 
 	// Normal Collision Objects will breakApart through deletion
-	// And remove itself from the list
-	virtual void breakApart(Simulator* sim);
+	// And remove itself from the Simulator's list of Collision Objects
+	// Given a list of additional Collision Objects that this Collision Object will break apart into, otherwise assumes none
+	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {});
 	
 	int getNumFragments() const { return this->numFragments; };
-
    double getRadius() const { return radius; };
 
 protected:

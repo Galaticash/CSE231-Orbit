@@ -9,46 +9,85 @@
 #include <cassert>      // for ASSERT
 #include "uiInteract.h" // for INTERFACE
 #include "uiDraw.h"     // for RANDOM and DRAW*
-#include "position.h"   // for POINT
-#include "simulator.h"
+//#include "position.h"   // for POINT
+#include "simulator.h"  // The orbit simulator
 
+// Specific Satellites
 #include "hubble.h"
+#include "starlink.h"
+#include "sputnik.h"
 
 using namespace std;
 
-#include "spaceshipTest/testRunner.cpp" // Not a class
+#include "spaceshipTest/testRunner.cpp" // Test cases, not a class
 
 // To show goal orbit and distance from Earth
 // Better to leave as a bool, or comment out?
-const bool SHOW_TESTING_VISUALS = true;
+const bool SHOW_TESTING_VISUALS = false;
 
 // Constants for GEO Orbit
 const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
 const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this example)
 
-/*
-* Creating a Satelite, made of Parts
-* 
-vector<pixel> HubbleVisual1 = { Pixel(), ...};
-vector<pixel> HubbleVisual2 = { Pixel(), ...};
+/*************************************
+* Given an Object pointer, calls the correct draw function
+*  **************************************/
+void drawObjectFunc(const Object* obj)
+{
+   string objType = typeid(*obj).name();
+   //cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
 
-Part HubblePart1 = Part(offset, rotaion, HubbleVisual1);
-Part HubblePart2 = Part(offset, rotation, HubbleVisual2);
+   // Neato. Can now draw objects by copying their draw function into the Object..
+   // so yeah, GPS will all have their own draw method, meaning they will be a class of their own
+   // Unless, can pass 2D int array of colors (see earth) and then make vector<ColorRect> all the same?
 
-Satelite Hubble(startPosition, rotation, {HubblePart1, HubblePart2})
-Satelite Hubble(startPosition, rotation, { HubblePart1, HubblePart2 }, startingVelocity);
+   // TEST: Draw based on obj type, instead of rewriting the entire Draw class
+   if (objType == "class Spaceship")
+      drawShip(obj->getPosition(), obj->getRotation().getDegree(), ((Spaceship*)obj)->getThrust());
+   else if (objType == "class Bullet")
+      drawProjectile(obj->getPosition());
+   else if (objType == "class Earth")
+      drawEarth(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class Star")
+      drawStar(obj->getPosition(), ((Star*)obj)->getPhase());
+   
+   // Draw Sputnik
+   else if (objType == "class Sputnik")
+      drawSputnik(obj->getPosition(), obj->getRotation().getDegree());
 
-3 Types of collisions:
+   // Draw StarLink and it's Parts
+   else if (objType == "class Starlink")
+      drawStarlink(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class StarlinkBody")
+      drawStarlinkBody(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class StarlinkArray")
+      drawStarlinkArray(obj->getPosition(), obj->getRotation().getDegree());
 
-Earth - does nothing upon collision
-Fragment - destroyed upon collision
-
-New: Fragmented Object
-- A type of collision object that fragments into smaller pieces upon collision
-- Has number of Fragments to break into (and Satelite has a collection of Parts)
-- Would include Satelite and Part (siblings)
-
-*/
+   // Draw Hubble and it's Parts
+   else if (objType == "class Hubble")
+      drawHubble(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class HubbleComputer")
+      drawHubbleComputer(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class HubbleLeft")
+      drawHubbleLeft(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class HubbleRight")
+      drawHubbleRight(obj->getPosition(), obj->getRotation().getDegree());
+   
+   // Generic drawings, shouldn't be used
+   else if (objType == "class Satellite")
+      drawHubble(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class Part")
+      drawHubbleTelescope(obj->getPosition(), obj->getRotation().getDegree());
+   
+   // Draw Fragments
+   else if (objType == "class Fragment")
+      drawFragment(obj->getPosition(), obj->getRotation().getDegree());
+   
+   else
+   {
+      // ERROR: No drawing instance for object
+   }
+}
 
 /*************************************
  * All the interesting work happens here, when
@@ -63,125 +102,74 @@ void callBack(const Interface* pUI, void* p)
    // is the first step of every single callback function in OpenGL. 
    Simulator* pSim = (Simulator*)p;
 
-   //
-   // accept input
-   //
-
-   // move by a little
-   double shipX = 0.0;
-   double shipY = 0.0;
-
-   if (pUI->isUp())
-      shipY = 1.0;
-   if (pUI->isDown())
-      shipY = -1.0;
-   if (pUI->isLeft())
-      shipX = -1.0;
-   if (pUI->isRight())
-      shipX = 1.0;
-
-   pSim->moveShip(shipX, shipY);
-
-   //
-   // perform all the game logic
-   //
-
-   // Update all Objects
+   // Get user input
+   pSim->getInput(pUI);
+ 
+   // Update all Objects in the Simulation
    pSim->update();
 
    //
    // draw everything
    //
 
+   // For every item in the simulator,
    vector<Object*> simObjects = pSim->getObjects();
-   int numObjs = 0;
    for (vector<Object*>::iterator it = simObjects.begin(); it != simObjects.end(); it++)
    {
-      // DEBUG: Get Object type and number of ColorRects
-      Object* obj = *it;
+      // Draw the Object based on its class type
+      drawObjectFunc(*it);
 
-
-      //cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
-      
-      string objType = typeid(*obj).name();
-
-      //drawObject(*obj);
-
-      // TEST: Draw based on obj type, instead of rewriting the entire Draw class
-      if(objType == "class Spaceship")
+      if (SHOW_TESTING_VISUALS)
       {
-         drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
-         drawShip(obj->getPosition(), obj->getRotation().getDegree(), ((Spaceship*)obj)->getThrust());
+         // TEST: draw a circle around each Collision Obj
+         try
+         {
+            //drawRadius((*it)->getPosition(), ((CollisionObject*)*it)->getRadius());
+            drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius());
+         }
+         catch (exception e) {} // Obj was not able to convert to Collision Obj
       }
-      else if(objType == "class Earth")
-      {
-         // ERROR: Earth is not rotating
-         drawEarth(obj->getPosition(), obj->getRotation().getDegree());
-      }
-      else if (objType == "class Star")
-      {
-         drawStar(obj->getPosition(), ((Star*)obj)->getPhase());
-      }
-      else if (objType == "class Hubble")
-      {
-         drawHubble(obj->getPosition(), obj->getRotation().getDegree());
-      }
-      else if (objType == "class HubbleComputer")
-      {
-         drawHubbleComputer(obj->getPosition(), obj->getRotation().getDegree());
-      }
-      else if (objType == "class HubbleLeft")
-      {
-         drawHubbleLeft(obj->getPosition(), obj->getRotation().getDegree());
-      }
-      else if (objType == "class HubbleRight")
-      {
-         drawHubbleRight(obj->getPosition(), obj->getRotation().getDegree());
-      }
-      else if (objType == "class Satellite")
-      {
-         drawRadius(obj->getPosition(), ((CollisionObject*)obj)->getRadius());
-         drawHubble(obj->getPosition(), obj->getRotation().getDegree());
-      }
-      else if (objType == "class Part")
-      {
-         drawHubbleTelescope(obj->getPosition(), obj->getRotation().getDegree());
-      }
-      else if (objType == "class Fragment")
-      {
-         drawFragment(obj->getPosition(), obj->getRotation().getDegree());
-      }
-      else
-      {
-         // ERROR: No drawing instance for object
-      }
-
-      // Draw the ColorRects of the Object
-      // So far, Earth is the only one that draws, Spaceship in progress
-      //drawObject(obj);
-   }
-
-   //drawCircle(0.0, 50000.0);
-   drawCircle(Position(0.0, 0.0), GEO_HEIGHT);
-   drawStar(Position(0.0, EARTH_RADIUS * 1.5), 1);
-   //drawStar(GEO_HEIGHT, GEO_HEIGHT);
-
-   //drawShip(Position(0, GEO_HEIGHT), 0, 1);
-
-   // Neato. Can now draw objects by copying their draw function into the Object..
-   // so yeah, GPS will all have their own draw method, meaning they will be a class of their own
-   // Unless, can pass 2D int array of colors (see earth) and then make vector<ColorRect> all the same?
-   //drawEarth(Position(50000000, 50000000), 0);
+   }   
 }
 
+/*************************************
+* Adds Objects to the simulator
+* TODO: Could move to Simulator, but mainly here for testing
+*  **************************************/
 void addObjects(Simulator* s)
 {
-   s->addCollider(new Satellite(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
-   s->addCollider(new Satellite(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
+   //s->addCollider(new Hubble(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
+   
+   //s->addCollider(new StarlinkBody(Position(-10888386.068, 40737174.459), Velocity(-3100.0, 0.0)));
+   
+   // Added quicker collision
+   //s->addCollider(new Hubble(Position(-13595100.4029, 39923965.84268), Velocity(2938.822, 984.102)));
 
-   s->addCollider(new Hubble(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
+   //s->addCollider(new Starlink(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
+   //s->addCollider(new HubbleLeft(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
+   //s->addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
 
-   s->addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
+   /* Actual Objects to add: */
+
+   // Starlink
+   s->addCollider(new Starlink(Position(-36515095.13, 21082000.0), Velocity(2050.0, 2684.68)));
+
+   // GPS
+   s->addCollider(new Hubble(Position(0.0, 26560000.0), Velocity(-3880.0, 0.0)));
+   s->addCollider(new Hubble(Position(23001634.72, 13280000.0), Velocity(-1940.00, 3360.18)));
+   s->addCollider(new Hubble(Position(23001634.72, -13280000.0), Velocity(1940.00, 3360.18)));
+   s->addCollider(new Hubble(Position(0.0, -26560000.0), Velocity(3880.0, 0.0)));
+   s->addCollider(new Hubble(Position(-23001634.72, -13280000.0), Velocity(1940.00, -3360.18)));
+   s->addCollider(new Hubble(Position(-23001634.72, 13280000.0), Velocity(-1940.00, -3360.18)));
+
+   // Hubble
+   s->addCollider(new Hubble(Position(0.0, -42164000.0), Velocity(3100.0, 0.0)));
+
+   // Dragon
+   s->addCollider(new Hubble(Position(0.0, 8000000.0), Velocity(-7900.0, 0.0)));
+
+   // StarLink
+   s->addCollider(new Hubble(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));
 }
 
 double TwoDValue::metersFromPixels = 40.0;
@@ -201,18 +189,16 @@ int main(int argc, char** argv)
 #endif // !_WIN32
 {
    // Unit Tests - add back in when Collisions work again
-   // testRunner();
+   testRunner();
 
    // Initialize OpenGL
    Position ptUpperRight;
-   ptUpperRight.setZoom(128000.0 /* 128km equals 1 pixel */);
+   ptUpperRight.setZoom(DEFAULT_ZOOM); /* 128km equals 1 pixel */
    ptUpperRight.setPixelsX(1000.0);
    ptUpperRight.setPixelsY(1000.0);
    Interface ui(0, NULL,
       "Orbit Lab",   /* name on the window */
       ptUpperRight);
-
-   // *TODO: Give Simulator upper right? Or draw even if off canvas?
 
    // Initialize the Simulator
    Simulator sim = Simulator();
