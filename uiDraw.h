@@ -138,7 +138,7 @@ void drawStarlinkArray(const Position& center, double rotation, const Position& 
  *************************************************************************/
 void drawShip(const Position& center, double rotation, bool thrust);
 
-void drawRadius(const Position& center, const double radius);
+void drawDirection(const Position& center, const double radius, const Angle angle);
 void drawCircle(const Position& center, const double raidus);
 void drawLine(const Position& one, const Position& two);
 

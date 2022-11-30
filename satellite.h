@@ -29,15 +29,15 @@ public:
 	};
 
 	void update(double time, double gravity, double planetRadius) {
-		// If the object has not collided,
+		// If the Satellite is defective,
 		if (defective)
 		{
 			double DEFECTIVE_SPIN_ANGLE = 1.0;
-
+			// Add defective spin to the Satellite
 			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
 		}
 
-		// Update normally
+		// Then update normally
 		CollisionObject::update(time, gravity, planetRadius);
 	}
 

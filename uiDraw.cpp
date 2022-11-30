@@ -726,12 +726,10 @@ void drawShip(const Position& center, double rotation, bool thrust)
 }
 
 
-void drawRadius(const Position& center, const double radius)
+void drawDirection(const Position& center, const double radius, const Angle angle)
 {
-   //cout << "drawing.." << endl;
-
-   drawCircle(center, radius);
-   Position outer = Position(center.getMetersX() + radius, center.getMetersY());
+   Position outer = Position(center.getMetersX(), center.getMetersY());
+   outer.addPixels(radius * 2, angle);   
    drawLine(center, outer);
 };
 
