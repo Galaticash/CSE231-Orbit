@@ -1,5 +1,13 @@
+/***********************************************************************
+ * Header File:
+ *    Bullet : A fragment in the orbital simulator that is fired from the
+ *    spaceship.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    A bullet has a fixed lifetime and a fixed speed increase from creation.
+ ************************************************************************/
 #pragma once
-
 #include "fragment.h"
 
 /*
@@ -24,7 +32,6 @@ public:
    
       this->lifetime = 70; // Measured in frames.
       this->radius = 1;
-      // Add 9000.0 m/s to velocity from ship. Position is 19 pixels in front of the ship.
       
       /*
       const double ADDED_POSITION_PX = 19.0;
@@ -42,6 +49,7 @@ public:
       */
 
       // TODO: Move the pythagorean theorem out of object and into 2DPosition and rename.
+      // Add 9000.0 m/s to velocity from ship. Position is 19 pixels in front of the ship.
       double dx = this->horizontalAcceleration(9000.0, angle.getDegree());
       double dy = this->verticalAcceleration(9000.0, angle.getDegree());
       double x = this->horizontalAcceleration(19.0, angle.getDegree());
@@ -50,8 +58,6 @@ public:
       this->pos.addPixelsX(x);
       this->pos.addPixelsY(y);
       this->vel.addMetersX(dx);
-      this->vel.addMetersY(dy);
-
-      
+      this->vel.addMetersY(dy); 
    };
 };

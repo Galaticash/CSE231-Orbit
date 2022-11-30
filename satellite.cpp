@@ -1,3 +1,13 @@
+/***********************************************************************
+ * Source File:
+ *    Satellite : An object in the orbital simulator that breaks into
+ *		parts and/or fragments.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    Each satellite can become defunct and need destroyed, except for
+ *		the spaceship the user controls.
+ ************************************************************************/
 #include "satellite.h"
 #include "simulator.h"
 

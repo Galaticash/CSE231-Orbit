@@ -1,4 +1,3 @@
-#pragma once
 /***********************************************************************
  * Header File:
  *    Point : The representation of a position 
@@ -9,7 +8,7 @@
  *    Everything we need to know about a location on the screen
  *    or the location on the field.
  ************************************************************************/
-
+#pragma once
 #ifndef TWO_D_VALUE
 #define TWO_D_VALUE
 #include "twoDValue.h"

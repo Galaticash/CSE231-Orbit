@@ -1,7 +1,14 @@
-
-
+/***********************************************************************
+ * Header File:
+ *    Spaceship : A satellite in the orbital simulator that the user controls
+ *    to clear away space debris
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    The spaceship rotates left and right with the key and thrusts with the
+ *    down key.
+ ************************************************************************/
 #pragma once
-
 #include "satellite.h"
 
 /*********************************************
@@ -24,7 +31,7 @@ private:
    void shipVisual()
    {
       // draw the white part of the ship
-      
+     
       const PT pointsShipWhite[] =
       {
          {0,0},
@@ -103,6 +110,7 @@ private:
 
    void createVisual()
    {
+      /*
       // Translate the previous method into a vector of ColorRects
 
       // The colors being used for the Earth
@@ -188,12 +196,9 @@ private:
             {
                //assert(earth[y][x] > 0 && earth[y][x] <= 4);
 
-               /*
-               Position pos;
-               pos.setPixelsX(-25.0 * SCALE);
-               pos.setPixelsY(-25.0 * SCALE);
-               */
-
+               //Position pos;
+               //pos.setPixelsX(-25.0 * SCALE);
+               //pos.setPixelsY(-25.0 * SCALE);
 
                // Note: Earth was easy since position is (0,0)
                ColorRect rect =
@@ -213,6 +218,6 @@ private:
                // Add the created ColorRect to the Earth's visual
                visual.push_back(rect);
             }
+      */
    };
-
 };

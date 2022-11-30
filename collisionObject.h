@@ -1,5 +1,14 @@
+/***********************************************************************
+ * Header File:
+ *    CollisionObject : An object in the orbital simulator that has collision.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    Deals with any object that has collision. Detects collisions, deletes 
+ *		object, and creates new ones when applicable. Earth is included because 
+ *		it can collide even though it is not destroyed.
+ ************************************************************************/
 #pragma once
-
 #include "object.h"
 //#include "random.h"
 
@@ -7,7 +16,7 @@ class Simulator;
 
 /*********************************************
  * Collision Object
- * A fragment that is spawned in front of the spaceship.
+ * An object that has collision.
  *********************************************/
 class CollisionObject : public Object
 {

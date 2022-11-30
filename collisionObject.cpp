@@ -1,6 +1,21 @@
+/***********************************************************************
+ * Source File:
+ *    CollisionObject : An object in the orbital simulator that has collision.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    Deals with any object that has collision. Detects collisions, deletes
+ *		object, and creates new ones when applicable. Earth is included because
+ *		it can collide even though it is not destroyed.
+ ************************************************************************/
 #include "collisionObject.h"
 #include "simulator.h"
 
+/******************************************
+* BREAK APART
+* Creates fragments after a collision and has them
+* added to the simulator's list of objects.
+********************************************/
 void CollisionObject::breakApart(Simulator* sim, vector<CollisionObject*> subParts)
 {
 	// Given a list of all the Collision Objects 
@@ -23,6 +38,11 @@ void CollisionObject::breakApart(Simulator* sim, vector<CollisionObject*> subPar
 	delete this; // Delete self
 };
 
+/******************************************
+* ADD OBJECTS
+* Creates fragments after a collision and adds
+* fragments and parts to simulator's list of objects.
+********************************************/
 void CollisionObject::addObjects(Simulator* sim, vector<CollisionObject*> obj) {
 	// For each sub Object the Collision Object will break into,
 	
@@ -57,6 +77,11 @@ void CollisionObject::addObjects(Simulator* sim, vector<CollisionObject*> obj) {
 	}
 }
 
+/******************************************
+* GET SUB PART VEL
+* Calculates the new velocity for a 
+* collection of parts and fragments.
+********************************************/
 vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 	vector<Velocity> velocities;
 
@@ -86,6 +111,11 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 	return velocities;
 }
 
+/******************************************
+* GET SUB PART POS
+* Calculates the new position for a
+* collection of parts and fragments.
+********************************************/
 vector<Position> CollisionObject::getSubPartPos(vector<Velocity> directions) {
 	vector<Position> positions;
 

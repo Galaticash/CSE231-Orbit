@@ -1,3 +1,12 @@
+/***********************************************************************
+ * Header File:
+ *    Test Two D Value : Tests the TwoDValue class
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    Tests the basic functions of the TwoDValue class, along with 
+ *    getting common angles.
+ ************************************************************************/
 #include "TestBase.h"
 #include "../twoDValue.h"
 

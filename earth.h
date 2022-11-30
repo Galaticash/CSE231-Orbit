@@ -1,17 +1,32 @@
+/***********************************************************************
+ * Header File:
+ *    Earth : A collisionObject in the orbital simulator. It has a gravity 
+ *    which pulls other collisionObjects towards it. Cannot be destroyed.
+ *    Rotates according to the time dilation of the simulation.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    The earth stays in a fixed position and is never destroyed. All it 
+ *    does is rotate and pull things towards it.
+ ************************************************************************/
 #pragma once
 #include "collisionObject.h"
 
+/*********************
+* CONSTANTS
+*************************/
+// Math Information
 const double PI = 3.1415926;            // The value of Pi
 
 // TODO: I'm sure there's a better way to calculate framerate
 //  (maybe using gl's framerate or something), but this will do for now
-const double FPS = 30;          // The number of frames drawn per second     
-const double TIME_DILATION = 24 * 60;    // One minute in simulator = One day in real world
+// Simulator Information
+const double FPS = 30;                    // The number of frames drawn per second     
+const double TIME_DILATION = 24 * 60;     // One minute in simulator = One day in real world
 
 // Planet Information
-const double SECONDS_DAY = 24 * 60 * 60; // 24 hours * 60 minutes * 60 seconds
-const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY;
-
+const double SECONDS_DAY = 24 * 60 * 60;  // 24 hours * 60 minutes * 60 seconds
+const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY; // Earth rotation within the simulation
 const double EARTH_RADIUS = 6378000.0;    // meters
 
 /*********************************************
@@ -45,6 +60,7 @@ public:
 private:
    void createVisual()
    {
+      
       // Translate the previous method into a vector of ColorRects
 
       // The colors being used for the Earth
@@ -130,11 +146,11 @@ private:
             {
                //assert(earth[y][x] > 0 && earth[y][x] <= 4);
 
-               /*
-               Position pos;
-               pos.setPixelsX(-25.0 * SCALE);
-               pos.setPixelsY(-25.0 * SCALE);
-               */
+               
+               //Position pos;
+               //pos.setPixelsX(-25.0 * SCALE);
+               //pos.setPixelsY(-25.0 * SCALE);
+               
 
                // Note: Earth was easy since position is (0,0)
                // However, seems it is not quite centered
@@ -156,5 +172,6 @@ private:
                // Add the created ColorRect to the Earth's visual
                visual.push_back(rect);
             }
+    
    };
 };
