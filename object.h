@@ -1,12 +1,11 @@
 #pragma once
 
-#include "position.h"
-#include "velocity.h"
-#include "acceleration.h" // remove class
-#include "angle.h"   // Add/construct or just use double
+#include "position.h" // The (x, y) position on the screen
+#include "velocity.h" // The (x, y) direction the Object is travelling
+#include "angle.h"    // The Object's angle of rotation
 
-#include "colorRect.h"  // *Note: either reconstruct all into colorRects, or have a typeid switch case, and use existing
-#include <vector>
+#include "colorRect.h" // To draw Objects (NOTE: Remove if not used)
+#include <vector> // To contain ColorRects or collections of sub Parts
 
 #ifndef C_ASSERT
 #define C_ASSERT

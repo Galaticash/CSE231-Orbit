@@ -1,7 +1,9 @@
-/*
-
+#pragma once
 #include <cassert>    // I feel the need... the need for asserts
-#include <random>
+#include <cmath>
+
+// TODO: For use in other parts of the program
+// ERROR: Redefined somehow?
 
 /******************************************************************
  * RANDOM
@@ -19,7 +21,7 @@ int random(int min, int max)
 
    return num;
 }
-*/
+
 /******************************************************************
  * RANDOM
  * This function generates a random number.

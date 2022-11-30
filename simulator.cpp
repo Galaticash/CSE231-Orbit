@@ -42,7 +42,7 @@ void Simulator::getInput(const Interface* pUI)
       }
    }   
 
-   /*
+   /* TESTING: toggle debug view
    if (pUI)
    {
    }

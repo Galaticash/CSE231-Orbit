@@ -143,7 +143,7 @@
     <ClCompile Include="collisionObject.cpp" />
     <ClCompile Include="fragment.cpp" />
     <ClCompile Include="Lab07.cpp" />
-    <ClCompile Include="random.h" />
+    <ClCompile Include="customRandom.h" />
     <ClCompile Include="satellite.cpp" />
     <ClCompile Include="twoDValue.cpp" />
     <ClCompile Include="simulator.cpp" />

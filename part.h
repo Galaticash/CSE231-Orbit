@@ -27,7 +27,6 @@ public:
       // velocity increase between 5,000 - 9,000 m/s
       // position increases by 4 pixels
       this->numFragments = 2;
-      this->radius = 10; // Pixels
-      //this->radius = 1250000.0; // Meters
+      this->radius = 10; // Radius in pixels
    };
 };
