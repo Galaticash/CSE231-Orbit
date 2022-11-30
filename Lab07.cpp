@@ -12,21 +12,12 @@
 
 #include "simulator.h"  // The orbit simulator
 
-// Specific Satellites - move to Simulator later
-#include "hubble.h"
-#include "starlink.h"
-#include "sputnik.h"
-
 using namespace std;
 
 #include "spaceshipTest/testRunner.cpp" // Test cases, not a class
 
 // To show collision circles
 const bool SHOW_TESTING_VISUALS = false;
-
-// Constants for GEO Orbit
-const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
-const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this example)
 
 /*************************************
 * Given an Object pointer, calls the correct draw function
@@ -65,6 +56,8 @@ void drawObjectFunc(const Object* obj)
    // Draw Hubble and it's Parts
    else if (objType == "class Hubble")
       drawHubble(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class HubbleTelescope")
+      drawHubbleTelescope(obj->getPosition(), obj->getRotation().getDegree());
    else if (objType == "class HubbleComputer")
       drawHubbleComputer(obj->getPosition(), obj->getRotation().getDegree());
    else if (objType == "class HubbleLeft")
@@ -85,6 +78,8 @@ void drawObjectFunc(const Object* obj)
    else
    {
       // ERROR: No drawing instance for object
+      cout << "Unidentified " << objType << endl;
+      assert(false);
    }
 }
 
@@ -131,54 +126,6 @@ void callBack(const Interface* pUI, void* p)
    }   
 }
 
-/*************************************
-* Adds Objects to the simulator
-* TODO: Could move to Simulator, but mainly here for testing
-*  **************************************/
-void addObjects(Simulator* s)
-{
-   s->addCollider(new Hubble(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
-   
-   s->addCollider(new StarlinkBody(Position(-10888386.068, 40737174.459), Velocity(-3100.0, 0.0)));
-   
-   // Added quicker collision
-   s->addCollider(new Hubble(Position(-13595100.4029, 39923965.84268), Velocity(2938.822, 984.102)));
-
-   s->addCollider(new Starlink(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
-   s->addCollider(new HubbleLeft(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
-   s->addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
-
-   s->addCollider(new HubbleLeft(Position(-15000000.4029, -39000000.84268), Velocity(-3100.0, 0.0)));
-   s->addCollider(new HubbleLeft(Position(-13595100.4029, -40000000.84268), Velocity(-3100.0, 0.0)));
-
-
-
-
-   /* Actual Objects to add: */
-
-   /*
-   // Starlink
-   s->addCollider(new Starlink(Position(-36515095.13, 21082000.0), Velocity(2050.0, 2684.68)));
-
-   // GPS
-   s->addCollider(new Hubble(Position(0.0, 26560000.0), Velocity(-3880.0, 0.0)));
-   s->addCollider(new Hubble(Position(23001634.72, 13280000.0), Velocity(-1940.00, 3360.18)));
-   s->addCollider(new Hubble(Position(23001634.72, -13280000.0), Velocity(1940.00, 3360.18)));
-   s->addCollider(new Hubble(Position(0.0, -26560000.0), Velocity(3880.0, 0.0)));
-   s->addCollider(new Hubble(Position(-23001634.72, -13280000.0), Velocity(1940.00, -3360.18)));
-   s->addCollider(new Hubble(Position(-23001634.72, 13280000.0), Velocity(-1940.00, -3360.18)));
-
-   // Hubble
-   s->addCollider(new Hubble(Position(0.0, -42164000.0), Velocity(3100.0, 0.0)));
-
-   // Dragon
-   s->addCollider(new Hubble(Position(0.0, 8000000.0), Velocity(-7900.0, 0.0)));
-
-   // StarLink
-   s->addCollider(new Hubble(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));
-   */
-}
-
 double TwoDValue::metersFromPixels = 40.0;
 
 /*********************************
@@ -209,7 +156,6 @@ int main(int argc, char** argv)
 
    // Initialize the Simulator
    Simulator sim = Simulator();
-   addObjects(&sim);
 
    // set everything into action
    ui.run(callBack, &sim);

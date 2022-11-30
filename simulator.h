@@ -1,26 +1,87 @@
 #pragma once
 
 #include "uiInteract.h"
-#include "spaceship.h"
 #include "star.h"
 #include "earth.h"
 #include "bullet.h"
 
+// Specific types of Satellites
+#include "spaceship.h"
+#include "hubble.h"
+#include "starlink.h"
+#include "sputnik.h"
+
 // Simulation Information
 const double TIME = 48;         // Real-world seconds between frames
 
-// TODO: Move these to Earth, and pass that to update (only gravitational item affecting others)
-const double GRAVITY = -9.8067;           // Gravity constant in m/s^2
+// Constants for GEO Orbit
+const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
+const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this example)
+
 
 class Simulator {
 public:
 	Simulator()
 	{
-		this->ship = new Spaceship(Position(35786000.0 + 6378000.0, 0.0), Velocity(0.0, 3100.0));
-		addCollider(ship); // Add to the list of Collision Objects
-		this->planet = new Earth();
-		addCollider(planet); // Create an Earth and add it to the list of Collision Objects
+		addObjects();
+		this->timeDialation = TIME;
 	};
+
+	/*************************************
+	* Adds Objects to the simulator
+	*  **************************************/
+	void addObjects()
+	{
+		// Create and add the user-controlled Spaceship
+		this->ship = new Spaceship(Position(35786000.0 + 6378000.0, 0.0), Velocity(0.0, 3100.0));
+		addCollider(ship);
+		
+		// Create and add the Earth at the center of the Simulation
+		this->planet = new Earth();
+		addCollider(planet);
+
+
+		/* Test Objects */
+
+		/*
+		addCollider(new Hubble(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
+
+		addCollider(new StarlinkBody(Position(-10888386.068, 40737174.459), Velocity(-3100.0, 0.0)));
+
+		// Added quicker collision
+		addCollider(new Hubble(Position(-13595100.4029, 39923965.84268), Velocity(2938.822, 984.102)));
+
+		addCollider(new Starlink(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
+		addCollider(new HubbleLeft(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
+		addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
+		
+		addCollider(new HubbleLeft(Position(-15000000.4029, -39000000.84268), Velocity(-3100.0, 0.0)));
+		addCollider(new HubbleLeft(Position(-13595100.4029, -40000000.84268), Velocity(-3100.0, 0.0)));
+		*/
+
+		/* Actual Objects to add */
+		
+		// Starlink
+		addCollider(new Starlink(Position(-36515095.13, 21082000.0), Velocity(2050.0, 2684.68)));
+
+		// GPS
+		addCollider(new Hubble(Position(0.0, 26560000.0), Velocity(-3880.0, 0.0)));
+		addCollider(new Hubble(Position(23001634.72, 13280000.0), Velocity(-1940.00, 3360.18)));
+		addCollider(new Hubble(Position(23001634.72, -13280000.0), Velocity(1940.00, 3360.18)));
+		addCollider(new Hubble(Position(0.0, -26560000.0), Velocity(3880.0, 0.0)));
+		addCollider(new Hubble(Position(-23001634.72, -13280000.0), Velocity(1940.00, -3360.18)));
+		addCollider(new Hubble(Position(-23001634.72, 13280000.0), Velocity(-1940.00, -3360.18)));
+
+		// Hubble
+		addCollider(new Hubble(Position(0.0, -42164000.0), Velocity(3100.0, 0.0)));
+
+		// Dragon
+		addCollider(new Hubble(Position(0.0, 8000000.0), Velocity(-7900.0, 0.0)));
+
+		// StarLink
+		addCollider(new Hubble(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));	
+	}
+
 	void createStars() { /* For numStars, add new Star() to list of Stars */ };
 	void addCollider(CollisionObject* newObj) { this->collisionObjects.push_back(newObj); };
 	void removeCollider(CollisionObject* removeObj) { 
@@ -47,13 +108,27 @@ public:
 
 	// Given an amount of time (seconds), update all collision objects
 	// Defaults to the assumed 48 seconds per frames if no values given
-	void update(double t = TIME, bool gravityOn = true) // TODO: parameters were for testing, so no variables, stick with default?
+
+
+				// TODO: Pass Earth/Earth varaibles to objects?, tell them what is affecting their movement (gravity of Earth at position)
+
+				// TODO: on/off values were also for testing, move to TestSim
+				// If gravity is turned off, passes 0 values
+				//double gravity = gravityOn ? GRAVITY : 0.0;
+				// Convert planet's radius from pixels into meters
+				//double radius = gravityOn ? (planet->getRadius() * DEFAULT_ZOOM) : 0.0;
+	 // TODO: parameters were for testing, so no variables, stick with default?
+
+	// Updates all items in the simulator, according to the amount of
+	//   time that has passed and the affect of the Earth's gravity
+	void update()
 	{
-		// Check for collisions between the Simulator's collisionObjects
+		// Collect all objects that are marked for destruction
+		vector<CollisionObject*> destroyObjs = {};
+
+		// Check for collisions between the Simulator's collisionObjects,
 		//  will update the destroyed bool for any that collide
 		updateCollisions();
-
-		vector<CollisionObject*> destroyObjs = {};
 
 		// For every Collision Object in the Simulator,
 		for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
@@ -67,17 +142,12 @@ public:
 			}
 
 			// Otherwise, has not been destroyed, update Position
-			else			
+			else
 			{
-				// TODO: Pass Earth/Earth varaibles to objects?, tell them what is affecting their movement (gravity of Earth at position)
-
-				// TODO: on/off values were also for testing, move to TestSim
-				// If gravity is turned off, passes 0 values
-				double gravity = gravityOn ? GRAVITY : 0.0;
-				// Convert planet's radius from pixels into meters
-				double radius = gravityOn ? (planet->getRadius() * DEFAULT_ZOOM) : 0.0;
-
-				(*it)->update(t, gravity, radius);
+				// Update the position of the Collision Object
+				// given the time passed, gravity, and Earth's radius
+				// Convert the Earth's radius from Pixels to Meters
+				(*it)->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * DEFAULT_ZOOM));
 			}
 		}
 
@@ -107,9 +177,9 @@ public:
 protected:
 	vector<CollisionObject*> collisionObjects;	// All Objects that can collide
 	Spaceship* ship;	// The user-controlled Spaceship
-	Earth* planet; // Could be modified to use different Planets
+	Earth* planet;		// The planet at the center of the Simulation
 	vector<Star> stars;	// All the stars to display
-	double timeDialation;
+	double timeDialation;// Real-world seconds between frames
 
 	void moveShip(double dx, double dy) {
 		// If there is a change in movement,

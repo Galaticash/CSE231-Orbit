@@ -12,6 +12,7 @@ const double TIME_DILATION = 24 * 60;    // One minute in simulator = One day in
 const double SECONDS_DAY = 24 * 60 * 60; // 24 hours * 60 minutes * 60 seconds
 const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY;
 
+const double GRAVITY = -9.8067;           // Gravity constant in m/s^2
 const double EARTH_RADIUS = 6378000.0;    // meters
 
 /*********************************************
@@ -22,12 +23,13 @@ const double EARTH_RADIUS = 6378000.0;    // meters
 class Earth : public CollisionObject
 {
 public:
-   // Earth is placed at 0.0, 0.0 with a velocity of 0.0, 0.0
-   Earth() : CollisionObject() {
-      this->pos = Position(0, 0); 
-      this->visual = vector<ColorRect>{};
+   Earth(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) {
       this->radius = (EARTH_RADIUS / DEFAULT_ZOOM);
-      createVisual(); // Populate the vector of ColorRects
+      this->gravity = GRAVITY;
+
+      // Create the visuals for the Earth (TODO: working, but not used)
+      this->visual = vector<ColorRect>{};
+      //createVisual(); // Populate the vector of ColorRects
    };
    
    void update(double time, double gravity = 0.0, double radius = 0.0) { 
@@ -37,12 +39,15 @@ public:
       this->rotationAngle += test.getRadian();
    }
 
-   bool getDestroyed() { return false; };
+   bool getDestroyed() { return false; };         // The Earth cannot be destroyed, will always return false
+   double getGravity() { return this->gravity; }; // Returns the gravitational constant of Earth
 
    // The Earth will not break apart
-   void breakApart(Simulator* sim) {};
+   void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {}) {};
 
 private:
+   double gravity;
+
    void createVisual()
    {
       // Translate the previous method into a vector of ColorRects

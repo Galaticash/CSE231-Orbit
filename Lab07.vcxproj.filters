@@ -42,7 +42,7 @@
     <ClCompile Include="angle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="random.h">
+    <ClCompile Include="customRandom.h">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
