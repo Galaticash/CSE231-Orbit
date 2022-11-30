@@ -1,3 +1,11 @@
+/***********************************************************************
+ * Source File:
+ *    Simulator : Runs the main interactions in the orbital simulator.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    Get's input from the user and gets all objects.
+ ************************************************************************/
 #include "simulator.h"
 
 void Simulator::getInput(const Interface* pUI) 

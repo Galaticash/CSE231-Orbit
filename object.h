@@ -1,5 +1,13 @@
+/***********************************************************************
+ * Header File:
+ *    Object : An Object in the orbital simulator. It has a position on
+ *    the screen and can be drawn.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    TODO
+ ************************************************************************/
 #pragma once
-
 #include "position.h" // The (x, y) position on the screen
 #include "velocity.h" // The (x, y) direction the Object is travelling
 #include "angle.h"    // The Object's angle of rotation
@@ -17,7 +25,7 @@ class TestSatellite;
 
 /*********************************************
  * Object
- *
+ * An object in the orbital simulator.
  *********************************************/
 class Object
 {

@@ -1,8 +1,10 @@
 /*************************************************************
  * Name:
- *      Orbit
+ *    Main : The entry point for the orbital simulator.
  * Authors:
- *      Ashley DeMott, Logan Huston
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    Starts the orbital simulator and runs the callback and drawing.
  *****************************************************************/
 
 #include <cmath>

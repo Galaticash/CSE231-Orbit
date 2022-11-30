@@ -1,5 +1,14 @@
+/***********************************************************************
+ * Header File:
+ *    Starlink Body : A part in the orbital simulator that is created
+ *    from a destroyed Starlink satellite.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    The Starlink body has a radius of 2 and creates 3 fragments 
+ *    when destroyed.
+ ************************************************************************/
 #pragma once
-
 #include "part.h"
 
 class StarlinkBody : public Part

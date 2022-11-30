@@ -1,5 +1,13 @@
+/***********************************************************************
+ * Header File:
+ *    Color Rect : A set of coordinates for rectangles with an associated
+ *    color, used for drawing things on the screen.
+ * Author:
+ *    Ashley DeMott
+ * Summary:
+ *    
+ ************************************************************************/
 #pragma once
-
 #ifndef POSITION
 #define POSITION
 #include "position.h"

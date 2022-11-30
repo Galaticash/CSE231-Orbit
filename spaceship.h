@@ -1,12 +1,14 @@
 /***********************************************************************
  * Header File:
  *    Spaceship : A satellite in the orbital simulator that the user controls
- *    to clear away space debris
+ *    to clear away space debris.
  * Author:
  *    Ashley DeMott, Logan Huston
  * Summary:
  *    The spaceship rotates left and right with the key and thrusts with the
- *    down key.
+ *    down key. It has a radius of 10 and creates 0 parts and 4 fragments
+ *    when destroyed. It starts at (-450px, 450px) with a speed of 
+ *    (0.0, -2,000.0).
  ************************************************************************/
 #pragma once
 #include "satellite.h"
@@ -20,6 +22,8 @@ class Spaceship : public Satellite
 public:
    Spaceship(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Satellite(pos, vel, angle) {
       this->thrust = false;
+      this->radius = 10; // Radius in pixels;
+      this->numFragments = 4;
       //shipVisual(); // Other way of drawing, remove if not used
    };
 

@@ -1,5 +1,14 @@
+/***********************************************************************
+ * Header File:
+ *    Simulator : Runs the main interactions in the orbital simulator.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    Keeps track of the objects in the simulation and is in charge of
+ *		creating new objects, updating the game, getting inputs, and checking
+ *		for collisions between objects.
+ ************************************************************************/
 #pragma once
-
 #include "uiInteract.h"
 #include "star.h"
 #include "earth.h"

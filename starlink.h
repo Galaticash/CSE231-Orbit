@@ -1,3 +1,12 @@
+/***********************************************************************
+ * Header File:
+ *    Starlink : A satellite in the orbital simulator.
+ * Author:
+ *    Ashley DeMott, Logan Huston
+ * Summary:
+ *    Starlink has a radius of 6 and creates 2 parts and 2 fragments when destroyed. 
+ *    It starts at (0.0, 13,020,000.0) and has a velocity of (5,800.0, 0.0).
+ ************************************************************************/
 #pragma once
 #include "satellite.h"
 

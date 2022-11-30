@@ -1,10 +1,10 @@
 /***********************************************************************
  * Source File:
- *    twoDValue : A type of value with two dimensions
+ *    twoDValue : A type of value with two dimensions.
  * Author:
  *    Br. Helfrich, modified for twoDValue by Ashley DeMott
  * Summary:
- *    ostream operators for twoDValue
+ *    Contains the ostream operators for twoDValue.
  ************************************************************************/
 
 #include "twoDValue.h"

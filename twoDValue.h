@@ -1,5 +1,16 @@
+/***********************************************************************
+ * Header File:
+ *    Two D Value : A pair of values in an xy/2-Dimensional plane. 
+ *    compatible with meters and pixels.
+ * Author:
+ *    Bro. Helfrich, 
+ *    Modified by: Ashley DeMott, Logan Huston
+ * Summary:
+ *    Stored as eters. Mainly has setters, getters, and adders for meters 
+ *    and pixels, with pixel to meter conversion built in. A zoom variable
+ *    helps in these calculations for scaling.
+ ************************************************************************/
 #pragma once
-
 #include <iostream> 
 #include <cmath>
 #include "angle.h"
@@ -112,7 +123,6 @@ protected:
 
 // stream I/O useful for debugging
 std::ostream& operator << (std::ostream& out, const TwoDValue& twoD);
-
 std::istream& operator >> (std::istream& in, TwoDValue& twoD);
 
 /*********************************************

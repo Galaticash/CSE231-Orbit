@@ -3,6 +3,7 @@
  *    Angle : Represents an angle in a 2D space
  * Author:
  *    Eddie McConkie, Logan Huston
+ *    Modified by: Ashley DeMott
  * Summary:
  * Calculates angle with radians and can accept both radians and degrees
  ************************************************************************/
