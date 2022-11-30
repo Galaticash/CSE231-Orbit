@@ -32,7 +32,9 @@ class Simulator {
 public:
 	Simulator()
 	{
-		addObjects();
+		addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
+		createStars(5); // Create a given number of Stars
+
 		this->timeDialation = TIME;
 	};
 
@@ -48,7 +50,6 @@ public:
 		// Create and add the Earth at the center of the Simulation
 		this->planet = new Earth();
 		addCollider(planet);
-
 
 		/* Test Objects */
 
@@ -91,7 +92,19 @@ public:
 		addCollider(new Hubble(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));	
 	}
 
-	void createStars() { /* For numStars, add new Star() to list of Stars */ };
+	void createStars(int numStars) 
+	{
+		// Create the given number of stars
+		// TODO: Randomly scatter through sky or make a pattern
+		for (int i = 0; i < numStars; i++)
+		{
+			Position initial;
+			initial.setPixelsX(-250.0);
+			initial.setPixelsY(100 * i);
+			this->stars.push_back(Star(initial));
+		}
+	};
+
 	void addCollider(CollisionObject* newObj) { this->collisionObjects.push_back(newObj); };
 	void removeCollider(CollisionObject* removeObj) { 
 		// If the given pointer is in the vector, remove it
@@ -105,28 +118,9 @@ public:
 
 	void createBullet(Position pos, Velocity vel, Angle angle) 
 	{
-		cout << "shoot" << endl;
 		this->collisionObjects.push_back(new Bullet(pos, vel, angle));	
 	};
 	void getInput(const Interface* pUI); // Also moves the ship, could be a sub method?
-
-	/* For object in collisionObjs, update their position
-	(according to the amount of time that has passed?
-	Better to leave with Simulator instead of assuming
-	all Objects will have the correct time */
-
-	// Given an amount of time (seconds), update all collision objects
-	// Defaults to the assumed 48 seconds per frames if no values given
-
-
-				// TODO: Pass Earth/Earth varaibles to objects?, tell them what is affecting their movement (gravity of Earth at position)
-
-				// TODO: on/off values were also for testing, move to TestSim
-				// If gravity is turned off, passes 0 values
-				//double gravity = gravityOn ? GRAVITY : 0.0;
-				// Convert planet's radius from pixels into meters
-				//double radius = gravityOn ? (planet->getRadius() * DEFAULT_ZOOM) : 0.0;
-	 // TODO: parameters were for testing, so no variables, stick with default?
 
 	// Updates all items in the simulator, according to the amount of
 	//   time that has passed and the affect of the Earth's gravity
@@ -154,8 +148,8 @@ public:
 			else
 			{
 				// Update the position of the Collision Object
-				// given the time passed, gravity, and Earth's radius
-				// Convert the Earth's radius from Pixels to Meters
+				//   given the time passed, gravity, and Earth's radius.
+				//   Convert the Earth's radius from Pixels to Meters
 				(*it)->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * DEFAULT_ZOOM));
 			}
 		}
@@ -175,10 +169,10 @@ public:
 		destroyObjs.clear();
 
 		// TODO: Update all the Stars (what frame they are on/movement)
-		/*for (vector<Star*>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
+		for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
 		{
-			(*it)->update()
-		}*/
+			(*it).update(this->timeDialation);
+		}
 	}
 
 	vector<Object*> getObjects(); // Get all Objects to be drawn
@@ -207,12 +201,17 @@ protected:
 	}
 
 	void updateCollisions() {
+		int outerCount = 0; // 12 <-- 12 Objects total
+		int innerCount = 0; // 66 <-- comparisons (12 + 11 + 10 + 9..)
+
 		// For every Collison Object in the Simulator's collisionObjects,
 		for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
 		{
+			//outerCount++;
 			// Check against every object except itself
 			for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
 			{
+				//innerCount++;
 				if (!(*objOneIt)->getDestroyed() && !(*objTwoIt)->getDestroyed())
 				{
 					// Check if the two Objects have hit eachother,

@@ -34,7 +34,6 @@ public:
 		this->numFragments = 2; 
 		this->radius = 10; // The Collision Object's radius in pixels
 
-		
 		this->defective = false;  // If the Satellite will spin
 	};
 

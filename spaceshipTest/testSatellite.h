@@ -144,7 +144,7 @@ private:
 
 		// VERIFY
 		// Satellite has broken into the correct number of SubParts
-		assert(fakeSim.getObjects().size() == expectedSubParts);
+		assert(fakeSim.getCollisionObjects().size() == expectedSubParts);
 		
 		// TEARDOWN	
 	}
@@ -175,7 +175,7 @@ private:
 		// Add the Satellite to the FakeSim and check that
 		//  it is the only Object there
 		fakeSim.addCollider(testSatellite);
-		assert(fakeSim.getObjects().size() == 1);
+		assert(fakeSim.getCollisionObjects().size() == 1);
 		
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);

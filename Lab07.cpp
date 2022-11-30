@@ -126,6 +126,8 @@ void callBack(const Interface* pUI, void* p)
          catch (exception e) {} // Obj was not able to convert to Collision Obj
       }
    }   
+
+   drawStar(Position(GEO_HEIGHT, 0), 209);
 }
 
 double TwoDValue::metersFromPixels = 40.0;
