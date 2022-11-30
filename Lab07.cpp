@@ -15,6 +15,7 @@
 using namespace std;
 
 #include "spaceshipTest/testRunner.cpp" // Test cases, not a class
+//#include "testRunner.cpp" // Test cases, without folder
 
 // To show collision circles
 const bool SHOW_TESTING_VISUALS = false;
@@ -27,17 +28,19 @@ void drawObjectFunc(const Object* obj)
    string objType = typeid(*obj).name();
    //cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
 
-   // Neato. Can now draw objects by copying their draw function into the Object..
-   // so yeah, GPS will all have their own draw method, meaning they will be a class of their own
-   // Unless, can pass 2D int array of colors (see earth) and then make vector<ColorRect> all the same?
+   // TODO: Should colorRects/Shapes be used instead?
 
-   // TEST: Draw based on obj type, instead of rewriting the entire Draw class
+   // Draws based on obj type, instead of rewriting the entire Draw class
    if (objType == "class Spaceship")
       drawShip(obj->getPosition(), obj->getRotation().getDegree(), ((Spaceship*)obj)->getThrust());
    else if (objType == "class Bullet")
       drawProjectile(obj->getPosition());
    else if (objType == "class Earth")
+   {
       drawEarth(obj->getPosition(), obj->getRotation().getDegree());
+
+      //drawObject(obj); // ERROR: rotates drawing around incorrect point
+   }
    else if (objType == "class Star")
       drawStar(obj->getPosition(), ((Star*)obj)->getPhase());
    
@@ -77,7 +80,8 @@ void drawObjectFunc(const Object* obj)
    
    else
    {
-      // ERROR: No drawing instance for object
+      // ERROR: No drawing instance for object,
+      //   output which class is missing a draw case
       cout << "Unidentified " << objType << endl;
       assert(false);
    }
@@ -102,24 +106,20 @@ void callBack(const Interface* pUI, void* p)
    // Update all Objects in the Simulation
    pSim->update();
 
-   //
-   // draw everything
-   //
-
-   // For every item in the simulator,
+   // Draw every item in the simulator
    vector<Object*> simObjects = pSim->getObjects();
    for (vector<Object*>::iterator it = simObjects.begin(); it != simObjects.end(); it++)
    {
       // Draw the Object based on its class type
       drawObjectFunc(*it);
 
+      // TEST: draw a circle around each Collision Obj
       if (SHOW_TESTING_VISUALS)
-      {
-         // TEST: draw a circle around each Collision Obj
+      {         
          try
-         {
-            //drawRadius((*it)->getPosition(), ((CollisionObject*)*it)->getRadius());
-            drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius());
+         {            
+            drawDirection((*it)->getPosition(), ((CollisionObject*)*it)->getRadius(), (*it)->getRotation()); // Line of direction
+            drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
          }
          catch (exception e) {} // Obj was not able to convert to Collision Obj
       }
