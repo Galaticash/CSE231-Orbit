@@ -10,6 +10,11 @@
 #pragma once
 #include "satellite.h"
 
+// Dragon parts
+#include "dragonCenter.h"
+#include "dragonLeft.h"
+#include "dragonRight.h"
+
 /*********************************************
  * Dragon
  * A type of satellite in the orbit simulator.
@@ -23,6 +28,11 @@ public:
       this->numFragments = 2;
    };
 
-private:
+   void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {}) {
+
+      // Add all the parts, 
+      //  add them to the simulator, then delete self
+      Satellite::breakApart(sim, { new dragonCenter, new dragonLeft(), new dragonRight() });
+   }
 
 };

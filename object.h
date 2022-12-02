@@ -82,6 +82,7 @@ public:
    void setVelocity(Velocity newVel) { this->vel = newVel; };
    Velocity getVelocity()    const { return vel; }
   
+   void setRotation(Angle newRotation) { rotationAngle += newRotation; };
    Angle getRotation()     const { return this->rotationAngle; }
    vector<ColorRect> getVisual() const { return visual; };
 

@@ -15,18 +15,21 @@ void Simulator::getInput(const Interface* pUI)
    {
       double shipX = 0.0;
       double shipY = 0.0;
+      Angle shipRotation = 0.0;
 
       // Get the user's input
-      // ERROR: wasd keys aren't working
+      // Sim meant to work with only left, right, and down arrow keys.
       if (pUI->isUp())
          shipY += 1.0;
       if (pUI->isDown())
          shipY += -1.0;
+         //this->ship->setThrust(true);
       if (pUI->isLeft())
-         shipX += -1.0;
+         shipRotation = -0.01;
       if (pUI->isRight())
-         shipX += 1.0;
+         shipRotation = 0.01;
 
+      this->ship->setRotation(shipRotation);
       // DEBUG: Checking Spaceship movement
       string xDir = "";
       string yDir = "";

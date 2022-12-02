@@ -31,7 +31,7 @@ public:
 
    void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {}) {
       
-      // Add all the Fragments (from numFragments), 
+      // Add all the parts, 
       //  add them to the simulator, then delete self
       Satellite::breakApart(sim, { new HubbleComputer(), new HubbleTelescope(), new HubbleLeft(), new HubbleRight() });
    }

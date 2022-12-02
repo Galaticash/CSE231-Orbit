@@ -11,6 +11,11 @@
 #pragma once
 #include "satellite.h"
 
+// GPS parts
+#include "gpsCenter.h"
+#include "gpsLeft.h"
+#include "gpsRight.h"
+
 /*********************************************
  * GPS
  * A type of satellite in the orbit simulator.
@@ -24,6 +29,10 @@ public:
       this->numFragments = 2;
    };
 
-private:
+   void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {}) {
 
+      // Add all the parts, 
+      //  add them to the simulator, then delete self
+      Satellite::breakApart(sim, { new GPSCenter(), new GPSLeft(), new GPSRight() });
+   }
 };
