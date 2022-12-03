@@ -103,7 +103,7 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 
 		// Add 5000 - 9000 m/s to speed
 		//double extraSpeed = random(5000, 9000);
-		newVel.addMeters(6000.0, newAngle);
+		newVel.addMeters(6000.0, newAngle); // TODO: Add random
 
 		velocities.push_back(newVel);
 	}

@@ -190,8 +190,9 @@ protected:
 	double timeDialation;// Real-world seconds between frames
 
 	void updateCollisions() {
-		int outerCount = 0; // 12 <-- 12 Objects total
-		int innerCount = 0; // 66 <-- comparisons (12 + 11 + 10 + 9..)
+		// DEGBUG: Checking efficiency of algorithm
+		//int outerCount = 0; // 12 <-- 12 Objects total
+		//int innerCount = 0; // 66 <-- comparisons (12 + 11 + 10 + 9..)
 
 		// For every Collison Object in the Simulator's collisionObjects,
 		for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
@@ -213,13 +214,13 @@ protected:
 				// If ObjOne has not been hit, but ObjTwo has already been hit,
 				else if ((!(*objOneIt)->getDestroyed() && (*objTwoIt)->getDestroyed()))
 				{
-					// Check if ObjOne has been hit
+					// Check if ObjOne has been hit, updates destroy bool
 					(*objOneIt)->isHit(*(*objTwoIt));					
 				}
 				// If ObjOne has not been hit, but ObjTwo has already been hit,
 				else if ((!(*objTwoIt)->getDestroyed() && (*objOneIt)->getDestroyed()))
 				{
-					// Check if ObjTwo has been hit
+					// Check if ObjTwo has been hit, updates destroy bool
 					(*objTwoIt)->isHit(*(*objOneIt));
 				}
 			}

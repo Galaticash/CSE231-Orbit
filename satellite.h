@@ -13,12 +13,11 @@
 
 class TestSatellite;
 
-/*
+// The amount of spin added to a defective Satellite
 #ifndef DEFECTIVE_SPIN
 #define DEFECTIVE_SPIN
-double DEFECTIVE_SPIN_ANGLE = 10.0;
+const double DEFECTIVE_SPIN_ANGLE = 1.0;
 #endif
-*/
 
 /*********************************************
  * Satellite
@@ -28,20 +27,19 @@ double DEFECTIVE_SPIN_ANGLE = 10.0;
 class Satellite : public CollisionObject
 {
 public:
-	friend TestSatellite;
+	friend TestSatellite; // For test cases
+
 	Satellite(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
 	{ 
-		this->numFragments = 2; 
 		this->radius = 10; // The Collision Object's radius in pixels
-
-		this->defective = false;  // If the Satellite will spin
+		this->numFragments = 2;		// The number of Fragments to break apart into
+		this->defective = false;	// If the Satellite will spin
 	};
 
 	virtual void update(double time, double gravity, double planetRadius) {
 		// If the Satellite is defective,
 		if (defective)
 		{
-			double DEFECTIVE_SPIN_ANGLE = 1.0;
 			// Add defective spin to the Satellite
 			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
 		}
@@ -50,10 +48,18 @@ public:
 		CollisionObject::update(time, gravity, planetRadius);
 	}
 
-	// The Satellite will break into Parts (depending on type of Satellite: Hubble, Starlink)
-	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {});
+	/* TODO: Uses Collision Object's version, not needed?
+	// The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)
+	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {})
+	{
+		// Given a list of all the Parts this Satellite will break into,
+		//  where each type of Satellite has its own unique Parts list
+
+		// Add all the Parts and Fragments (from numFragments), 
+		//  to the simulator, then delete self
+		CollisionObject::breakApart(sim, subParts);	
+	}*/
 
 protected:
-	bool defective;
-
+	bool defective;	// If the Satellite will be given a defective spin
 };

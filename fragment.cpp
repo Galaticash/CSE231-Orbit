@@ -12,11 +12,11 @@
 #include "fragment.h"
 #include "simulator.h"
 
-/*****************************
-* BREAK APART
-* Gets rid of the fragment since 
-* it doesn't break apart.
-****************************/
+ /*****************************
+ * BREAK APART
+ * Gets rid of the fragment since
+ * it doesn't break apart.
+ ****************************/
 void Fragment::breakApart(Simulator* sim) {
    sim->removeCollider(this); // Remove pointer to self
    delete this; // Delete self

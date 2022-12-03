@@ -25,7 +25,7 @@ public:
       this->thrust = false;
       this->radius = 10; // Radius in pixels;
       this->numFragments = 4;
-      //shipVisual(); // Other way of drawing, remove if not used
+      //shipVisual(); // TODO: Other way of drawing, remove if not used
    };
 
    void update(double time, double gravity, double planetRadius) {

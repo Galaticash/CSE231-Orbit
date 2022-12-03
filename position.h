@@ -28,7 +28,7 @@ public:
    Position(double x = 0.0, double y = 0.0) : TwoDValue(x, y) {};
    Position(const Position& pt) : TwoDValue(pt.x, pt.y) {};
 
-   // Calculates the number of pixels between two Positions (as a double/float)
+   // Calculates the number of pixels between two Positions
    double pixelsBetween(const Position& other) {
       return sqrt(pow((this->getPixelsX() - other.getPixelsX()), 2) + pow((this->getPixelsY() - other.getPixelsY()), 2));
    }

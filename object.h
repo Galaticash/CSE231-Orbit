@@ -5,7 +5,7 @@
  * Author:
  *    Ashley DeMott, Logan Huston
  * Summary:
- *    TODO
+ *    An Object that can move around 2D space
  ************************************************************************/
 #pragma once
 #include "position.h" // The (x, y) position on the screen
@@ -34,15 +34,26 @@ public:
    friend TestSatellite; // For test cases
 
    // Constructor taking an initial Position, Velocity, and Angle
-   Object(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) { this->pos = pos; this->vel = vel; this->rotationAngle = rotation; };
+   // If none given, uses default constructors
+   Object(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) 
+   { 
+      this->pos = pos;
+      this->vel = vel;
+      this->rotationAngle = rotation;
+   };
 
    // Update the position, rotation, and other status of the object
    // Takes the amount of time that has passed, and the gravity and radius of the Earth
    virtual void update(double time, double gravity, double planetRadius)
    {
+      // ** QUESTION ** //
+      // Would it be better to pass in Earth, or just the relevant attributes from Earth?
+      // Could also have Global variables, but then it wouldn't be a pure function
+      
       // TODO: Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
       // OR just pass the Earth in overall, get pos, radius, and gravity?
 
+      // The Object's horizontal and vertical acceleration
       double hAcc = 0.0;
       double vAcc = 0.0;
 
@@ -64,9 +75,6 @@ public:
          this->vel.setMetersY(velocityConstantAcceleration(this->vel.getMetersY(), vAcc, time));
       }
 
-      // Adjust the rotation
-      //this->rotationAngle +=
-
       // Adjust the position given the current position, velocity, and acceleration
       double xGPS = distanceFormula(this->pos.getMetersX(), this->vel.getMetersX(), hAcc, time);
       double yGPS = distanceFormula(this->pos.getMetersY(), this->vel.getMetersY(), vAcc, time);
@@ -75,18 +83,20 @@ public:
       this->pos.setMeters(xGPS, yGPS);
    }
 
-   // Getters and Setters
+   // Position Getters and Setters
    void setPosition(Position newPos) { this->pos = newPos; };
    Position getPosition()    const { return pos; }
-   
+
+   // Velocity Getters and Setters
+   void setVelocity(Velocity newVel) { this->vel = newVel; };
+   Velocity getVelocity()    const { return vel; }
+
    // Add a Velocity to this Object
    void addVelocity(Velocity v) { this->vel += v; };
    void addVelocity(double velX, double velY) { this->vel.addMetersX(velX); this->vel.addMetersY(velY); };
    
-   void setVelocity(Velocity newVel) { this->vel = newVel; };
-   Velocity getVelocity()    const { return vel; }
-  
-   void setRotation(Angle newRotation) { rotationAngle += newRotation; };
+   // Add Rotation and get Rotation
+   void addRotation(Angle newRotation) { rotationAngle += newRotation; };
    Angle getRotation()     const { return this->rotationAngle; }
    
    // TODO: If not using current uiDraw methods and instead a collection of ColorRects/Shapes
@@ -217,4 +227,3 @@ protected:
    Angle rotationAngle; // The current rotation of this Object
    vector <ColorRect> visual; // TODO: The ColorRects/Shapes that make up the visual for this Object
 };
-

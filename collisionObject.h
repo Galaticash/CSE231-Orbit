@@ -21,55 +21,60 @@ class Simulator;
 class CollisionObject : public Object
 {
 public:
-	CollisionObject(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Object(pos, vel, angle) 
-	{ 
-		this->radius = 0.0; 
+	CollisionObject(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Object(pos, vel, angle)
+	{
+		this->radius = 0; // The Collision Object's radius in Pixels
+		this->numFragments = 0;
 		this->destroyed = false; 
-		this->numFragments = 0; 
 	};
 
 	virtual void update(double time, double gravity, double planetRadius) {
 		// A collided Object should be destroyed before updating
 		assert(!destroyed);
 
-		// Update the same as a normal Object
+		// Update the same as a normal Object (Position, Velocity, etc)
 		Object::update(time, gravity, planetRadius);
 	}
 
-	// Check if this Collision Object has hit another Collision Object
+	// Checks if this Collision Object has hit a given Collision Object
 	bool isHit(const CollisionObject &other) {
-
-		// TODO: Prevent destroy from being reset to false
-		// ERROR: This line causes a crash,
-		// if (distanceBetween <= other.radius + this->radius) { this->destroyed = true; }
-
-		// If the pixels between the two objects are less than their combined radii,
-		//  then the two objects have collided
+		// Check if the pixels between the two objects are 
+		//  less than their combined radii, destroy if colliding
 		double pixelsBetween = this->pos.pixelsBetween(other.pos);
-		this->destroyed = pixelsBetween <= other.radius + this->radius;
-		return this->destroyed;
+		bool collision = pixelsBetween <= (other.radius + this->radius);
+
+		// If the Object has not already been marked for destruction,
+		if (!destroyed)		
+			// The current collision state defines if
+			//  the Object is to be destroyed
+			//  (prevents true --> false error)
+			this->destroyed = collision;		
+
+		// Return if this Collision Object has collided with other
+		return collision;
 	};
 
 	// Getters and setters
-	void setDestroyed(bool destroy) { this->destroyed = destroy; }; // Simulator will check for collisions
+	void setDestroyed(bool destroy) { this->destroyed = destroy; }; // TODO: Not needed?
 	virtual bool getDestroyed() { return this->destroyed; };
 
-	int getNumFragments() const { return this->numFragments; };
+	int getNumFragments() const { return this->numFragments; }; // TODO: Not needed?
 	double getRadius() const { return radius; };
 
-	// Normal Collision Objects will breakApart through deletion
-	// And remove itself from the Simulator's list of Collision Objects
-	// Given a list of additional Collision Objects that this Collision Object will break apart into, otherwise assumes none
+	/* Normal Collision Objects will breakApart by removing itself
+	 *  from the Simulator's list of Collision Objects and deleting itself.
+	 *  Given a list of additional Collision Objects that this Collision Object 
+	 *  will break apart into, otherwise assumes none */
 	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {});
 
 protected:
 	// Given the Simulator, adds subParts to the Simulator's Collision Objects
 	void addObjects(Simulator* sim, vector<CollisionObject*> obj);		
 
-	vector<Velocity> getSubPartVel(int subParts);	// Get the Velocities of subparts
-	vector<Position> getSubPartPos(vector<Velocity> directions);	// Get the initial Positions of subparts
+	vector<Velocity> getSubPartVel(int subParts);	// Calculates the Velocities of subparts
+	vector<Position> getSubPartPos(vector<Velocity> directions);	// Calculates the initial Positions of subparts
 
-	bool destroyed;     // If the current Object is to be destroyed (from a collision or timer expiring)
+	bool destroyed;     // If the current Object is to be destroyed (either from a collision or timer expiring)
    double radius;      // How large this object is, used to check if another object is touching it
 	int numFragments;   // The number of fragments this object will break into
 };

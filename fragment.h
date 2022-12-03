@@ -13,6 +13,10 @@
 #pragma once
 #include "collisionObject.h"
 
+// The lifetime range of a Fragment (in frames)
+const int FRAGMENT_LIFETIME_MIN = 50;
+const int FRAGMENT_LIFETIME_MAX = 100;
+
 /*********************************************
  * Fragment
  * A piece from a destroyed satellite or a destroyed part.
@@ -23,22 +27,26 @@ class Fragment : public CollisionObject
 {
 public:
    // Lifetime is random (50-100 frames). 
-   // Velocity increase is random (5,000-9,000 m/s).
+   // Velocity increase is random (5,000-9,000 m/s). <- given in Satellite::breakApart
    // Radius is always 2.
-   Fragment(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) { this->lifetime = 50; this->radius = 2; };
+   Fragment(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
+   { 
+      this->lifetime = FRAGMENT_LIFETIME_MIN; // TODO: Add random
+      this->radius = 2;
+   };
 
    // Keeps track of the lifetime of the fragment. 
-   // Decrements whenever it is called, which should be once per game cycle.
+   // Decrements whenever it is called, which should be once per frame.
    bool isExpired() { if (lifetime <= 0) return true; else { lifetime--; return false; } }
    
-   void update(double time = 0.0, double gravity = 0.0, double radius = 0.0) {
+   void update(double time, double gravity, double radius) {
+      // Check if the timer has run out
       if (isExpired())
-      {
          this->destroyed = true; // The object is to be destroyed
-      }
       else
-         CollisionObject::update(time, gravity, radius);
+         CollisionObject::update(time, gravity, radius); // Update normally
    }
+
    void breakApart(Simulator* sim);
 
 protected:

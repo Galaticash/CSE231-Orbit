@@ -4,35 +4,34 @@
  * Author:
  *    Ashley DeMott, Logan Huston
  * Summary:
- *    Get's input from the user and gets all objects.
+ *    Methods for getting input from the user and getting all Objects.
  ************************************************************************/
 #include "simulator.h"
 
-const double SHIP_ACCELERATION = 5.0;
-//30.0; // Instructions say 30.0 m/s, but too fast currently
-
+// How many m/s^2 the ship accelerates with one press of the down arrow
+// Instructions say 30.0 m/s, but too fast with current implementation
+const double SHIP_ACCELERATION = 5.0; 
 
 void Simulator::getInput(const Interface* pUI)
 {
+   // NOTE: Sim meant to work with only left, right, and down arrow keys.
+   // ERROR: J key shoots bullets, e unlocks thrusters??????
+   // D key makes ship spin uncontrollably
+
    // Check that the Spaceship is still in the Simulation
    if (this->ship != NULL)
    {
-      // NOTE: Sim meant to work with only left, right, and down arrow keys.
-
       Velocity addedVelocity = Velocity();  // The Velocity to be added
       Angle shipRotation = 0.0;  // The change in rotation
 
-
-      // ERROR: J key shoots bullets, e unlocks thrusters??????
       // Get the user's input
       // Ship turning
-
       // TODO: Normalize not working properly?
       if (pUI->isLeft())
          shipRotation.setDegree(-0.1);
       if (pUI->isRight())
          shipRotation.setDegree(0.1);
-      ship->setRotation(shipRotation); // TODO: addRotation instead of set
+      ship->addRotation(shipRotation);
 
       // TODO: Acceleration math
       // 3600 (sim) to 1 seconds (real), 30FPS
@@ -47,8 +46,8 @@ void Simulator::getInput(const Interface* pUI)
          ship->setThrust(false);
 
       // Add Velocity to the Ship according to the user's input
-      // velocity = Vinitial + acceleration * time
-      // velocityAdded = acceleration * TIME
+      // NewVel = InitialVel + acceleration * time
+      // AddedVel = acceleration * TIME
       ship->addVelocity(addedVelocity);
 
       // Check for Bullet shooting
@@ -59,13 +58,15 @@ void Simulator::getInput(const Interface* pUI)
       }
    }
 
-   /* TESTING: toggle debug view
+   /* TESTING: toggle debug view <-- would have to add more key checks to Interface
+   * // Would also have to move debug bool to Simulator
    if (pUI)
    {
+      this->debug = true;
+      this->debug = debug ? false : true;
    }
    */
 }
-
 
 vector<Object*> Simulator::getObjects() {
    // Returns the pointers for all the Objects to be drawn
