@@ -37,7 +37,7 @@ public:
 		this->defective = false;  // If the Satellite will spin
 	};
 
-	void update(double time, double gravity, double planetRadius) {
+	virtual void update(double time, double gravity, double planetRadius) {
 		// If the Satellite is defective,
 		if (defective)
 		{

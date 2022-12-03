@@ -6,7 +6,7 @@
  *    Bro. Helfrich, 
  *    Modified by: Ashley DeMott, Logan Huston
  * Summary:
- *    Stored as eters. Mainly has setters, getters, and adders for meters 
+ *    Stored as meters. Mainly has setters, getters, and adders for meters 
  *    and pixels, with pixel to meter conversion built in. A zoom variable
  *    helps in these calculations for scaling.
  ************************************************************************/
@@ -35,6 +35,8 @@ public:
    // Sets Zoom to Default, can be adjusted later with setZoom()
    TwoDValue(double newX = 0.0, double newY = 0.0) { /*this->setZoom(DEFAULT_ZOOM);*/ this->x = newX; this->y = newY; };
    TwoDValue(const TwoDValue& pt) : TwoDValue(pt.x, pt.y) {};
+
+   /* OPERATORS */
 
    TwoDValue& operator = (const TwoDValue& twoD) {
       this->x = twoD.x;
@@ -83,6 +85,8 @@ public:
       this->addMetersX(xVal);
       this->addMetersY(yVal);
    };
+
+   // Given Meters, adjusts the X or Y value
    void addMetersX(double dxMeters) { setMetersX(getMetersX() + dxMeters); }
    void addMetersY(double dyMeters) { setMetersY(getMetersY() + dyMeters); }
    
@@ -94,6 +98,8 @@ public:
       this->addPixelsX(xVal);
       this->addPixelsY(yVal);
    }
+
+   // Given Pixels, adjusts the X or Y value
    void addPixelsX(double dxPixels) { setPixelsX(getPixelsX() + dxPixels); }
    void addPixelsY(double dyPixels) { setPixelsY(getPixelsY() + dyPixels); }
 
@@ -103,8 +109,11 @@ public:
 
    // Get the hypotenuse of the x and y values
    double getTotal() {
+      // Returns 0 if the x or y value is 0
       if (x == 0 && y == 0)
          return 0;
+
+      // Caclcuates the hypotenuse
       return sqrt(pow(this->x, 2) + pow(this->y, 2));
    }
 

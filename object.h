@@ -12,7 +12,8 @@
 #include "velocity.h" // The (x, y) direction the Object is travelling
 #include "angle.h"    // The Object's angle of rotation
 
-#include "colorRect.h" // To draw Objects (NOTE: Remove if not used)
+// To draw Objects (TODO: Remove if not used)
+#include "colorRect.h" // A colored rectangle/shape to draw this Object with
 #include <vector> // To contain ColorRects or collections of sub Parts
 
 #ifndef C_ASSERT
@@ -30,15 +31,16 @@ class TestSatellite;
 class Object
 {
 public:
-   friend TestSatellite;
+   friend TestSatellite; // For test cases
 
-   // ** TODO: Update to use Angle class
-   Object(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) { this->pos = pos; this->vel = vel; this->rotationAngle = 0.0; };
+   // Constructor taking an initial Position, Velocity, and Angle
+   Object(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) { this->pos = pos; this->vel = vel; this->rotationAngle = rotation; };
 
    // Update the position, rotation, and other status of the object
-   virtual void update(double time, double gravity = 0.0, double planetRadius = 0.0)
+   // Takes the amount of time that has passed, and the gravity and radius of the Earth
+   virtual void update(double time, double gravity, double planetRadius)
    {
-      // Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
+      // TODO: Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
       // OR just pass the Earth in overall, get pos, radius, and gravity?
 
       double hAcc = 0.0;
@@ -77,13 +79,17 @@ public:
    void setPosition(Position newPos) { this->pos = newPos; };
    Position getPosition()    const { return pos; }
    
-   //void addVelocity(Velocity v) { this->vel += v; }; // TODO: Add 2D Value +=/-= operators
+   // Add a Velocity to this Object
+   void addVelocity(Velocity v) { this->vel += v; };
    void addVelocity(double velX, double velY) { this->vel.addMetersX(velX); this->vel.addMetersY(velY); };
+   
    void setVelocity(Velocity newVel) { this->vel = newVel; };
    Velocity getVelocity()    const { return vel; }
   
    void setRotation(Angle newRotation) { rotationAngle += newRotation; };
    Angle getRotation()     const { return this->rotationAngle; }
+   
+   // TODO: If not using current uiDraw methods and instead a collection of ColorRects/Shapes
    vector<ColorRect> getVisual() const { return visual; };
 
    /*************************************************************************
@@ -206,9 +212,9 @@ public:
    }
 
 protected:
-   Position pos;
-   Velocity vel;
-   Angle rotationAngle;
-   vector <ColorRect> visual;
+   Position pos;  // The current Position of this Object
+   Velocity vel;  // The current Velocity of this Object
+   Angle rotationAngle; // The current rotation of this Object
+   vector <ColorRect> visual; // TODO: The ColorRects/Shapes that make up the visual for this Object
 };
 

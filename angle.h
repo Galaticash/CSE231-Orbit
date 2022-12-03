@@ -2,8 +2,7 @@
  * Header File:
  *    Angle : Represents an angle in a 2D space
  * Author:
- *    Eddie McConkie, Logan Huston
- *    Modified by: Ashley DeMott
+ *    Eddie McConkie, Logan Huston, Ashley DeMott
  * Summary:
  * Calculates angle with radians and can accept both radians and degrees
  ************************************************************************/
@@ -16,12 +15,15 @@
 class Angle
 {
 public:
-   Angle() : radAngle(0.0) {}
-   Angle(double radAngle) : radAngle(radAngle) {}
+   Angle(double radAngle = 0.0) : radAngle(radAngle) { this->normalize(); }
   
    // Set an Angle to another Angle
    Angle& operator = (const Angle& twoD) {
       this->radAngle = twoD.radAngle;
+      return *this;
+   };
+   Angle& operator = (const double twoD) {
+      this->radAngle = twoD;
       return *this;
    };
 
@@ -42,12 +44,12 @@ public:
    }
 
    // Subtraction operators for both Angles and doubles
+   Angle& operator-=(const double rhs); 
    Angle& operator -= (const Angle& twoD) {
       this->radAngle -= twoD.radAngle;
       normalize();
       return *this;
    }
-   Angle& operator-=(const double rhs);
 
    // If two Angle's radAngle values are the same, same angle
    bool operator == (const Angle& twoD) {
