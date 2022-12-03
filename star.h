@@ -10,6 +10,8 @@
 #pragma once
 #include "object.h"
 
+const int STAR_PHASE_LIMIT = 100; // TODO: figure out max
+
 /*********************************************
  * Star
  * A star that exists in space. It is part of the background
@@ -20,13 +22,21 @@ class Star : public Object
 public:
    Star(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) : Object(pos, vel, rotation) 
    { 
-      this->phase = 0; // TODO: Start at a random phase?
+      this->phase = random(0, STAR_PHASE_LIMIT); // Start at a random phase
    };
 
-   // TODO: Adjust Phase to not increment infinetley, reset to 0 at some point (work with smaller numbers)
-   void update(double time) { this->phase++; };
+   // TODO: Adjust Phase to not increment infinetley, 
+   //  reset to 0 at some point (work with smaller numbers)
+   void update(double time) {
+      //if (phase > STAR_PHASE_LIMIT)
+      if (false)      
+         this->phase = 0;
+      else
+         this->phase++;
+   };
+
    int getPhase() { return this->phase; };
 
 private:
-   int phase;
+   int phase;  // The current phase of the Star, used to draw differently
 };

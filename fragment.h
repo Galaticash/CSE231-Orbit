@@ -31,7 +31,7 @@ public:
    // Radius is always 2.
    Fragment(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
    { 
-      this->lifetime = FRAGMENT_LIFETIME_MIN; // TODO: Add random
+      this->lifetime =  random(FRAGMENT_LIFETIME_MIN, FRAGMENT_LIFETIME_MAX); // Give Fragment a random lifetime
       this->radius = 2;
    };
 

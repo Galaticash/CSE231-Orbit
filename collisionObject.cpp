@@ -102,8 +102,8 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 		newAngle += difference; // Ex: +1/4PI, +2/4PI... etc or 1/3PI + 2/3PI.. etc
 
 		// Add 5000 - 9000 m/s to speed
-		//double extraSpeed = random(5000, 9000);
-		newVel.addMeters(6000.0, newAngle); // TODO: Add random
+		double extraSpeed = random(5000.0, 9000.0);
+		newVel.addMeters(extraSpeed, newAngle);
 
 		velocities.push_back(newVel);
 	}

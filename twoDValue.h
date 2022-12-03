@@ -119,6 +119,11 @@ public:
 
    // Get the angle between the x and y values
    Angle getAngle() {
+      if (x == 0 && y == 0)
+      {
+         return Angle(0);
+      }
+
       // Sin A = opposite / hyp
       double sine = this->y / getTotal();
       return Angle(asin(sine));

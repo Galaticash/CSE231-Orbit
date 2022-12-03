@@ -19,12 +19,15 @@ public:
 		breakSubParts();
 
 		// Testing explosion directions
-		//breakApartStatic(); // Broken?
+		breakApartStatic();
 		breakApartX();
 		breakApartY();
 	};
 
 private:
+	int randomSeed = 1;
+
+
 	// Check that custom updates (no gravity) adjust the Position correctly
 	void updatePos()
 	{
@@ -160,7 +163,7 @@ private:
 		Velocity initialV = Velocity(0.0, 0.0);
 
 		// Create a Satellite and get the number of Parts
-		Satellite* testSatellite = new Satellite();
+		Satellite* testSatellite = new Satellite(initialP, initialV);
 
 		// Set Position
 		testSatellite->pos.setMeters(initialP.getMetersX(), initialP.getMetersY());
@@ -177,10 +180,14 @@ private:
 		fakeSim.addCollider(testSatellite);
 		assert(fakeSim.getCollisionObjects().size() == 1);
 		
+
+		srand(randomSeed); // Seed the random
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
 
+		srand(randomSeed); // Seed the random
+		
 		// EXERCISE - break apart the Satellite
 		testSatellite->breakApart(&fakeSim, parts);
 
@@ -241,9 +248,12 @@ private:
 		int expectedSubParts = parts.size() + testSatellite->numFragments;
 		//testSatellite->parts.size() + testSatellite->numFragments;
 
+		srand(randomSeed); // Seed the random
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
+
+		srand(randomSeed); // Seed the random
 
 		// EXERCISE
 		testSatellite->breakApart(&fakeSim, parts);
@@ -306,9 +316,12 @@ private:
 		int expectedSubParts = parts.size() + testSatellite->numFragments;
 			//testSatellite->parts.size() + testSatellite->numFragments;
 
+		srand(randomSeed); // Seed the random
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
+
+		srand(randomSeed); // Seed the random
 
 		// EXERCISE - Break apart the Satellite
 		testSatellite->breakApart(&fakeSim, parts);
