@@ -13,6 +13,7 @@
 #include "star.h"
 #include "earth.h"
 #include "bullet.h"
+#include "uiDraw.h"		// For Random
 
 // Specific types of Satellites
 #include "spaceship.h"
@@ -35,7 +36,7 @@ public:
 	Simulator()
 	{
 		addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
-		createStars(5); // Create a given number of Stars
+		createStars(500); // Create a given number of Stars
 
 		this->timeDialation = TIME;
 	};
@@ -103,9 +104,14 @@ public:
 		// TODO: Randomly scatter through sky or make a pattern
 		for (int i = 0; i < numStars; i++)
 		{
+			// screen is 1,000 x 1,000 pixels. 
+			int posX = random(-500, 500);
+			int posY = random(-500, 500);
 			Position initial;
-			initial.setPixelsX(-250.0);
-			initial.setPixelsY(100 * i);
+			//initial.setPixelsX(-250.0);
+			//initial.setPixelsY(100 * i);
+			initial.setPixelsX(posX);
+			initial.setPixelsY(posY);
 			this->stars.push_back(Star(initial));
 		}
 	};
