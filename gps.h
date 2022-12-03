@@ -16,6 +16,9 @@
 #include "gpsLeft.h"
 #include "gpsRight.h"
 
+// Rotation offset in degrees, 'facing' direction of drawing isn't correct
+const double GPS_ROTATION_OFFSET = 67.5;
+
 /*********************************************
  * GPS
  * A type of satellite in the orbit simulator.
@@ -30,9 +33,17 @@ public:
    };
 
    void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {}) {
-
       // Add all the parts, 
       //  add them to the simulator, then delete self
       Satellite::breakApart(sim, { new GPSCenter(), new GPSLeft(), new GPSRight() });
+   }
+
+   void update(double time, double gravity, double planetRadius)
+   {
+      // GPS will rotate to face the Earth (direction of gravity)
+      this->rotationAngle.setDegree(gravityDirection(pos.getMetersX(), pos.getMetersY()) + GPS_ROTATION_OFFSET);
+
+      Satellite::update(time, gravity, planetRadius);
+   
    }
 };
