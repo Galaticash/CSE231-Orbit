@@ -33,11 +33,8 @@ void drawObjectFunc(const Object* obj)
    // TODO: Should colorRects/Shapes be used instead?
 
    // Draws based on obj type, instead of rewriting the entire Draw class
-   if (objType == "class Spaceship") {
-   drawShip(obj->getPosition(), obj->getRotation().getDegree(), ((Spaceship*)obj)->getThrust());
-   // Debug for thrusting
-   cout << ((Spaceship*)obj)->getThrust();
-   }
+   if (objType == "class Spaceship") 
+      drawShip(obj->getPosition(), obj->getRotation().getDegree(), ((Spaceship*)obj)->getThrust());
    else if (objType == "class Bullet")
       drawProjectile(obj->getPosition());
    else if (objType == "class Earth")
@@ -169,7 +166,7 @@ int main(int argc, char** argv)
 #endif // !_WIN32
 {
    // Unit Tests - add back in when Collisions work again
-   testRunner();
+   testRunner(); // TODO: Randoms 
 
    // Initialize OpenGL
    Position ptUpperRight;

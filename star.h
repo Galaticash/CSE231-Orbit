@@ -9,8 +9,9 @@
  ************************************************************************/
 #pragma once
 #include "object.h"
+#include "uiDraw.h"
 
-const int STAR_PHASE_LIMIT = 100; // TODO: figure out max
+const int STAR_PHASE_LIMIT = 200; // TODO: figure out max
 
 /*********************************************
  * Star

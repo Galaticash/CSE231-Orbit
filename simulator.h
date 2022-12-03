@@ -13,6 +13,7 @@
 #include "star.h"
 #include "earth.h"
 #include "bullet.h"
+#include "uiDraw.h"		// For Random
 
 // Specific types of Satellites
 #include "spaceship.h"
@@ -35,7 +36,7 @@ public:
 	Simulator()
 	{
 		addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
-		createStars(); // Create all the stars
+		createStars(500); // Create a given number of Stars
 
 		this->timeDialation = TIME;
 	};
@@ -98,26 +99,21 @@ public:
 		addCollider(new Starlink(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));	
 	}
 
-	/*************************************
-	* CREATE STARS
-	* Scatters Stars across the display
-	* TODO: Randomly scatter through sky or make a pattern
-	***************************************/
-	void createStars() 
+	void createStars(int numStars) 
 	{
-		// Currenlty creates a grid of Stars
-		const int ROWS = 5;
-		const int COLS = 5;
-
-		for (int r = -5; r < ROWS; r++)
+		// Create the given number of stars
+		// TODO: Randomly scatter through sky or make a pattern
+		for (int i = 0; i < numStars; i++)
 		{
-			for (int c = -5; c < COLS; c++)
-			{
-				Position initial;
-				initial.setPixelsX(-100.0 * r);
-				initial.setPixelsY(100 * c + (r % 2 ? 50 : 0));
-				this->stars.push_back(Star(initial));
-			}
+			// screen is 1,000 x 1,000 pixels. 
+			int posX = random(-500, 500);
+			int posY = random(-500, 500);
+			Position initial;
+			//initial.setPixelsX(-250.0);
+			//initial.setPixelsY(100 * i);
+			initial.setPixelsX(posX);
+			initial.setPixelsY(posY);
+			this->stars.push_back(Star(initial));
 		}
 	};
 
