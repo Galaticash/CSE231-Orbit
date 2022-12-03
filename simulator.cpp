@@ -17,13 +17,15 @@ void Simulator::getInput(const Interface* pUI)
       double shipY = 0.0;
       Angle shipRotation = 0.0;
 
+      // ERROR: J key shoots bullets, e unlocks thrusters??????
       // Get the user's input
       // Sim meant to work with only left, right, and down arrow keys.
       if (pUI->isUp())
-         shipY += 1.0;
+         //shipY += 1.0;
       if (pUI->isDown())
-         shipY += -1.0;
-         //this->ship->setThrust(true
+         this->ship->setThrust(true);
+      else 
+         this->ship->setThrust(false);
       // TODO: Normalize not working properly?
       if (pUI->isLeft())
          shipRotation.setDegree(-0.1);

@@ -199,7 +199,7 @@ protected:
 			// TODO: Add rotation
 			// TODO: movement is very finiky
 		}
-		this->ship->setThrust(false);
+		//this->ship->setThrust(false);
 	}
 
 	void updateCollisions() {

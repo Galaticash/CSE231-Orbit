@@ -53,7 +53,7 @@ public:
 	// The Satellite will break into Parts (depending on type of Satellite: Hubble, Starlink)
 	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {});
 
-private:
+protected:
 	bool defective;
 
 };
