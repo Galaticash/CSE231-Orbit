@@ -20,7 +20,7 @@ using namespace std;
 //#include "testRunner.cpp" // Test cases, without folder
 
 // To show collision circles
-const bool SHOW_TESTING_VISUALS = false;
+const bool SHOW_TESTING_VISUALS = true;
 
 /*************************************
 * Given an Object pointer, calls the correct draw function
@@ -139,8 +139,9 @@ void callBack(const Interface* pUI, void* p)
       if (SHOW_TESTING_VISUALS)
       {         
          try
-         {            
-            drawDirection((*it)->getPosition(), ((CollisionObject*)*it)->getRadius(), (*it)->getRotation()); // Line of direction
+         {  
+            // Radius: ((CollisionObject*)*it)->getRadius()
+            drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction
             drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
          }
          catch (exception e) {} // Obj was not able to convert to Collision Obj

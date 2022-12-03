@@ -46,7 +46,10 @@ public:
 	void addObjects()
 	{
 		// Create and add the user-controlled Spaceship
-		this->ship = new Spaceship(Position(35786000.0 + 6378000.0, 0.0), Velocity(0.0, 3100.0));
+		Position shipInitial = Position(); // Position given in pixels
+		shipInitial.setPixelsX(-450);
+		shipInitial.setPixelsY(450);
+		this->ship = new Spaceship(shipInitial, Velocity(0.0, -2000.0));
 		addCollider(ship);
 		
 		// Create and add the Earth at the center of the Simulation
@@ -185,22 +188,6 @@ protected:
 	Earth* planet;		// The planet at the center of the Simulation
 	vector<Star> stars;	// All the stars to display
 	double timeDialation;// Real-world seconds between frames
-
-	void moveShip(double dx, double dy) {
-		// If there is a change in movement,
-		if (!(dx == 0.0 && dy == 0.0))
-		{
-			this->ship->setThrust(true);
-
-			// Adjust the velocity of the Spaceship
-			double scale = 250.0; // TODO: Figure out movement scale
-			this->ship->addVelocity(dx * scale, dy * scale);
-
-			// TODO: Add rotation
-			// TODO: movement is very finiky
-		}
-		this->ship->setThrust(false);
-	}
 
 	void updateCollisions() {
 		int outerCount = 0; // 12 <-- 12 Objects total
