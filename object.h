@@ -102,6 +102,31 @@ public:
    // TODO: If not using current uiDraw methods and instead a collection of ColorRects/Shapes
    vector<ColorRect> getVisual() const { return visual; };
 
+protected:
+   Position pos;  // The current Position of this Object
+   Velocity vel;  // The current Velocity of this Object
+   Angle rotationAngle; // The current rotation of this Object
+   vector <ColorRect> visual; // TODO: The ColorRects/Shapes that make up the visual for this Object
+
+   // TODO: duplicate code from uiDraw, errors with moving to another file
+   double random(double min, double max)
+   {
+      assert(min <= max);
+      double num = min + ((double)rand() / (double)RAND_MAX * (max - min));
+      assert(min <= num && num <= max);
+
+      return num;
+   }
+
+   int random(int min, int max)
+   {
+      assert(min < max);
+      int num = (rand() % (max - min)) + min;
+      assert(min <= num && num <= max);
+
+      return num;
+   }
+
    /*************************************************************************
     * GRAVITY DIRECTION
     * Calculates the angle at which an object is pulled by gravity.
@@ -127,7 +152,7 @@ public:
     * y = vertical position of object     (meters)
     * r = radius of earth                 (meters)
     *************************************************************************/
-   // TODO: Assumes Earth is located at (0, 0), calculate distance?
+    // TODO: Assumes Earth is located at (0, 0), calculate distance?
    double heightAbovePlanet(double x, double y, double radius) {
       double h = sqrt(x * x + y * y) - radius;
       return h;
@@ -221,9 +246,4 @@ public:
       return v;
    }
 
-protected:
-   Position pos;  // The current Position of this Object
-   Velocity vel;  // The current Velocity of this Object
-   Angle rotationAngle; // The current rotation of this Object
-   vector <ColorRect> visual; // TODO: The ColorRects/Shapes that make up the visual for this Object
 };

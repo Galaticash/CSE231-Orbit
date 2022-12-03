@@ -42,8 +42,9 @@ public:
 	};
 
 	/*************************************
+	* ADD OBJECTS
 	* Adds Objects to the simulator
-	*  **************************************/
+	***************************************/
 	void addObjects()
 	{
 		// Create and add the user-controlled Spaceship
@@ -116,6 +117,7 @@ public:
 		}
 	};
 
+	// Add and Remove Collision Objects from the Simulators's collection
 	void addCollider(CollisionObject* newObj) { this->collisionObjects.push_back(newObj); };
 	void removeCollider(CollisionObject* removeObj) { 
 		// If the given pointer is in the vector, remove it
@@ -127,11 +129,14 @@ public:
 		}
 	};
 
+	// Creates a Bullet in front of the Simulator's Spaceship
 	void createBullet(Position pos, Velocity vel, Angle angle) 
 	{
 		this->collisionObjects.push_back(new Bullet(pos, vel, angle));	
 	};
-	void getInput(const Interface* pUI); // Also moves the ship, could be a sub method?
+	
+	// Gets input from the user that affects the Simulation
+	void getInput(const Interface* pUI);
 
 	// Updates all items in the simulator, according to the amount of
 	//   time that has passed and the affect of the Earth's gravity
@@ -179,7 +184,7 @@ public:
 		}
 		destroyObjs.clear();
 
-		// TODO: Update all the Stars (what frame they are on/movement)
+		// Updates the frame of all the Stars
 		for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
 		{
 			(*it).update(this->timeDialation);
