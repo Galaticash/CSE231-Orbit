@@ -95,7 +95,7 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 		// Based on the original CollisionObject's Velocity
 		Angle newAngle = Angle(newVel.getAngle().getRadian());
 
-		Angle difference = Angle(((i * PI) / subParts));
+		Angle difference = Angle(((i * PI) / (subParts + numFragments)));
 		//Angle((PI + (i * PI) / subParts));
 
 		// Plus a direction from the number of subParts

@@ -31,12 +31,12 @@ public:
    void update(double time, double gravity, double planetRadius) {
       if(thrust)
       {
-         // Increase velocity by 30 m/s. Calculate x and y velocity from total.
-         double dx = this->horizontalAcceleration(30.0, rotationAngle.getDegree());
-         double dy = this->verticalAcceleration(30.0, rotationAngle.getDegree());
+         // Increase velocity by 30 m/s^2. Calculate x and y velocity from total.
+         double ddx = this->horizontalAcceleration(30.0, rotationAngle.getDegree());
+         double ddy = this->verticalAcceleration(30.0, rotationAngle.getDegree());
 
-         this->vel.addMetersX(dx);
-         this->vel.addMetersY(dy);
+         this->vel.addMetersX(ddx);
+         this->vel.addMetersY(ddy);
       }
 
       // The spaceship never becomes defective.
