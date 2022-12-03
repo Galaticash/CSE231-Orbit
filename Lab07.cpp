@@ -20,7 +20,7 @@ using namespace std;
 //#include "testRunner.cpp" // Test cases, without folder
 
 // To show collision circles
-const bool SHOW_TESTING_VISUALS = true;
+const bool SHOW_TESTING_VISUALS = false;
 
 /*************************************
 * Given an Object pointer, calls the correct draw function

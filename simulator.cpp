@@ -8,45 +8,48 @@
  ************************************************************************/
 #include "simulator.h"
 
-void Simulator::getInput(const Interface* pUI) 
+const double SHIP_ACCELERATION = 5.0;
+//30.0; // Instructions say 30.0 m/s, but too fast currently
+
+
+void Simulator::getInput(const Interface* pUI)
 {
    // Check that the Spaceship is still in the Simulation
    if (this->ship != NULL)
    {
-      double shipX = 0.0;
-      double shipY = 0.0;
-      Angle shipRotation = 0.0;
+      // NOTE: Sim meant to work with only left, right, and down arrow keys.
+
+      Velocity addedVelocity = Velocity();  // The Velocity to be added
+      Angle shipRotation = 0.0;  // The change in rotation
+
 
       // ERROR: J key shoots bullets, e unlocks thrusters??????
       // Get the user's input
-      // Sim meant to work with only left, right, and down arrow keys.
-      if (pUI->isUp())
-         //shipY += 1.0;
-      if (pUI->isDown())
-         this->ship->setThrust(true);
-      else 
-         this->ship->setThrust(false);
+      // Ship turning
+
       // TODO: Normalize not working properly?
       if (pUI->isLeft())
          shipRotation.setDegree(-0.1);
       if (pUI->isRight())
          shipRotation.setDegree(0.1);
+      ship->setRotation(shipRotation); // TODO: addRotation instead of set
 
-      this->ship->setRotation(shipRotation);
-      // DEBUG: Checking Spaceship movement
-      string xDir = "";
-      string yDir = "";
-      // If the Ship has moved, output direction moved
-      if (shipX != 0.0)
-         xDir = shipX > 0.0 ? "right " : "left ";
-      if (shipY != 0.0)
-         yDir = shipY > 0.0 ? "up" : "down";
-      cout << xDir << yDir;
-      if (!(shipX == 0.0 && shipY == 0.0))
-         cout << endl;
+      // TODO: Acceleration math
+      // 3600 (sim) to 1 seconds (real), 30FPS
+
+      // Set if the ship's thruster is on
+      if (pUI->isDown()) {
+         // Accelerate 30.0 m/s^2 in facing direction
+         addedVelocity.addMeters(SHIP_ACCELERATION * TIME, ship->getRotation());
+         ship->setThrust(true);
+      }
+      else
+         ship->setThrust(false);
 
       // Add Velocity to the Ship according to the user's input
-      moveShip(shipX, shipY);
+      // velocity = Vinitial + acceleration * time
+      // velocityAdded = acceleration * TIME
+      ship->addVelocity(addedVelocity);
 
       // Check for Bullet shooting
       if (pUI->isSpace())
@@ -54,15 +57,15 @@ void Simulator::getInput(const Interface* pUI)
          // Create a new bullet in front of the Spaceship
          createBullet(this->ship->getPosition(), this->ship->getVelocity(), this->ship->getRotation());
       }
-   }   
+   }
 
    /* TESTING: toggle debug view
    if (pUI)
    {
    }
    */
-
 }
+
 
 vector<Object*> Simulator::getObjects() {
    // Returns the pointers for all the Objects to be drawn
