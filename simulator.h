@@ -36,10 +36,23 @@ public:
 	Simulator()
 	{
 		addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
+		//addTestObjects();
+
 		createStars(500); // Create a given number of Stars
 
 		this->timeDialation = TIME;
 	};
+
+
+	/*************************************
+	* ADD TEST OBJECTS
+	* TESTING: Adds additional Objects to the simulator
+	***************************************/
+	void addTestObjects()
+	{
+		// Parts don't appear since they collide too fast
+		addCollider(new HubbleTelescope(Position(-46500000.13, 21000000.0), Velocity(2000.0, 2684.68)));
+	}
 
 	/*************************************
 	* ADD OBJECTS

@@ -141,8 +141,17 @@ void callBack(const Interface* pUI, void* p)
          try
          {  
             // Radius: ((CollisionObject*)*it)->getRadius()
-            drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction
-            drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
+            string objType = typeid(*(*it)).name();
+            if (objType == "class Star" || objType == "class Fragment" || objType == "class Bullet" || objType == "clas Earth")
+            {
+               // Ignore
+            }
+            else
+            {
+               // Draw Direction and Radius
+               drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction
+               drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
+            }
          }
          catch (exception e) {} // Obj was not able to convert to Collision Obj
       }
@@ -166,7 +175,7 @@ int main(int argc, char** argv)
 #endif // !_WIN32
 {
    // Unit Tests - add back in when Collisions work again
-   testRunner(); // TODO: Randoms 
+   testRunner(); // TODO: seed randoms
 
    // Initialize OpenGL
    Position ptUpperRight;

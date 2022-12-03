@@ -27,7 +27,6 @@ public:
 private:
 	int randomSeed = 1;
 
-
 	// Check that custom updates (no gravity) adjust the Position correctly
 	void updatePos()
 	{
@@ -70,9 +69,6 @@ private:
 		void createStars() { assert(false);  };
 		void createBullet(Position pos, Velocity vel, double angle) { assert(false); };
 		void moveShip(double x, double y) { assert(false); };
-	
-		// TODO: update() in Simulator should take no arguments,
-		//  the parameters are for testing purposes only (custom time, gravity on/off)
 	};
 
 	class FakeSimulator : public DummySimulator {
@@ -163,14 +159,13 @@ private:
 		Velocity initialV = Velocity(0.0, 0.0);
 
 		// Create a Satellite and get the number of Parts
-		Satellite* testSatellite = new Satellite(initialP, initialV);
+		Satellite* testSatellite = new Satellite();
 
 		// Set Position
 		testSatellite->pos.setMeters(initialP.getMetersX(), initialP.getMetersY());
 		// Set Velocity
 		testSatellite->vel.setMeters(initialV.getMetersX(), initialV.getMetersY());
 
-		
 		// Set collection of Parts
 		vector<CollisionObject*> parts = { new Part(), new Part() };
 		int expectedSubParts = parts.size() + testSatellite->numFragments;
@@ -266,8 +261,6 @@ private:
 		vector<Position>::iterator pos = expectedPositions.begin();
 		vector<Velocity>::iterator dir = expectedDirections.begin();
 		
-		// Error: unsorted somehow? Should just be push back, same order
-
 		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
 			// Iterators changed into their classes
@@ -286,8 +279,7 @@ private:
 			// Move to next object
 			pos++;
 			dir++;
-		}
-		
+		}		
 
 		// TEARDOWN
 	}
@@ -314,7 +306,6 @@ private:
 		// Set collection of Parts
 		vector<CollisionObject*> parts = { new Part(), new Part() };
 		int expectedSubParts = parts.size() + testSatellite->numFragments;
-			//testSatellite->parts.size() + testSatellite->numFragments;
 
 		srand(randomSeed); // Seed the random
 		// Find the expected part directions and positions
