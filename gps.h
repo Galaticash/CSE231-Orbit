@@ -20,7 +20,7 @@
  * GPS
  * A type of satellite in the orbit simulator.
  *********************************************/
-class GPS : Satellite
+class GPS : public Satellite
 {
 public:
    GPS(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Satellite(pos, vel, angle)

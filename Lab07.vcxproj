@@ -156,9 +156,15 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="collisionObject.h" />
     <ClInclude Include="dragon.h" />
+    <ClInclude Include="dragonCenter.h" />
+    <ClInclude Include="dragonLeft.h" />
+    <ClInclude Include="dragonRight.h" />
     <ClInclude Include="earth.h" />
     <ClInclude Include="fragment.h" />
     <ClInclude Include="gps.h" />
+    <ClInclude Include="gpsCenter.h" />
+    <ClInclude Include="gpsLeft.h" />
+    <ClInclude Include="gpsRight.h" />
     <ClInclude Include="hubbleComputer.h" />
     <ClInclude Include="HubbleLeft.h" />
     <ClInclude Include="HubbleRight.h" />

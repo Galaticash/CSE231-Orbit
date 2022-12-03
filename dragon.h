@@ -11,15 +11,15 @@
 #include "satellite.h"
 
 // Dragon parts
-#include "dragonCenter.h"
-#include "dragonLeft.h"
-#include "dragonRight.h"
+#include "DragonCenter.h"
+#include "DragonLeft.h"
+#include "DragonRight.h"
 
 /*********************************************
  * Dragon
  * A type of satellite in the orbit simulator.
  *********************************************/
-class Dragon : Satellite
+class Dragon : public Satellite
 {
 public:
    Dragon(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Satellite(pos, vel, angle)
@@ -32,7 +32,7 @@ public:
 
       // Add all the parts, 
       //  add them to the simulator, then delete self
-      Satellite::breakApart(sim, { new dragonCenter, new dragonLeft(), new dragonRight() });
+      Satellite::breakApart(sim, { new DragonCenter, new DragonLeft(), new DragonRight() });
    }
 
 };

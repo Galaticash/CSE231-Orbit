@@ -134,6 +134,24 @@
     <ClInclude Include="StarlinkArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gpsCenter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gpsLeft.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gpsRight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dragonCenter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dragonLeft.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dragonRight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

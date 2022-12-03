@@ -19,6 +19,8 @@
 #include "hubble.h"
 #include "starlink.h"
 #include "sputnik.h"
+#include "gps.h"
+#include "dragon.h"
 
 // Simulation Information
 const double TIME = 48;         // Real-world seconds between frames
@@ -71,25 +73,25 @@ public:
 
 		/* Actual Objects to add */
 		
-		// Starlink
-		addCollider(new Starlink(Position(-36515095.13, 21082000.0), Velocity(2050.0, 2684.68)));
+		// Sputnik
+		addCollider(new Sputnik(Position(-36515095.13, 21082000.0), Velocity(2050.0, 2684.68)));
 
 		// GPS
-		addCollider(new Hubble(Position(0.0, 26560000.0), Velocity(-3880.0, 0.0)));
-		addCollider(new Hubble(Position(23001634.72, 13280000.0), Velocity(-1940.00, 3360.18)));
-		addCollider(new Hubble(Position(23001634.72, -13280000.0), Velocity(1940.00, 3360.18)));
-		addCollider(new Hubble(Position(0.0, -26560000.0), Velocity(3880.0, 0.0)));
-		addCollider(new Hubble(Position(-23001634.72, -13280000.0), Velocity(1940.00, -3360.18)));
-		addCollider(new Hubble(Position(-23001634.72, 13280000.0), Velocity(-1940.00, -3360.18)));
+		addCollider(new GPS(Position(0.0, 26560000.0), Velocity(-3880.0, 0.0)));
+		addCollider(new GPS(Position(23001634.72, 13280000.0), Velocity(-1940.00, 3360.18)));
+		addCollider(new GPS(Position(23001634.72, -13280000.0), Velocity(1940.00, 3360.18)));
+		addCollider(new GPS(Position(0.0, -26560000.0), Velocity(3880.0, 0.0)));
+		addCollider(new GPS(Position(-23001634.72, -13280000.0), Velocity(1940.00, -3360.18)));
+		addCollider(new GPS(Position(-23001634.72, 13280000.0), Velocity(-1940.00, -3360.18)));
 
 		// Hubble
 		addCollider(new Hubble(Position(0.0, -42164000.0), Velocity(3100.0, 0.0)));
 
 		// Dragon
-		addCollider(new Hubble(Position(0.0, 8000000.0), Velocity(-7900.0, 0.0)));
+		addCollider(new Dragon(Position(0.0, 8000000.0), Velocity(-7900.0, 0.0)));
 
 		// StarLink
-		addCollider(new Hubble(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));	
+		addCollider(new Starlink(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));	
 	}
 
 	void createStars(int numStars) 

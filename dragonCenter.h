@@ -11,10 +11,10 @@
 #pragma once
 #include "part.h"
 
-class dragonCenter : public Part
+class DragonCenter : public Part
 {
 public:
-   dragonCenter(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Part(pos, vel, angle)
+   DragonCenter(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Part(pos, vel, angle)
    {
       this->radius = 6; // Radius in pixels
       this->numFragments = 4;

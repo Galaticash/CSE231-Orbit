@@ -45,7 +45,7 @@ void drawObjectFunc(const Object* obj)
    }
    else if (objType == "class Star")
       drawStar(obj->getPosition(), ((Star*)obj)->getPhase());
-   
+
    // Draw Sputnik
    else if (objType == "class Sputnik")
       drawSputnik(obj->getPosition(), obj->getRotation().getDegree());
@@ -69,7 +69,27 @@ void drawObjectFunc(const Object* obj)
       drawHubbleLeft(obj->getPosition(), obj->getRotation().getDegree());
    else if (objType == "class HubbleRight")
       drawHubbleRight(obj->getPosition(), obj->getRotation().getDegree());
-   
+
+   // Draw Dragon and it's Parts
+   else if (objType == "class Dragon")
+      drawCrewDragon(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class DragonCenter")
+      drawCrewDragonCenter(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class DragonLeft")
+      drawCrewDragonLeft(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class DragonRight")
+      drawCrewDragonRight(obj->getPosition(), obj->getRotation().getDegree());
+
+   // Draw GPS and it's Parts
+   else if (objType == "class GPS")
+      drawGPS(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class GPSCenter")
+      drawGPSCenter(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class GPSLeft")
+      drawGPSLeft(obj->getPosition(), obj->getRotation().getDegree());
+   else if (objType == "class GPSRight")
+      drawGPSRight(obj->getPosition(), obj->getRotation().getDegree());
+
    // Generic drawings, shouldn't be used
    else if (objType == "class Satellite")
       drawHubble(obj->getPosition(), obj->getRotation().getDegree());

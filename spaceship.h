@@ -8,7 +8,8 @@
  *    The spaceship rotates left and right with the key and thrusts with the
  *    down key. It has a radius of 10 and creates 0 parts and 4 fragments
  *    when destroyed. It starts at (-450px, 450px) with a speed of 
- *    (0.0, -2,000.0).
+ *    (0.0, -2,000.0). Rotation is by 0.1 Radians and thrusters increase
+ *    velocity by 30m/s.
  ************************************************************************/
 #pragma once
 #include "satellite.h"
@@ -26,6 +27,16 @@ public:
       this->numFragments = 4;
       //shipVisual(); // Other way of drawing, remove if not used
    };
+
+   void update(double time, double gravity, double planetRadius) {
+      if(thrust)
+      {
+         // Increase velocity by 30 m/s. Calculate x and y velocity from total.
+      }
+
+      // Then update normally
+      CollisionObject::update(time, gravity, planetRadius);
+   }
 
    void setThrust(bool t) {  this->thrust = t; }
    bool getThrust() { return this->thrust; };

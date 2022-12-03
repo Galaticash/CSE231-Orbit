@@ -23,11 +23,12 @@ void Simulator::getInput(const Interface* pUI)
          shipY += 1.0;
       if (pUI->isDown())
          shipY += -1.0;
-         //this->ship->setThrust(true);
+         //this->ship->setThrust(true
+      // TODO: Normalize not working properly?
       if (pUI->isLeft())
-         shipRotation = -0.01;
+         shipRotation.setDegree(-0.1);
       if (pUI->isRight())
-         shipRotation = 0.01;
+         shipRotation.setDegree(0.1);
 
       this->ship->setRotation(shipRotation);
       // DEBUG: Checking Spaceship movement
