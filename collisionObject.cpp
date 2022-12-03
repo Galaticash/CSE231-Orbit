@@ -129,7 +129,7 @@ vector<Position> CollisionObject::getSubPartPos(vector<Velocity> directions) {
 
 		// 4 pixels in direction of travel
 		// Find X and Y from Angle of the current Velocity
-		double buffer = 4; // Default 4
+		double buffer = 10; // Default 4
 		newPos.addPixels(buffer, (*it).getAngle());
 
 		positions.push_back(newPos);

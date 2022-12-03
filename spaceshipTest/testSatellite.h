@@ -19,9 +19,15 @@ public:
 		breakSubParts();
 
 		// Testing explosion directions
+<<<<<<< HEAD
+		//breakApartStatic(); // Broken?
+		//breakApartX();
+		//breakApartY();
+=======
 		breakApartStatic();
 		breakApartX();
 		breakApartY();
+>>>>>>> c432312eaa6e8fde391838e648b354f94e1f88a6
 	};
 
 private:
