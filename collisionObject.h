@@ -10,7 +10,7 @@
  ************************************************************************/
 #pragma once
 #include "object.h"
-//#include "random.h"
+#include "uiDraw.h"
 
 class Simulator;
 

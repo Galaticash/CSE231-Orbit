@@ -12,6 +12,7 @@
  ************************************************************************/
 #pragma once
 #include "collisionObject.h"
+#include "uiDraw.h"
 
 // The lifetime range of a Fragment (in frames)
 const int FRAGMENT_LIFETIME_MIN = 50;
@@ -31,7 +32,7 @@ public:
    // Radius is always 2.
    Fragment(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
    { 
-      this->lifetime = FRAGMENT_LIFETIME_MIN; // TODO: Add random
+      this->lifetime = random(FRAGMENT_LIFETIME_MIN, FRAGMENT_LIFETIME_MAX);
       this->radius = 2;
    };
 

@@ -20,8 +20,8 @@ public:
 
 		// Testing explosion directions
 		//breakApartStatic(); // Broken?
-		breakApartX();
-		breakApartY();
+		//breakApartX();
+		//breakApartY();
 	};
 
 private:

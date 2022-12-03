@@ -103,7 +103,7 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 
 		// Add 5000 - 9000 m/s to speed
 		//double extraSpeed = random(5000, 9000);
-		newVel.addMeters(6000.0, newAngle); // TODO: Add random
+		newVel.addMeters(random(5000.0, 9000.0), newAngle); // TODO: Added random, but it breaks testSatellite
 
 		velocities.push_back(newVel);
 	}
@@ -127,7 +127,7 @@ vector<Position> CollisionObject::getSubPartPos(vector<Velocity> directions) {
 
 		// 4 pixels in direction of travel
 		// Find X and Y from Angle of the current Velocity
-		double buffer = 4; // Default 4
+		double buffer = 10; // Default 4
 		newPos.addPixels(buffer, (*it).getAngle());
 
 		positions.push_back(newPos);
