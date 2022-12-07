@@ -22,11 +22,9 @@ class Star : public Object
 {
 public:
    Star(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) : Object(pos, vel, rotation) 
-   { 
-      this->phase = random(0, STAR_PHASE_LIMIT); // Start at a random phase
-   };
+   { this->phase = random(0, STAR_PHASE_LIMIT); /* Start at a random phase */ };
 
-   // TODO: Adjust Phase to not increment infinetley, 
+   // TODO: Adjust Phase to not increment infinitley, 
    //  reset to 0 at some point (work with smaller numbers)
    void update(double time) {
       //if (phase > STAR_PHASE_LIMIT)

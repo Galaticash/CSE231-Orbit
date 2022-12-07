@@ -8,10 +8,12 @@
  ************************************************************************/
 #include "simulator.h"
 
-// How many m/s^2 the ship accelerates with one press of the down arrow
-// Instructions say 30.0 m/s, but too fast with current implementation
-const double SHIP_ACCELERATION = 5.0; 
+const double SHIP_ACCELERATION = 30.0; 
 
+/*********************************************
+ * Simulator
+ * Handles running the orbital simulation.
+ *********************************************/
 void Simulator::getInput(const Interface* pUI)
 {
    // NOTE: Sim meant to work with only left, right, and down arrow keys.
@@ -39,7 +41,7 @@ void Simulator::getInput(const Interface* pUI)
       // Set if the ship's thruster is on
       if (pUI->isDown()) {
          // Accelerate 30.0 m/s^2 in facing direction
-         addedVelocity.addMeters(SHIP_ACCELERATION * TIME, ship->getRotation());
+         addedVelocity.addMeters(SHIP_ACCELERATION / TIME, ship->getRotation());
          ship->setThrust(true);
       }
       else

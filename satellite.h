@@ -16,7 +16,7 @@ class TestSatellite;
 // The amount of spin added to a defective Satellite
 #ifndef DEFECTIVE_SPIN
 #define DEFECTIVE_SPIN
-const double DEFECTIVE_SPIN_ANGLE = 1.0;
+const double DEFECTIVE_SPIN_ANGLE = 0.1;
 #endif
 
 /*********************************************
@@ -40,8 +40,8 @@ public:
 		// If the Satellite is defective,
 		if (defective)
 		{
-			// Add defective spin to the Satellite
-			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
+			// Add defective spin to the Satellite divided by simulator time.
+			this->rotationAngle += DEFECTIVE_SPIN_ANGLE / 48;
 		}
 
 		// Then update normally

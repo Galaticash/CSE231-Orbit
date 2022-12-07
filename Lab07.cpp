@@ -142,11 +142,7 @@ void callBack(const Interface* pUI, void* p)
          {  
             // Radius: ((CollisionObject*)*it)->getRadius()
             string objType = typeid(*(*it)).name();
-            if (objType == "class Star" || objType == "class Fragment" || objType == "class Bullet" || objType == "clas Earth")
-            {
-               // Ignore
-            }
-            else
+            if (objType != "class Star" || objType != "class Fragment" || objType != "class Bullet" || objType != "class Earth")
             {
                // Draw Direction and Radius
                drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction

@@ -13,6 +13,10 @@
 
 //string drawType = "hubbleTelescope";
 
+/*********************************************
+* HUBBLE TELESCOPE
+* A type of part in the orbit simulator.
+*********************************************/
 class HubbleTelescope : public Part
 {
 public:

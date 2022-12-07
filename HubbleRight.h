@@ -11,6 +11,10 @@
 #pragma once
 #include "part.h"
 
+/*********************************************
+* HUBBLE RIGHT
+* A type of part in the orbit simulator.
+*********************************************/
 class HubbleRight : public Part
 {
 public:

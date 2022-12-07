@@ -29,27 +29,14 @@ public:
 
    // Addition operators for both Angles and doubles
    Angle& operator +=(const double rhs);
-   Angle& operator += (const Angle& twoD) {
-      this->radAngle += twoD.radAngle;
-      normalize();
-      return *this;
-   }
+   Angle& operator += (const Angle& twoD);
 
    // Scale an Angle
-   Angle& operator *= (const double scale)
-   {
-      this->radAngle *= scale;
-      normalize();
-      return *this;
-   }
+   Angle& operator *= (const double scale);
 
    // Subtraction operators for both Angles and doubles
-   Angle& operator-=(const double rhs); 
-   Angle& operator -= (const Angle& twoD) {
-      this->radAngle -= twoD.radAngle;
-      normalize();
-      return *this;
-   }
+   Angle& operator -=(const double rhs); 
+   Angle& operator -= (const Angle& twoD);
 
    // If two Angle's radAngle values are the same, same angle
    bool operator == (const Angle& twoD) {

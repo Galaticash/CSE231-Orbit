@@ -11,6 +11,10 @@
 #pragma once
 #include "part.h"
 
+/*********************************************
+* DAGON RIGHT
+* A type of part in the orbit simulator.
+*********************************************/
 class DragonRight : public Part
 {
 public:

@@ -25,6 +25,7 @@ void Angle::normalize()
    radAngle -= cycleOffset * (2.0 * M_PI);
 }
 
+// Keep these here so math isn't defined in multiple places.
 void Angle::setDegree(double degree) { this->radAngle = degree * M_PI / 180.0; }
 double Angle::getDegree() const { return radAngle * 180.0 / M_PI; }
 
@@ -35,9 +36,29 @@ Angle& Angle::operator+=(const double rhs)
    return *this;
 }
 
+Angle& Angle::operator += (const Angle& twoD) {
+   this->radAngle += twoD.radAngle;
+   normalize();
+   return *this;
+}
+
 Angle& Angle::operator-=(const double rhs)
 {
    radAngle -= rhs;
+   normalize();
+   return *this;
+}
+
+Angle& Angle::operator-=(const Angle& twoD) 
+{
+   this->radAngle -= twoD.radAngle;
+   normalize();
+   return *this;
+}
+
+Angle& Angle::operator*=(const double scale)
+{
+   this->radAngle *= scale;
    normalize();
    return *this;
 }

@@ -32,18 +32,25 @@ public:
       this->numFragments = 2;
    };
 
+   /************************************************
+   * BREAK APART
+   * Pass parts to the parent function to add all the 
+   * parts, add them to the simulator, then delete self.
+   ****************************************************/
    void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {}) {
-      // Add all the parts, 
-      //  add them to the simulator, then delete self
+      // Add all the parts, add them to the simulator, then delete self
       Satellite::breakApart(sim, { new GPSCenter(), new GPSLeft(), new GPSRight() });
    }
 
+   /*********************************
+   * UPDATE
+   * The GPS satelite will always point to the earth,
+   * so it's rotation must match that of the earth.
+   *********************************************/
    void update(double time, double gravity, double planetRadius)
    {
       // GPS will rotate to face the Earth (direction of gravity)
       this->rotationAngle.setDegree(gravityDirection(pos.getMetersX(), pos.getMetersY()) + GPS_ROTATION_OFFSET);
-
       Satellite::update(time, gravity, planetRadius);
-   
    }
 };

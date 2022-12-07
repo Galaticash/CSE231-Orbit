@@ -11,6 +11,10 @@
 #pragma once
 #include "part.h"
 
+/*********************************************
+* GPS CENTER
+* A type of part in the orbit simulator.
+*********************************************/
 class GPSCenter : public Part
 {
 public:

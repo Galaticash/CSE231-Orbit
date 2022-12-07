@@ -11,6 +11,10 @@
 #pragma once
 #include "part.h"
 
+/*********************************************
+* GPS LEFT
+* A type of part in the orbit simulator.
+*********************************************/
 class GPSLeft : public Part
 {
 public:

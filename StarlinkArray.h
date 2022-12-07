@@ -11,6 +11,10 @@
 #pragma once
 #include "part.h"
 
+/*********************************************
+* STARLINK ARRAY
+* A type of part in the orbit simulator.
+*********************************************/
 class StarlinkArray : public Part
 {
 public:

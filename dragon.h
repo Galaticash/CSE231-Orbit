@@ -28,11 +28,13 @@ public:
       this->numFragments = 2;
    };
 
+   /************************************************
+   * BREAK APART
+   * Pass parts to the parent function to add all the
+   * parts, add them to the simulator, then delete self.
+   ****************************************************/
    void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {}) {
-
-      // Add all the parts, 
-      //  add them to the simulator, then delete self
+      // Add all the parts, add them to the simulator, then delete self
       Satellite::breakApart(sim, { new DragonCenter, new DragonLeft(), new DragonRight() });
    }
-
 };
