@@ -29,6 +29,38 @@ public:
       this->numFragments = 0;
    };
 
+
+   /************************************************************************
+ * DRAW Hubble
+ * Draw a Hubble satellite on the screen. It consists of 4 parts
+ *  INPUT center    The position of the ship
+ *        rotation  Which direction it is point
+ *************************************************************************/
+   /*
+   void draw()
+   {
+      Position posTelescope;
+      posTelescope.setPixelsX(2.0);
+      posTelescope.setPixelsY(0.0);
+      HubbleTelescope::draw();
+      //drawHubbleTelescope(center, rotation, posTelescope);
+
+      Position posComputer;
+      posComputer.setPixelsX(-10.0);
+      posComputer.setPixelsY(0.0);
+      drawHubbleComputer(center, rotation, posComputer);
+
+      Position posRight;
+      posRight.setPixelsX(1.0);
+      posRight.setPixelsY(-8.0);
+      drawHubbleRight(center, rotation, posRight);
+
+      Position posLeft;
+      posLeft.setPixelsX(1.0);
+      posLeft.setPixelsY(8.0);
+      drawHubbleLeft(center, rotation, posLeft);
+   }*/
+
    /************************************************
    * BREAK APART
    * Pass parts to the parent function to add all the

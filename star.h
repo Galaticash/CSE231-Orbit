@@ -9,7 +9,6 @@
  ************************************************************************/
 #pragma once
 #include "object.h"
-#include "uiDraw.h"
 
 const int STAR_PHASE_LIMIT = 200; // TODO: figure out max
 
@@ -38,6 +37,68 @@ public:
       else
          this->phase++;
    };
+
+
+   /************************************************************************
+    * DRAW STAR
+    * Draw a star that twinkles
+    *   INPUT  POINT     The position of the beginning of the star
+    *          PHASE     The phase of the twinkling
+    *************************************************************************/
+   //void drawStar(const Position& point, unsigned char phase)
+   
+   void draw()
+   {
+      // TOOD: Could find and replace all?
+      Position point = this->pos;
+
+      // Get ready...
+      glBegin(GL_POINTS);
+
+      // most of the time, it is just a pale yellow dot
+      if (phase < 128)
+      {
+         glColor3f((GLfloat)0.5 /* red % */, (GLfloat)0.5 /* green % */, (GLfloat)0.0 /* blue % */);
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() + 0.0));
+      }
+      // transitions to a bright yellow dot
+      else if (phase < 160 || phase > 224)
+      {
+         glColor3f((GLfloat)1.0 /* red % */, (GLfloat)1.0 /* green % */, (GLfloat)0.0 /* blue % */);
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() + 0.0));
+      }
+      // transitions to a bright yellow dot with pale yellow corners
+      else if (phase < 176 || phase > 208)
+      {
+         glColor3f((GLfloat)1.0 /* red % */, (GLfloat)1.0 /* green % */, (GLfloat)0.0 /* blue % */);
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() + 0.0));
+         glColor3f((GLfloat)0.5 /* red % */, (GLfloat)0.5 /* green % */, (GLfloat)0.0 /* blue % */);
+         glVertex2f((GLfloat)(point.getPixelsX() + 1.0), (GLfloat)(point.getPixelsY() + 0.0));
+         glVertex2f((GLfloat)(point.getPixelsX() - 1.0), (GLfloat)(point.getPixelsY() + 0.0));
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() + 1.0));
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() - 1.0));
+      }
+      // the biggest yet
+      else
+      {
+         glColor3f((GLfloat)1.0 /* red % */, (GLfloat)1.0 /* green % */, (GLfloat)0.0 /* blue % */);
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() + 0.0));
+         glColor3f((GLfloat)0.7 /* red % */, (GLfloat)0.7 /* green % */, (GLfloat)0.0 /* blue % */);
+         glVertex2f((GLfloat)(point.getPixelsX() + 1.0), (GLfloat)(point.getPixelsY() + 0.0));
+         glVertex2f((GLfloat)(point.getPixelsX() - 1.0), (GLfloat)(point.getPixelsY() + 0.0));
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() + 1.0));
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() - 1.0));
+         glColor3f((GLfloat)0.5 /* red % */, (GLfloat)0.5 /* green % */, (GLfloat)0.0 /* blue % */);
+         glVertex2f((GLfloat)(point.getPixelsX() + 2.0), (GLfloat)(point.getPixelsY() + 0.0));
+         glVertex2f((GLfloat)(point.getPixelsX() - 2.0), (GLfloat)(point.getPixelsY() + 0.0));
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() + 2.0));
+         glVertex2f((GLfloat)(point.getPixelsX() + 0.0), (GLfloat)(point.getPixelsY() - 2.0));
+      }
+
+      // Complete drawing
+      glColor3f((GLfloat)1.0 /* red % */, (GLfloat)1.0 /* green % */, (GLfloat)1.0 /* blue % */);
+      glEnd();
+   }
 
    int getPhase() { return this->phase; }; // Returns the Star's current phase
 

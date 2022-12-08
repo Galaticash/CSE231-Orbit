@@ -21,7 +21,26 @@ using std::min;
 using std::max;
 
 #include <sstream>
-#include "object.h"
+#include "colorRect.h"
+
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#include <openGL/gl.h>    // Main OpenGL library
+#include <GLUT/glut.h>    // Second OpenGL library
+#endif // __APPLE__
+
+#ifdef __linux__
+#include <GL/gl.h>        // Main OpenGL library
+#include <GL/glut.h>      // Second OpenGL library
+#endif // __linux__
+
+#ifdef _WIN32
+#include <stdio.h>
+#include <stdlib.h>
+#include <GL/glut.h>         // OpenGL library we copied 
+#define _USE_MATH_DEFINES
+#include <math.h>
+#endif // _WIN32
 
 
 #define GL_SILENCE_DEPRECATION
@@ -47,109 +66,36 @@ private:
    Position pt;
 };
 
-/************************************************************************
- * DRAW FRAGMENT
- * Draw a fragment on the screen.
- *   INPUT  pt     The location of the projectile
- *          age    The age in seconds. The younger, the brighter
- *************************************************************************/
-void drawFragment(const Position& center, double rotation);
+void glDrawRect(const Position& center, const Position& offset,
+   const ColorRect& rect, double rotation);
 
 /************************************************************************
- * DRAW PROJECTILE
- * Draw a projectile on the screen at a given point.
- *   INPUT  pt     The location of the projectile
+ * DRAW DIRECTION
+ * Draws a line out at an angle from a center starting point
+ *  INPUT center    The starting position of the line
+ *        radius    The length of the line
+ *        angle     The direction of the line
  *************************************************************************/
-void drawProjectile(const Position& pt);
-
-/************************************************************************
- * DRAW Crew Dragon
- * Draw a crew dragon on the screen. It consists of three components
- *  INPUT point   The position of the ship
- *        angle   Which direction it is pointed
- *        offset  For pieces of the satellite, this is the relative position of the center
- *                of rotation when it is connected to the main satellite
- *************************************************************************/
-void drawCrewDragon      (const Position& center, double rotation);
-void drawCrewDragonRight (const Position& center, double rotation, const Position& offset = Position());
-void drawCrewDragonLeft  (const Position& center, double rotation, const Position& offset = Position());
-void drawCrewDragonCenter(const Position& center, double rotation);
-
-/************************************************************************
- * DRAW Sputnik
- * Draw the satellite on the screen
- *  INPUT point   The position of the ship
- *        angle   Which direction it is point
- *************************************************************************/
-void drawSputnik(const Position& center, double rotation);
-
-/************************************************************************
- * DRAW GPS
- * Draw a GPS satellite on the screen. It consists of three parts
- *  INPUT point   The position of the ship
- *        angle   Which direction it is pointed
- *        offset  For pieces of the satellite, this is the relative position of the center
- *                of rotation when it is connected to the main satellite
- *************************************************************************/
-void drawGPS      (const Position& center, double rotation);
-void drawGPSCenter(const Position& center, double rotation);
-void drawGPSRight (const Position& center, double rotation, const Position& offset = Position());
-void drawGPSLeft  (const Position& center, double rotation, const Position& offset = Position());
-
-/************************************************************************
- * DRAW Hubble
- * Draw a Hubble satellite on the screen. It consists of 4 parts
- *  INPUT point   The position of the ship
- *        angle   Which direction it is ponted
- *        offset  For pieces of the satellite, this is the relative position of the center
- *                of rotation when it is connected to the main satellite
- *************************************************************************/
-void drawHubble         (const Position& center, double rotation);
-void drawHubbleComputer (const Position& center, double rotation, const Position& offset = Position());
-void drawHubbleTelescope(const Position& center, double rotation, const Position& offset = Position());
-void drawHubbleLeft     (const Position& center, double rotation, const Position& offset = Position());
-void drawHubbleRight    (const Position& center, double rotation, const Position& offset = Position());
-
-/************************************************************************
- * DRAW Starlink
- * Draw a Starlink satellite on the screen. It consists of 2 components
- *  INPUT point   The position of the ship
- *        angle   Which direction it is pointed
- *        offset  For pieces of the satellite, this is the relative position of the center
- *                of rotation when it is connected to the main satellite
- *************************************************************************/
-void drawStarlink     (const Position& center, double rotation);
-void drawStarlinkBody (const Position& center, double rotation, const Position& offset = Position());
-void drawStarlinkArray(const Position& center, double rotation, const Position& offset = Position());
-
-/************************************************************************
- * DRAW Ship
- * Draw a spaceship on the screen
- *  INPUT point   The position of the ship
- *        angle   Which direction it is pointed
- *        thrust  Whether the thrusters are on
- *************************************************************************/
-void drawShip(const Position& center, double rotation, bool thrust);
-
 void drawDirection(const Position& center, const double radius, const Angle angle);
-void drawCircle(const Position& center, const double raidus);
-void drawLine(const Position& one, const Position& two);
 
 /************************************************************************
- * DRAW Earth
- * Draw Earth
- *  INPUT point   The position of the ship
- *        angle   Which direction it is pointed (time of day!)
+ * DRAW CIRCLE
+ * Draws a circle
+ *  INPUT center    The center of the circle
+ *        radius    How large the cirle is
+ *
+ *  Modified from: github linusthe3rd's circles.cpp
+ *  Has commented out code for a filled circle
  *************************************************************************/
-void drawEarth(const Position& center, double rotation);
+void drawCircle(const Position& center, const double raidus);
 
 /************************************************************************
-* DRAW STAR
-* Draw a star
-*   INPUT  POINT     The position of the beginning of the star
-*          PHASE     The phase of the twinkling
-*************************************************************************/
-void drawStar(const Position& point, unsigned char phase);
+ * DRAW LINE
+ * Draws a Line
+ *  INPUT one    The starting position of the line
+ *        two    The ending position of the line
+ *************************************************************************/
+void drawLine(const Position& one, const Position& two);
 
 /******************************************************************
  * RANDOM
@@ -160,5 +106,3 @@ void drawStar(const Position& point, unsigned char phase);
  ****************************************************************/
 int    random(int    min, int    max);
 double random(double min, double max);
-
-

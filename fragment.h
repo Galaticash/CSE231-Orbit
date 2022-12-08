@@ -48,6 +48,23 @@ public:
          CollisionObject::update(time, gravity, radius); // Update normally
    }
 
+   /************************************************************************
+    * DRAW FRAGMENT
+    * Draw a fragment on the screen.
+    *   INPUT  pt     The location of the projectile
+    *          age    The age in seconds. The younger, the brighter
+    *************************************************************************/
+   void draw()
+   {
+      ColorRect rects[] =
+      {
+         {-4,1, -4,-1, 4,-1, 4,1, RGB_LIGHT_GREY },
+      };
+
+      for (int i = 0; i < sizeof(rects) / sizeof(ColorRect); i++)
+         glDrawRect(this->pos, Position(), rects[i], this->rotationAngle.getDegree());
+   }
+
    void breakApart(Simulator* sim);
 
 protected:

@@ -22,6 +22,7 @@ using namespace std;
 /*************************************
 * Given an Object pointer, calls the correct draw function
 *  **************************************/
+/*
 void drawObjectFunc(const Object* obj)
 {
    string objType = typeid(*obj).name();
@@ -104,7 +105,7 @@ void drawObjectFunc(const Object* obj)
       cout << "Unidentified " << objType << endl;
       assert(false);
    }
-}
+}*/
 
 /*************************************
  * All the interesting work happens here, when
@@ -130,26 +131,23 @@ void callBack(const Interface* pUI, void* p)
    for (vector<Object*>::iterator it = simObjects.begin(); it != simObjects.end(); it++)
    {
       // Draw the Object based on its class type
-      drawObjectFunc(*it);
+      //drawObjectFunc(*it);
 
+      (*it)->draw(); // TODO: To use, copy methods from uiDraw into each Object
 
-      // TEST: draw a collision circle around each Collision Obj
-      // and draw facing angle
-      //if (SHOW_TESTING_VISUALS)
+      // DEBUG: draw a collision circle around each Collision Obj
+      // and draw facing direction/angle
       if (pSim->getDebug())
-      {         
-         try
-         {  
-            // Radius: ((CollisionObject*)*it)->getRadius()
-            string objType = typeid(*(*it)).name();
-            if (objType != "class Star" && objType != "class Fragment" && objType != "class Bullet" && objType != "class Earth")
-            {
-               // Draw Direction and Radius
-               drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction
-               drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
-            }
+      {
+         string objType = typeid(*(*it)).name(); // Get the type of the Object
+
+         // Don't draw for smaller Objcts or the Earth
+         if (objType != "class Star" && objType != "class Fragment" && objType != "class Bullet" && objType != "class Earth")
+         {
+            // Draw Direction and Radius
+            drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction
+            drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
          }
-         catch (exception e) {} // Obj was not able to convert to Collision Obj
       }
    }
 }
@@ -171,7 +169,7 @@ int main(int argc, char** argv)
 #endif // !_WIN32
 {
    // Unit Tests
-   //testRunner();
+   testRunner();
 
    // Initialize OpenGL
    Position ptUpperRight;

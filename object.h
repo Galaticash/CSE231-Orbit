@@ -74,6 +74,20 @@ public:
       this->pos.setMeters(xGPS, yGPS);
    }
 
+   // TODO: Each Object draws itself differently
+   virtual void draw()
+   {
+      ColorRect rects[] =
+      {
+         {-7,7, 8,2, 8,-6, -7,-1,  RGB_GREY},
+         {-6,6, 7,1, 7,-5, -6,0,   RGB_DEEP_BLUE}
+      };
+
+      for (int i = 0; i < sizeof(rects) / sizeof(ColorRect); i++)
+         glDrawRect(this->pos, 0, rects[i], this->rotationAngle.getDegree());
+   }
+
+
    // Position Getters and Setters
    void setPosition(Position newPos) { this->pos = newPos; };
    Position getPosition()    const { return pos; }
