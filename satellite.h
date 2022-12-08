@@ -39,17 +39,20 @@ public:
 		this->defective = 0;		// Satellites aren't initially defective
 	};
 
+	/******************************************
+	* UPDATE
+	* Updates the position and velocity of the Object
+	* Satellites that are defective will spin, and those
+	* that aren't defective have a random chance to beceome defective
+	********************************************/
 	virtual void update(double time, double gravity, double planetRadius) {
-		// Becomes defective at a random time when running the sim.
-		if (!defective)
-			defective = random(0, DEFECTIVE_CHANCE) == DEFECTIVE_CHANCE -1 ? true : false;
-
 		// If the Satellite is defective,
 		if (defective)
-		{
 			// Add defective spin to the Satellite
 			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
-		}
+		else
+			// Has a random chance of becoming defective when running the sim.
+			defective = random(0, DEFECTIVE_CHANCE) == DEFECTIVE_CHANCE - 1 ? true : false;
 
 		// Then update normally
 		CollisionObject::update(time, gravity, planetRadius);
