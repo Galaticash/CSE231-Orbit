@@ -177,6 +177,12 @@ private:
 		
 
 		srand(randomSeed); // Seed the random
+
+		// IMPORTANT: Ensure seeded random is in the same place
+		// random() is also called within breakApart for every Fragment created
+		for (int i = 0; i < testSatellite->numFragments; i++)
+			random(0, 1);
+
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
@@ -244,6 +250,12 @@ private:
 		//testSatellite->parts.size() + testSatellite->numFragments;
 
 		srand(randomSeed); // Seed the random
+
+		// IMPORTANT: Ensure seeded random is in the same place
+		// random() is also called within breakApart for every Fragment created
+		for (int i = 0; i < testSatellite->numFragments; i++)
+			random(0, 1);
+
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);
@@ -308,6 +320,12 @@ private:
 		int expectedSubParts = parts.size() + testSatellite->numFragments;
 
 		srand(randomSeed); // Seed the random
+
+		// IMPORTANT: Ensure seeded random is in the same place
+		// random() is also called within breakApart for every Fragment created
+		for (int i = 0; i < testSatellite->numFragments; i++)
+			random(0, 1);
+
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
 		vector<Position> expectedPositions = testSatellite->getSubPartPos(expectedDirections);

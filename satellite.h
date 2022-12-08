@@ -11,16 +11,16 @@
 #pragma once
 #include "part.h"
 
-class TestSatellite;
+class TestSatellite; // For test Cases
+
+#ifndef DEFECTIVE_VARIABLES
+#define DEFECTIVE_VARIABLES
+// 1 in 10,000 creates a good amount of time between different satellites becoming defective.
+const int DEFECTIVE_CHANCE = 10000;
 
 // The amount of spin added to a defective Satellite
-#ifndef DEFECTIVE_SPIN
-#define DEFECTIVE_SPIN
 const double DEFECTIVE_SPIN_ANGLE = 0.1;
 #endif
-
-// 1 in 5,000 creates a good amount of time between different satellites becoming defective.
-const int DEFECTIVE_CHANCE = 5000;
 
 /*********************************************
  * Satellite
@@ -34,14 +34,30 @@ public:
 
 	Satellite(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
 	{ 
-		this->radius = 10; // The Collision Object's radius in pixels
-		this->numFragments = 2;		// The number of Fragments to break apart into
-		this->defective = 0;	// Randomly deciedes if the Satellite will spin (overriden for Ship)
+		this->radius = 10;		// The Collision Object's radius in pixels
+		this->numFragments = 2; // The number of Fragments to break apart into
+		this->defective = 0;		// Satellites aren't initially defective
 	};
 
-	virtual void update(double time, double gravity, double planetRadius);
+	/******************************************
+	* UPDATE
+	* Updates the position and velocity of the Object
+	* Satellites that are defective will spin, and those
+	* that aren't defective have a random chance to beceome defective
+	********************************************/
+	virtual void update(double time, double gravity, double planetRadius) {
+		// If the Satellite is defective,
+		if (defective)
+			// Add defective spin to the Satellite
+			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
+		else
+			// Has a random chance of becoming defective when running the sim.
+			defective = random(0, DEFECTIVE_CHANCE) == DEFECTIVE_CHANCE - 1 ? true : false;
 
-	/* TODO: Uses Collision Object's version, not needed? UPDATE: It's not needed
+		// Then update normally
+		CollisionObject::update(time, gravity, planetRadius);
+	}
+
 	// The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)
 	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {})
 	{

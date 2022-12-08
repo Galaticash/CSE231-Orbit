@@ -230,23 +230,6 @@ void drawCrewDragonCenter(const Position& center, double rotation)
       glDrawRect(center, Position(), rects[i], rotation);
 }
 
-void drawObject(const Object* obj)
-{
-   // Draw the ColorRects of the Object
-   // So far, Earth is the only one that draws, Spaceship in progress 
-   
-   vector<ColorRect> pixels = obj->getVisual();
-   Position center = obj->getPosition();
-   Angle rotation = obj->getRotation();
-
-   // For each of the object's color rectangles,
-   for (vector<ColorRect>::iterator it = pixels.begin(); it != pixels.end(); it++)
-   {
-      // Draw the rectangle, given the center, an offset (currently none), color rectangle, and rotation
-      glDrawRect(center, Position(), *it, rotation.getDegree());
-   }
-}
-
 /************************************************************************
  * DRAW Crew Dragon Right array
  * Draw the right solar array of the crew dragon module

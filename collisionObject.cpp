@@ -39,20 +39,25 @@ bool CollisionObject::isHit(const CollisionObject& other) {
 ********************************************/
 void CollisionObject::breakApart(Simulator* sim, vector<CollisionObject*> subParts)
 {
-	// Given a list of all the Collision Objects 
+	// TODO: Shorten/condense this comment section
+	/* Normal Collision Objects will breakApart by removing itself
+ *  from the Simulator's list of Collision Objects and deleting itself.
+ *  Given a list of additional Collision Objects that this Collision Object
+ *  will break apart into, otherwise assumes none */
+
+	// Given a list of all the Collision Objects (not including Fragments)
 	//  that this Collision Object will break into,
 	//  (If none given, creates empty list)
-
-	// For each fragment the Collision Object will break into,
+	
+	// For each Fragment the Collision Object will break into,
 	int numFragments = this->getNumFragments();
 	for (int i = 0; i < numFragments; i++)
-	{
-		// Add a Fragment to list of SubParts
+		// Add a Fragment to list of Subparts
 		subParts.push_back(new Fragment());
-	}
 
-	// Add all Parts and Fragments to the Simulator
-	// Fragments and Parts will go in different directions
+	// Add all Parts and Fragments to the Simulator,
+	//  each with their own initial Velocity and Position
+	//  so they don't crash into eachother immediately
 	addObjects(sim, subParts);
 
 	sim->removeCollider(this); // Remove pointer to self
@@ -61,27 +66,29 @@ void CollisionObject::breakApart(Simulator* sim, vector<CollisionObject*> subPar
 
 /******************************************
 * ADD OBJECTS
-* Creates fragments after a collision and adds
-* fragments and parts to simulator's list of objects.
+* Given the Simulator and a vector of Collision Objects,
+* Adds all subparts to the given Simulator's list of objects.
 ********************************************/
-void CollisionObject::addObjects(Simulator* sim, vector<CollisionObject*> obj) {
-	// For each sub Object the Collision Object will break into,
+void CollisionObject::addObjects(Simulator* sim, vector<CollisionObject*> objs) {
+	// For all the subparts (additional Collision Objects)
+	//  that this Collision Object will break into,
 	
-	// Calculate the different Velocities each Part will travel
-	vector<Velocity> directions = getSubPartVel(obj.size());
+	// Calculate the intial Velocities each subpart will have
+	vector<Velocity> directions = getSubPartVel(objs.size());
 
-	// Calculate different intial Positions of each Part
+	// Calculate the intial Positions of each subpart
+	//  (with a buffer so they don't collide immediately)
 	vector<Position> startingPos = getSubPartPos(directions);
 
-	// Add all Collision Objects, each going in different directions
+	// Create an iterator for the Positions and Velocities
 	vector<Position>::iterator pos = startingPos.begin();
 	vector<Velocity>::iterator vel = directions.begin();
 
 	// All vectors should be the same size
-	assert((obj.size() == directions.size()) && (obj.size() == startingPos.size()) && (directions.size() == startingPos.size()));
+	assert((objs.size() == directions.size()) && (objs.size() == startingPos.size()) && (directions.size() == startingPos.size()));
 
-	// For each CollisionObject,
-	for (vector<CollisionObject*>::iterator part = obj.begin(); part != obj.end(); part++)
+	// For each subpart in the list of Collision Objects,
+	for (vector<CollisionObject*>::iterator part = objs.begin(); part != objs.end(); part++)
 	{
 		CollisionObject* newObj = *part;
 
@@ -92,16 +99,16 @@ void CollisionObject::addObjects(Simulator* sim, vector<CollisionObject*> obj) {
 		// Add the Collision Object to the Simulator
 		sim->addCollider(newObj);
 
-		// Move to the next item in each vector
+		// Move to the next item in the position and velocity vectors
 		pos++;
 		vel++;
 	}
 }
 
 /******************************************
-* GET SUB PART VEL
-* Calculates the new velocity for a 
-* collection of parts and fragments.
+* GET SUB PART VELOCITY
+* Calculates the Velocity of created subParts
+* given the total number of Parts and Fragments.
 ********************************************/
 vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 	vector<Velocity> velocities;
@@ -109,25 +116,20 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 	// For each subPart, create a random velocity for it to travel
 	for (int i = 0; i < subParts; i++)
 	{
-		// Initial direction
+		// Copy the initial velocity
 		Velocity newVel = Velocity(this->vel);
 		
-		// Figure out which direction to add the Velocity
-		// Based on the original CollisionObject's Velocity
+		// Copy the initial direction/angle
 		Angle newAngle = Angle(newVel.getAngle().getRadian());
 
-		Angle difference = Angle(((i * PI) / (subParts + numFragments)));
-		//Angle((PI + (i * PI) / subParts));
+		// Give each subPart a slightly different angle from the initial
+		// Ex: +1/4PI, +2/4PI... etc or 1/3PI + 2/3PI.. etc
+		newAngle += Angle(((i * PI) / (subParts + numFragments)));
 
-		// Plus a direction from the number of subParts
-		newAngle += difference; // Ex: +1/4PI, +2/4PI... etc or 1/3PI + 2/3PI.. etc
+		// Add bewteen 5000 and 9000 m/s to this subPart's velocity
+		newVel.addMeters(random(5000.0, 9000.0), newAngle);
 
-		// Add 5000 - 9000 m/s to speed
-		// TODO: Add Random, but also to test cases			
-		double extraSpeed = 6000.0;
-			//random(5000.0, 9000.0);
-		newVel.addMeters(extraSpeed, newAngle);
-
+		// Add to the vector of Velocities to give the subParts
 		velocities.push_back(newVel);
 	}
 
@@ -135,9 +137,9 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 }
 
 /******************************************
-* GET SUB PART POS
-* Calculates the new position for a
-* collection of parts and fragments.
+* GET SUB PART POSITION
+* Calculates the Position of created subParts
+* given the total number of Parts and Fragments.
 ********************************************/
 vector<Position> CollisionObject::getSubPartPos(vector<Velocity> directions) {
 	vector<Position> positions;
@@ -148,11 +150,19 @@ vector<Position> CollisionObject::getSubPartPos(vector<Velocity> directions) {
 		// Starting at the original Collision Object's position,
 		Position newPos = Position(this->pos);
 
-		// 4 pixels in direction of travel. Changed to 10 since everything is close together.
-		// Find X and Y from Angle of the current Velocity
-		double buffer = 10; // Default 4
-		newPos.addPixels(buffer, (*it).getAngle());
+		// Have each object move 4 pixels in direction of travel.		
+		double buffer = 20; // Default 4
+		
+		// ERROR: Parts are colliding immediately
+		// TESTING: -1, maybe they were going together then apart?
 
+		Angle direction = (*it).getAngle();
+		direction *= -1.0;
+		
+		// Find X and Y from Angle of the current Velocity
+		newPos.addPixels(buffer, direction);
+
+		// Add to the vector of Positions to give the subParts
 		positions.push_back(newPos);
 	}
 

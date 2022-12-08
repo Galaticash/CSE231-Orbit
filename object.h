@@ -12,14 +12,14 @@
 #include "velocity.h" // The (x, y) direction the Object is travelling
 #include "angle.h"    // The Object's angle of rotation
 
-// To draw Objects (TODO: Remove if not used)
-#include "colorRect.h" // A colored rectangle/shape to draw this Object with
-#include <vector> // To contain ColorRects or collections of sub Parts
-
 #ifndef C_ASSERT
 #define C_ASSERT
 #include <cassert>
 #endif  // To make assertions
+
+// TODO: Since including for random, should each Object have a "draw" method and just copy the methods in uiDraw?
+// (Would make it more cohesive, Objects draw themselves instead of using the typeID)
+#include "uiDraw.h" // To use random
 
 using namespace std;
 class TestSatellite;
@@ -41,40 +41,31 @@ public:
       this->vel = vel;
       this->rotationAngle = rotation;
    };
-
-   // Update the position, rotation, and other status of the object
-   // Takes the amount of time that has passed, and the gravity and radius of the Earth
+   
+   /******************************************
+   * UPDATE
+   * Updates the position and velocity of the Object
+   * Takes the amount of time that has passed, and the gravity and radius of the Earth
+   ********************************************/
    virtual void update(double time, double gravity, double planetRadius)
    {
       // ** QUESTION ** //
       // Would it be better to pass in Earth, or just the relevant attributes from Earth?
-      // Could also have Global variables, but then it wouldn't be a pure function
-      
       // TODO: Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
-      // OR just pass the Earth in overall, get pos, radius, and gravity?
 
-      // The Object's horizontal and vertical acceleration
-      double hAcc = 0.0;
-      double vAcc = 0.0;
+      // Calculates the current angle and distance from the Earth (0, 0)
+      double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
+      double height = heightAbovePlanet(this->pos.getMetersX(), this->pos.getMetersY(), planetRadius);
 
-      // If calculating gravity/orbiting around a planet,
-      //  calculate acceleartion and update current velocity
-      if (gravity <= 0.0)
-      {
-         // Calculates the current angle and distance from the Earth (0, 0)
-         double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
-         double height = heightAbovePlanet(this->pos.getMetersX(), this->pos.getMetersY(), planetRadius);
+      // Calculate the current acceleration
+      double totalAcc = gravityEquation(height, planetRadius, gravity);
+      double vAcc = verticalAcceleration(totalAcc, angle);
+      double hAcc = horizontalAcceleration(totalAcc, angle);
 
-         // Calculate the current acceleration
-         double totalAcc = gravityEquation(height, planetRadius, gravity);
-         double vAcc = verticalAcceleration(totalAcc, angle);
-         double hAcc = horizontalAcceleration(totalAcc, angle);
-
-         // Update the current velocity with the current acceleration
-         this->vel.setMetersX(velocityConstantAcceleration(this->vel.getMetersX(), hAcc, time));
-         this->vel.setMetersY(velocityConstantAcceleration(this->vel.getMetersY(), vAcc, time));
-      }
-
+      // Update the current velocity with the current acceleration
+      this->vel.setMetersX(velocityConstantAcceleration(this->vel.getMetersX(), hAcc, time));
+      this->vel.setMetersY(velocityConstantAcceleration(this->vel.getMetersY(), vAcc, time));
+      
       // Adjust the position given the current position, velocity, and acceleration
       double xGPS = distanceFormula(this->pos.getMetersX(), this->vel.getMetersX(), hAcc, time);
       double yGPS = distanceFormula(this->pos.getMetersY(), this->vel.getMetersY(), vAcc, time);
@@ -99,40 +90,17 @@ public:
    void addRotation(Angle newRotation) { rotationAngle += newRotation; };
    Angle getRotation()     const { return this->rotationAngle; }
    
-   // TODO: If not using current uiDraw methods and instead a collection of ColorRects/Shapes
-   vector<ColorRect> getVisual() const { return visual; };
-
 protected:
    Position pos;  // The current Position of this Object
    Velocity vel;  // The current Velocity of this Object
    Angle rotationAngle; // The current rotation of this Object
-   vector <ColorRect> visual; // TODO: The ColorRects/Shapes that make up the visual for this Object
-   /*
-   // TODO: duplicate code from uiDraw, errors with moving to another file
-   double random(double min, double max)
-   {
-      assert(min <= max);
-      double num = min + ((double)rand() / (double)RAND_MAX * (max - min));
-      assert(min <= num && num <= max);
-
-      return num;
-   }
-
-   int random(int min, int max)
-   {
-      assert(min < max);
-      int num = (rand() % (max - min)) + min;
-      assert(min <= num && num <= max);
-
-      return num;
-   }
-   */
 
    // PHYSICS FUNCTIONS
 
    /*************************************************************************
     * GRAVITY DIRECTION
     * Calculates the angle at which an object is pulled by gravity.
+    * Assumes Earth is located at (0, 0)
     * Fromula: d = atan( xe - xs, ye - ys )
     * d = direction of the pull of gravity      (radians)
     * xe = horizontal position of the center of the earth : 0m
@@ -140,7 +108,6 @@ protected:
     * xs = horizontal position of the satellite (meters)
     * ys = vertical position of the satellite   (meters)
     *************************************************************************/
-    // TODO: Assumes Earth is located at (0, 0), calculate distance?
    double gravityDirection(double xs, double ys) {
       double d = atan2(xs, ys);
       return d;
@@ -149,13 +116,13 @@ protected:
    /*************************************************************************
     * HEIGHT ABOVE EARTH
     * Finds the height above the earth an object is.
+    * Assumes Earth is located at (0, 0)
     * Formula: h = sqrt(x * x + y * y) - r
     * h = distance between the surface of the earth and the object (meters)
     * x = horizontal position of object   (meters)
     * y = vertical position of object     (meters)
     * r = radius of earth                 (meters)
     *************************************************************************/
-    // TODO: Assumes Earth is located at (0, 0), calculate distance?
    double heightAbovePlanet(double x, double y, double radius) {
       double h = sqrt(x * x + y * y) - radius;
       return h;
@@ -171,7 +138,6 @@ protected:
     * h  = height above earth     (meters)
     *************************************************************************/
    double gravityEquation(double h, double radius, double gravity) {
-      // TODO: Figure out if it is better to repeat this equation or to use the square function
       double gh = gravity * pow((radius / (radius + h)), 2);
       return gh;
    }
