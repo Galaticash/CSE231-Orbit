@@ -13,7 +13,6 @@
 #include "star.h"
 #include "earth.h"
 #include "bullet.h"
-#include "uiDraw.h"		// For Random
 
 // Specific types of Satellites
 #include "spaceship.h"
@@ -39,22 +38,11 @@ public:
    Simulator()
    {
 	   addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
-      //addTestObjects();
 
       createStars(500); // Create a given number of Stars
 
       this->timeDialation = TIME;
    };
-
-   /*************************************
-   * ADD TEST OBJECTS
-   * TESTING: Adds additional Objects to the simulator
-   ***************************************/
-   void addTestObjects()
-   {
-      // Parts don't appear since they collide too fast
-      addCollider(new HubbleTelescope(Position(-46500000.13, 21000000.0), Velocity(2000.0, 2684.68)));
-   }
 
    /*************************************
    * ADD OBJECTS
@@ -72,26 +60,6 @@ public:
       // Create and add the Earth at the center of the Simulation
       this->planet = new Earth();
       addCollider(planet);
-
-      /* Test Objects */
-
-		/*
-		addCollider(new Hubble(Position(0.0, GEO_HEIGHT), Velocity(-3100.0, 0.0)));
-
-		addCollider(new StarlinkBody(Position(-10888386.068, 40737174.459), Velocity(-3100.0, 0.0)));
-
-		// Added quicker collision
-		addCollider(new Hubble(Position(-13595100.4029, 39923965.84268), Velocity(2938.822, 984.102)));
-
-		addCollider(new Starlink(Position(-GEO_HEIGHT, 0.0), Velocity(0.0, 3100.0)));
-		addCollider(new HubbleLeft(Position(0.0, -GEO_HEIGHT), Velocity(0.0, 3000.0)));
-		addCollider(new Hubble(Position(GEO_HEIGHT, -GEO_HEIGHT), Velocity(-3100.0, 0.0)));
-		
-		addCollider(new HubbleLeft(Position(-15000000.4029, -39000000.84268), Velocity(-3100.0, 0.0)));
-		addCollider(new HubbleLeft(Position(-13595100.4029, -40000000.84268), Velocity(-3100.0, 0.0)));
-		*/
-
-		/* Actual Objects to add */
 		
       // Sputnik
       addCollider(new Sputnik(Position(-36515095.13, 21082000.0), Velocity(2050.0, 2684.68)));
@@ -114,26 +82,34 @@ public:
       addCollider(new Starlink(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));	
    }
 
+   /******************************************
+   * CREATE STARS
+   * Given a number of Stars, creates and scatters them across the screen
+   ********************************************/
    void createStars(int numStars) 
    {
       // Create the given number of stars
-      // TODO: Randomly scatter through sky or make a pattern
       for (int i = 0; i < numStars; i++)
       {
-         // screen is 1,000 x 1,000 pixels. 
-         int posX = random(-500, 500);
-         int posY = random(-500, 500);
+         // screen is 1,000 x 1,000 pixels.
          Position initial;
-         //initial.setPixelsX(-250.0);
-         //initial.setPixelsY(100 * i);
-         initial.setPixelsX(posX);
-         initial.setPixelsY(posY);
+         initial.setPixelsX(random(-500, 500));
+         initial.setPixelsY(random(-500, 500));
+         
          this->stars.push_back(Star(initial));
       }
    };
 
-   // Add and Remove Collision Objects from the Simulators's collection
+   /******************************************
+   * ADD COLLIDER
+   * Adds a pointer to a given Collision Object to the Simulators's collection
+   ********************************************/
    void addCollider(CollisionObject* newObj) { this->collisionObjects.push_back(newObj); };
+   
+   /******************************************
+   * REMOVE COLLIDER
+   * Removes a pointer to a given Collision Object from the Simulators's collection
+   ********************************************/
    void removeCollider(CollisionObject* removeObj) { 
       // If the given pointer is in the vector, remove it
       vector<CollisionObject*>::iterator removeIt = find(collisionObjects.begin(), collisionObjects.end(), removeObj);
@@ -144,32 +120,93 @@ public:
       }
    };
 
-   // Creates a Bullet in front of the Simulator's Spaceship
+   /******************************************
+   * CREATE BULLET
+   * Creates a Bullet in front of the Simulator's Spaceship
+   ********************************************/
    void createBullet(Position pos, Velocity vel, Angle angle) 
    {
       this->collisionObjects.push_back(new Bullet(pos, vel, angle));	
    };
 	
-   // Gets input from the user that affects the Simulation
+   /******************************************
+   * GET INPUT
+   * Gets input from the user that affects the Simulation
+   ********************************************/
    void getInput(const Interface* pUI);
 
-   // Updates all items in the simulator, according to the amount of
-   //   time that has passed and the affect of the Earth's gravity
-   void update();
+   /******************************************
+   * UPDATE
+   * Updates all items in the simulator, according to the amount of
+   * time that has passed and the affect of Earth's gravity
+   ********************************************/
+   void update()
+   {
+      // Collect all objects that are marked for destruction
+      vector<CollisionObject*> destroyObjs = {};
+
+      // Check for collisions between the Simulator's collisionObjects,
+      //  will update the destroyed bool for any that collide
+      updateCollisions();
+
+      // For every Collision Object in the Simulator,
+      for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
+      {
+         // If it has been marked for destruction,
+         //  (either from a collision or a timer expiring)
+         if ((*it)->getDestroyed())
+            // Add to list of objects to break apart
+            destroyObjs.push_back(*it);
+
+         // Otherwise, has not been destroyed, update Position
+         //  (NOTE: Converts the Earth's radius from Pixels to Meters using zoom)
+         else
+            (*it)->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * Position().getZoom()));
+      }
+
+      // For every Collision Object that has been marked for destruction,
+      for (vector<CollisionObject*>::iterator it = destroyObjs.begin(); it != destroyObjs.end(); it++)
+         // Break the object apart, adding their subParts to the Simulator's list of collisionObjects
+         ((CollisionObject*)(*it))->breakApart(this);
+      
+      destroyObjs.clear(); // Clear the vector of Collision Objects
+
+      // Updates the frame of all the Stars
+      for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
+         (*it).update(this->timeDialation);
+   }
 
    vector<Object*> getObjects(); // Get all Objects to be drawn
 
-   // Returns if debugging features should be shown
-   bool getDebug() { return this->debug; };
+   bool getDebug() { return this->debug; }; // DEBUG: Returns if debugging features should be shown
 
 protected:
    vector<CollisionObject*> collisionObjects;	// All Objects that can collide
-   Spaceship* ship;	// The user-controlled Spaceship
-   Earth* planet;		// The planet at the center of the Simulation
+   Spaceship* ship;	   // The user-controlled Spaceship
+   Earth* planet;		   // The planet at the center (0, 0) of the Simulation
    vector<Star> stars;	// All the stars to display
    double timeDialation;// Real-world seconds between frames
 
    bool debug; // Toggle Debugging features on/off
 
-   void updateCollisions();
+   /******************************************
+   * UPDATE COLLISIONS
+   * Checks for collisions between this Simulator's collisionObjects
+   ********************************************/
+   void updateCollisions() {
+      // For every Collison Object in the Simulator's collisionObjects,
+      for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
+      {
+         // Check against every object except itself
+         for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
+         {
+            // Check if the two Objects have hit eachother,
+            if ((*objOneIt)->isHit(*(*objTwoIt)))
+            {
+               // Tell the second object it was also hit
+               (*objTwoIt)->setDestroyed(true);
+            }
+         }
+      }
+   };
 };

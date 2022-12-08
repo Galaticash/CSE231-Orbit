@@ -7,17 +7,20 @@
  *    Starts the orbital simulator and runs the callback and drawing.
  *****************************************************************/
 
-#include <cmath>
-#include <cassert>      // for ASSERT
-#include "uiInteract.h" // for INTERFACE
-#include "uiDraw.h"     // for RANDOM and DRAW*
-
 #include "simulator.h"  // The orbit simulator
-
-using namespace std;
 
 #include "spaceshipTest/testRunner.cpp" // Test cases, not a class
 //#include "testRunner.cpp" // Test cases, without folder
+
+// The default zoom value for the program,
+const double DEFAULT_ZOOM = 128000.0 /* 128km equals 1 pixel */;
+
+// The Interface's window size
+const double SCREEN_SIZE = 1000.0; // The size of the window (currenly square)
+const double SCREEN_SIZE_X = SCREEN_SIZE; // The horizonal length of the window
+const double SCREEN_SIZE_Y = SCREEN_SIZE; // The vertical length of the window
+
+using namespace std;
 
 /*************************************
 * Given an Object pointer, calls the correct draw function
@@ -132,24 +135,19 @@ void callBack(const Interface* pUI, void* p)
       // Draw the Object based on its class type
       drawObjectFunc(*it);
 
-
-      // TEST: draw a collision circle around each Collision Obj
-      // and draw facing angle
-      //if (SHOW_TESTING_VISUALS)
+      // DEBUG: Draw a collision circle around each
+      //  Collision Obj and draw facing direction/angle
       if (pSim->getDebug())
-      {         
-         try
-         {  
-            // Radius: ((CollisionObject*)*it)->getRadius()
-            string objType = typeid(*(*it)).name();
-            if (objType != "class Star" && objType != "class Fragment" && objType != "class Bullet" && objType != "class Earth")
-            {
-               // Draw Direction and Radius
-               drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction
-               drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
-            }
+      {
+         string objType = typeid(*(*it)).name(); // Get the type of the Object
+
+         // Don't draw for smaller Objects or the Earth
+         if (objType != "class Star" && objType != "class Fragment" && objType != "class Bullet" && objType != "class Earth")
+         {
+            // Draw Direction and Radius
+            drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction
+            drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
          }
-         catch (exception e) {} // Obj was not able to convert to Collision Obj
       }
    }
 }
@@ -171,13 +169,13 @@ int main(int argc, char** argv)
 #endif // !_WIN32
 {
    // Unit Tests
-   //testRunner();
+   testRunner();
 
    // Initialize OpenGL
    Position ptUpperRight;
    ptUpperRight.setZoom(DEFAULT_ZOOM); /* 128km equals 1 pixel */
-   ptUpperRight.setPixelsX(1000.0);
-   ptUpperRight.setPixelsY(1000.0);
+   ptUpperRight.setPixelsX(SCREEN_SIZE_X);
+   ptUpperRight.setPixelsY(SCREEN_SIZE_Y);
    Interface ui(0, NULL,
       "Orbit Lab",   /* name on the window */
       ptUpperRight);

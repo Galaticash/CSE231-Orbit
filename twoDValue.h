@@ -15,9 +15,6 @@
 #include <cmath>
 #include "angle.h"
 
-// The default zoom value for the simulator, will use if not set
-const double DEFAULT_ZOOM = 128000.0 /* 128km equals 1 pixel */;
-
 class TestTwoDValue;
 
 /*********************************************
@@ -33,7 +30,7 @@ public:
 
    // If no value given, assumes equals 0
    // Sets Zoom to Default, can be adjusted later with setZoom()
-   TwoDValue(double newX = 0.0, double newY = 0.0) { /*this->setZoom(DEFAULT_ZOOM);*/ this->x = newX; this->y = newY; };
+   TwoDValue(double newX = 0.0, double newY = 0.0) { this->x = newX; this->y = newY; };
    TwoDValue(const TwoDValue& pt) : TwoDValue(pt.x, pt.y) {};
 
    /* OPERATORS */

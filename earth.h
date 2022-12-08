@@ -40,7 +40,7 @@ class Earth : public CollisionObject
 {
 public:
    Earth(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) {
-      this->radius = (EARTH_RADIUS / DEFAULT_ZOOM);
+      this->radius = (EARTH_RADIUS / Position().getZoom());
       this->gravity = GRAVITY;
    };
    
