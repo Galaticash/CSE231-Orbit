@@ -19,8 +19,8 @@ class TestSatellite;
 const double DEFECTIVE_SPIN_ANGLE = 0.1;
 #endif
 
-// 1 / DEFECTIVE_CHANCE
-const int DEFECTIVE_CHANCE = 6;
+// 1 in 10,000 creates a good amount of time between different satellites becoming defective.
+const int DEFECTIVE_CHANCE = 10000;
 
 /*********************************************
  * Satellite
@@ -36,16 +36,19 @@ public:
 	{ 
 		this->radius = 10; // The Collision Object's radius in pixels
 		this->numFragments = 2;		// The number of Fragments to break apart into
-		this->defective = random(0, DEFECTIVE_CHANCE) > DEFECTIVE_CHANCE - 1 ? true : false;	// Randomly deciedes if the Satellite will spin (overriden for Ship)
+		this->defective = 0;	// Randomly deciedes if the Satellite will spin (overriden for Ship)
 	};
 
 	virtual void update(double time, double gravity, double planetRadius) {
+		// Becomes defective at a random time when running the sim.
+		if (!defective)
+			defective = random(0, DEFECTIVE_CHANCE) == DEFECTIVE_CHANCE -1 ? true : false;
+
 		// If the Satellite is defective,
 		if (defective)
 		{
 			// Add defective spin to the Satellite divided by simulator time.
-			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
-				/// 48;
+			this->rotationAngle += DEFECTIVE_SPIN_ANGLE / 48;
 		}
 
 		// Then update normally
