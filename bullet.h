@@ -10,13 +10,8 @@
 #pragma once
 #include "fragment.h"
 
-/*
-#ifndef BULLET_VALUES
-#define BULLET_VALUES
-   double ADDED_POSITION_PX = 19.0;
-   double ADDED_VELOCITY_M = 9000.0;
-#endif
-*/
+const double ADDED_POSITION = 19.0;
+const double ADDED_VELOCITY = 9000.0;
 
 class TestBullet;
 
@@ -34,9 +29,6 @@ public:
       this->radius = 1;
       
       /*
-      const double ADDED_POSITION_PX = 19.0;
-      const double ADDED_VELOCITY_M = 9000.0;
-
       TODO: Pyth theorem
       this->pos.addPixels(ADDED_POSITION_PX);
       this->pos.addPixelsX(ADDED_POSITION_PX);
@@ -50,10 +42,10 @@ public:
 
       // TODO: Move the pythagorean theorem out of object and into 2DPosition and rename.
       // Add 9000.0 m/s to velocity from ship. Position is 19 pixels in front of the ship.
-      double dx = this->horizontalAcceleration(9000.0, angle.getDegree());
-      double dy = this->verticalAcceleration(9000.0, angle.getDegree());
-      double x = this->horizontalAcceleration(19.0, angle.getDegree());
-      double y = this->verticalAcceleration(19.0, angle.getDegree());
+      double dx = this->horizontalAcceleration(ADDED_VELOCITY, angle.getDegree());
+      double dy = this->verticalAcceleration(ADDED_VELOCITY, angle.getDegree());
+      double x = this->horizontalAcceleration(ADDED_POSITION, angle.getDegree());
+      double y = this->verticalAcceleration(ADDED_POSITION, angle.getDegree());
 
       this->pos.addPixelsX(x);
       this->pos.addPixelsY(y);

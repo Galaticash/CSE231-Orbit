@@ -107,7 +107,7 @@ protected:
    Velocity vel;  // The current Velocity of this Object
    Angle rotationAngle; // The current rotation of this Object
    vector <ColorRect> visual; // TODO: The ColorRects/Shapes that make up the visual for this Object
-
+   /*
    // TODO: duplicate code from uiDraw, errors with moving to another file
    double random(double min, double max)
    {
@@ -126,6 +126,9 @@ protected:
 
       return num;
    }
+   */
+
+   // PHYSICS FUNCTIONS
 
    /*************************************************************************
     * GRAVITY DIRECTION
@@ -245,5 +248,4 @@ protected:
       double v = vo + a * t;
       return v;
    }
-
 };

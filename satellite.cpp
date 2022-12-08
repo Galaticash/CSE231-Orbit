@@ -11,19 +11,24 @@
 #include "satellite.h"
 #include "simulator.h"
 
-/*
-	NOTE: This version makes Satellite class unecessary
-	No real uniqueness about Satellite, only the 'types' of Satellites act differently
-	(Just calling CollisionObject::breakApart() with different subParts parameters)
-*/
+/*****************************
+* UPDATE
+* Updates the satellite's defective status 
+* and adds rotation based on defective status, 
+* then proceeds to update the object as normal.
+***********************************/
+void Satellite::update(double time, double gravity, double planetRadius) {
+	// Becomes defective at a random time when running the sim.
+	if (!defective)
+		defective = random(0, DEFECTIVE_CHANCE) == DEFECTIVE_CHANCE - 1 ? true : false;
 
-/*
-void Satellite::breakApart(Simulator* sim, vector<CollisionObject*> subParts)
-{	
-	// Given a list of all the Parts this Satellite will break into,
-	//  where each type of Satellite has its own unique Parts list
+	// If the Satellite is defective,
+	if (defective)
+	{
+		// Add defective spin to the Satellite divided by simulator time.
+		this->rotationAngle += DEFECTIVE_SPIN_ANGLE / 48;
+	}
 
-	// Add all the Parts and Fragments (from numFragments), 
-	//  to the simulator, then delete self
-	CollisionObject::breakApart(sim, subParts);
-};*/
+	// Then update normally
+	CollisionObject::update(time, gravity, planetRadius);
+}

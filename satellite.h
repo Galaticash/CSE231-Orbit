@@ -19,8 +19,8 @@ class TestSatellite;
 const double DEFECTIVE_SPIN_ANGLE = 0.1;
 #endif
 
-// 1 in 10,000 creates a good amount of time between different satellites becoming defective.
-const int DEFECTIVE_CHANCE = 10000;
+// 1 in 5,000 creates a good amount of time between different satellites becoming defective.
+const int DEFECTIVE_CHANCE = 5000;
 
 /*********************************************
  * Satellite
@@ -39,24 +39,10 @@ public:
 		this->defective = 0;	// Randomly deciedes if the Satellite will spin (overriden for Ship)
 	};
 
-	virtual void update(double time, double gravity, double planetRadius) {
-		// Becomes defective at a random time when running the sim.
-		if (!defective)
-			defective = random(0, DEFECTIVE_CHANCE) == DEFECTIVE_CHANCE -1 ? true : false;
+	virtual void update(double time, double gravity, double planetRadius);
 
-		// If the Satellite is defective,
-		if (defective)
-		{
-			// Add defective spin to the Satellite divided by simulator time.
-			this->rotationAngle += DEFECTIVE_SPIN_ANGLE / 48;
-		}
-
-		// Then update normally
-		CollisionObject::update(time, gravity, planetRadius);
-	}
-
-	/* TODO: Uses Collision Object's version, not needed?
-	// The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)*/
+	/* TODO: Uses Collision Object's version, not needed? UPDATE: It's not needed
+	// The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)
 	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {})
 	{
 		// Given a list of all the Parts this Satellite will break into,
@@ -66,7 +52,7 @@ public:
 		//  to the simulator, then delete self
 		CollisionObject::breakApart(sim, subParts);	
 	}
-
+	*/
 protected:
 	bool defective;	// If the Satellite will be given a defective spin
 };

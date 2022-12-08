@@ -34,9 +34,6 @@ public:
       // If the ship's thruster is on (from user input)
       if(thrust)
       {
-         // TODO: Acceleration math (**see instructions)
-         // 3600 (sim) to 1 seconds (real), 30FPS
-
          /* INSTRUCTIONS
           Pressing the down-arrow will accelerate the spaceplane by 30.0 m/s2.
 

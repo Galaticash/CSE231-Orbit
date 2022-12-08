@@ -55,6 +55,66 @@ void Simulator::getInput(const Interface* pUI)
       this->debug = debug ? false : true;
 }
 
+/********************************************
+* UPDATE
+* Updates all items in the simulator, according to the amount of
+* time that has passed and the affect of the Earth's gravity
+*******************************************************/
+void Simulator::update()
+{
+   // Collect all objects that are marked for destruction
+   vector<CollisionObject*> destroyObjs = {};
+
+   // Check for collisions between the Simulator's collisionObjects,
+   //  will update the destroyed bool for any that collide
+   updateCollisions();
+
+   // For every Collision Object in the Simulator,
+   for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
+   {
+      // If it has been marked for destruction,
+      //  (either from a collision or a timer expiring)
+      if ((*it)->getDestroyed())
+      {
+         // Add to list of objects to break apart
+         destroyObjs.push_back(*it);
+      }
+
+      // Otherwise, has not been destroyed, update Position
+      else
+      {
+         // Update the position of the Collision Object
+         //   given the time passed, gravity, and Earth's radius.
+         //   Convert the Earth's radius from Pixels to Meters
+         (*it)->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * DEFAULT_ZOOM));
+      }
+   }
+
+   // For every Collision Object that has been marked for destruction,
+   for (vector<CollisionObject*>::iterator it = destroyObjs.begin(); it != destroyObjs.end(); it++)
+   {
+      // Break the object apart, adding their subParts to the Simulator's list of collisionObjects
+      CollisionObject* obj = *it;
+
+      // DEBUG: What objects have been destroyed
+      string objType = typeid(*obj).name();
+      cout << objType << " destroyed" << endl;
+
+      obj->breakApart(this);
+   }
+   destroyObjs.clear();
+
+   // Updates the frame of all the Stars
+   for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
+   {
+      (*it).update(this->timeDialation);
+   }
+}
+
+/******************************
+* GET OBJECTS
+* Creates a list of all objects in the simulator.
+**************************************/
 vector<Object*> Simulator::getObjects() {
    // Returns the pointers for all the Objects to be drawn
    vector<Object*> objects;
@@ -74,3 +134,46 @@ vector<Object*> Simulator::getObjects() {
 
    return objects;
 }
+
+/*************************************
+* UPDATE COLLISIONS
+* Updates the collision of all objects in the sim by
+* looping through the list of objects twice, with 
+* the inner loop having one less than the outer loop.
+*******************************************/
+void Simulator::updateCollisions() {
+   // DEGBUG: Efficiency of this algorithm
+   //int outerCount = 0; // 12 <-- 12 Objects total
+   //int innerCount = 0; // 66 <-- comparisons (12 + 11 + 10 + 9..)
+
+   // For every Collison Object in the Simulator's collisionObjects,
+   for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
+   {
+      // Check against every object except itself
+      for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
+      {
+         // If neither object has been marked for destruction,
+         if (!(*objOneIt)->getDestroyed() && !(*objTwoIt)->getDestroyed())
+         {
+            // Check if the two Objects have hit eachother,
+            if ((*objOneIt)->isHit(*(*objTwoIt)))
+            {
+               // Tell the second object it was also hit
+               (*objTwoIt)->setDestroyed(true);
+            }
+         }
+         // If ObjOne has not been marked, but ObjTwo already has,
+         else if ((!(*objOneIt)->getDestroyed() && (*objTwoIt)->getDestroyed()))
+         {
+            // Check if ObjOne has been hit, updates destroy bool
+            (*objOneIt)->isHit(*(*objTwoIt));
+         }
+         // If ObjTwo has not been marked, but ObjOne already has,
+         else if ((!(*objTwoIt)->getDestroyed() && (*objOneIt)->getDestroyed()))
+         {
+            // Check if ObjTwo has been hit, updates destroy bool
+            (*objTwoIt)->isHit(*(*objOneIt));
+         }
+      }
+   }
+};
