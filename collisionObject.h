@@ -10,13 +10,14 @@
  ************************************************************************/
 #pragma once
 #include "object.h"
-#include "uiDraw.h"
 
-class Simulator;
+#include <vector>  // To hold subparts
+
+class Simulator; // To use in breakApart
 
 /*********************************************
  * Collision Object
- * An object that has collision.
+ * An Object that can collide with other Collision Objects
  *********************************************/
 class CollisionObject : public Object
 {
@@ -28,6 +29,11 @@ public:
 		this->destroyed = false; 
 	};
 
+	/******************************************
+	* UPDATE
+	* Asserts destroyed Collision Objects aren't updated
+	* Updates the same as a normal Object
+	********************************************/
 	virtual void update(double time, double gravity, double planetRadius) {
 		// A collided Object should be destroyed before updating
 		assert(!destroyed);
@@ -36,7 +42,11 @@ public:
 		Object::update(time, gravity, planetRadius);
 	}
 
-	// Checks if this Collision Object has hit a given Collision Object
+	/******************************************
+	* IS HIT
+	* Checks if this Collision Object has come
+	* in contact with a given Collision Object
+	********************************************/
 	bool isHit(const CollisionObject &other) {
 		// Check if the pixels between the two objects are 
 		//  less than their combined radii, destroy if colliding
@@ -44,35 +54,49 @@ public:
 		bool collision = pixelsBetween <= (other.radius + this->radius);
 
 		// If the Object has not already been marked for destruction,
-		if (!destroyed)		
-			// The current collision state defines if
-			//  the Object is to be destroyed
-			//  (prevents true --> false error)
-			this->destroyed = collision;		
+		if (!destroyed)
+			// Mark this Object for destruction if there was a hit
+			this->destroyed = collision;
 
-		// Return if this Collision Object has collided with other
+		// Return if this Collision Object has collided with the other
 		return collision;
 	};
 
 	// Getters and setters
-	void setDestroyed(bool destroy) { this->destroyed = destroy; }; // TODO: Not needed?
+	void setDestroyed(bool destroy) { this->destroyed = destroy; };
 	virtual bool getDestroyed() { return this->destroyed; };
 
-	int getNumFragments() const { return this->numFragments; }; // TODO: Not needed?
+	int getNumFragments() const { return this->numFragments; };
 	double getRadius() const { return radius; };
-
-	/* Normal Collision Objects will breakApart by removing itself
-	 *  from the Simulator's list of Collision Objects and deleting itself.
-	 *  Given a list of additional Collision Objects that this Collision Object 
-	 *  will break apart into, otherwise assumes none */
+	 
+	 /******************************************
+	 * BREAK APART
+	 * Creates fragments after a collision and has them
+	 * added to the simulator's list of objects.
+	 ********************************************/
 	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {});
 
-protected:
-	// Given the Simulator, adds subParts to the Simulator's Collision Objects
-	void addObjects(Simulator* sim, vector<CollisionObject*> obj);		
+protected: 
+	 /******************************************
+	 * ADD OBJECTS
+	 * Given the Simulator and Collision Objects to add,
+	 * adds the subParts to the Simulator's Collision Objects
+	 ********************************************/
+	void addObjects(Simulator* sim, vector<CollisionObject*> subParts);
 
-	vector<Velocity> getSubPartVel(int subParts);	// Calculates the Velocities of subparts
-	vector<Position> getSubPartPos(vector<Velocity> directions);	// Calculates the initial Positions of subparts
+	/******************************************
+	* GET SUB PART VELOCITY
+	* Calculates the Velocity of created subParts
+	* given the total number of Parts and Fragments.
+	********************************************/
+	vector<Velocity> getSubPartVel(int subParts);
+	
+	/******************************************
+	* GET SUB PART POSITION
+	* Calculates the Position of created subParts
+	* given the total number of Parts and Fragments.
+	********************************************/
+	vector<Position> getSubPartPos(vector<Velocity> directions);
 
 	bool destroyed;     // If the current Object is to be destroyed (either from a collision or timer expiring)
    double radius;      // How large this object is, used to check if another object is touching it

@@ -151,7 +151,7 @@ void callBack(const Interface* pUI, void* p)
          }
          catch (exception e) {} // Obj was not able to convert to Collision Obj
       }
-   } 
+   }
 }
 
 double TwoDValue::metersFromPixels = 40.0;
@@ -170,8 +170,8 @@ int WINAPI wWinMain(
 int main(int argc, char** argv)
 #endif // !_WIN32
 {
-   // Unit Tests - add back in when Collisions work again
-   testRunner(); // TODO: seed randoms
+   // Unit Tests
+   //testRunner();
 
    // Initialize OpenGL
    Position ptUpperRight;

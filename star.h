@@ -16,26 +16,31 @@ const int STAR_PHASE_LIMIT = 200; // TODO: figure out max
 /*********************************************
  * Star
  * A star that exists in space. It is part of the background
- * so it has no collision.
+ * so it has no collision and is not affected by Earth's gravity.
  *********************************************/
 class Star : public Object
 {
 public:
-   Star(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) : Object(pos, vel, rotation) 
-   { this->phase = random(0, STAR_PHASE_LIMIT); /* Start at a random phase */ };
+   Star(Position pos = Position(), Velocity vel = Velocity(), Angle rotation = Angle()) : Object(pos, vel, rotation)
+   {
+      this->phase = random(0, STAR_PHASE_LIMIT); /* Start at a random phase */
+   };
 
-   // TODO: Adjust Phase to not increment infinitley, 
-   //  reset to 0 at some point (work with smaller numbers)
+   /******************************************
+   * UPDATE
+   * Stars don't need their position or velocity updated,
+   * so only their phase is updated
+   ********************************************/
    void update(double time) {
       //if (phase > STAR_PHASE_LIMIT)
-      if (false)      
-         this->phase = 0;
+      if (false)
+         this->phase = 0; // Resets phase to 0, as to not increment infinitely
       else
          this->phase++;
    };
 
-   int getPhase() { return this->phase; };
+   int getPhase() { return this->phase; }; // Returns the Star's current phase
 
 private:
-   int phase;  // The current phase of the Star, used to draw differently
+   int phase;  // The current phase of the Star, used to draw a Star differently
 };

@@ -12,10 +12,6 @@
 #include "velocity.h" // The (x, y) direction the Object is travelling
 #include "angle.h"    // The Object's angle of rotation
 
-// To draw Objects (TODO: Remove if not used)
-#include "colorRect.h" // A colored rectangle/shape to draw this Object with
-#include <vector> // To contain ColorRects or collections of sub Parts
-
 #ifndef C_ASSERT
 #define C_ASSERT
 #include <cassert>
@@ -41,40 +37,31 @@ public:
       this->vel = vel;
       this->rotationAngle = rotation;
    };
-
-   // Update the position, rotation, and other status of the object
-   // Takes the amount of time that has passed, and the gravity and radius of the Earth
+   
+   /******************************************
+   * UPDATE
+   * Updates the position and velocity of the Object
+   * Takes the amount of time that has passed, and the gravity and radius of the Earth
+   ********************************************/
    virtual void update(double time, double gravity, double planetRadius)
    {
       // ** QUESTION ** //
       // Would it be better to pass in Earth, or just the relevant attributes from Earth?
-      // Could also have Global variables, but then it wouldn't be a pure function
-      
       // TODO: Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
-      // OR just pass the Earth in overall, get pos, radius, and gravity?
 
-      // The Object's horizontal and vertical acceleration
-      double hAcc = 0.0;
-      double vAcc = 0.0;
+      // Calculates the current angle and distance from the Earth (0, 0)
+      double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
+      double height = heightAbovePlanet(this->pos.getMetersX(), this->pos.getMetersY(), planetRadius);
 
-      // If calculating gravity/orbiting around a planet,
-      //  calculate acceleartion and update current velocity
-      if (gravity <= 0.0)
-      {
-         // Calculates the current angle and distance from the Earth (0, 0)
-         double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
-         double height = heightAbovePlanet(this->pos.getMetersX(), this->pos.getMetersY(), planetRadius);
+      // Calculate the current acceleration
+      double totalAcc = gravityEquation(height, planetRadius, gravity);
+      double vAcc = verticalAcceleration(totalAcc, angle);
+      double hAcc = horizontalAcceleration(totalAcc, angle);
 
-         // Calculate the current acceleration
-         double totalAcc = gravityEquation(height, planetRadius, gravity);
-         double vAcc = verticalAcceleration(totalAcc, angle);
-         double hAcc = horizontalAcceleration(totalAcc, angle);
-
-         // Update the current velocity with the current acceleration
-         this->vel.setMetersX(velocityConstantAcceleration(this->vel.getMetersX(), hAcc, time));
-         this->vel.setMetersY(velocityConstantAcceleration(this->vel.getMetersY(), vAcc, time));
-      }
-
+      // Update the current velocity with the current acceleration
+      this->vel.setMetersX(velocityConstantAcceleration(this->vel.getMetersX(), hAcc, time));
+      this->vel.setMetersY(velocityConstantAcceleration(this->vel.getMetersY(), vAcc, time));
+      
       // Adjust the position given the current position, velocity, and acceleration
       double xGPS = distanceFormula(this->pos.getMetersX(), this->vel.getMetersX(), hAcc, time);
       double yGPS = distanceFormula(this->pos.getMetersY(), this->vel.getMetersY(), vAcc, time);
@@ -99,14 +86,10 @@ public:
    void addRotation(Angle newRotation) { rotationAngle += newRotation; };
    Angle getRotation()     const { return this->rotationAngle; }
    
-   // TODO: If not using current uiDraw methods and instead a collection of ColorRects/Shapes
-   vector<ColorRect> getVisual() const { return visual; };
-
 protected:
    Position pos;  // The current Position of this Object
    Velocity vel;  // The current Velocity of this Object
    Angle rotationAngle; // The current rotation of this Object
-   vector <ColorRect> visual; // TODO: The ColorRects/Shapes that make up the visual for this Object
 
    // TODO: duplicate code from uiDraw, errors with moving to another file
    double random(double min, double max)

@@ -61,7 +61,7 @@ public:
          // Accelerate 30.0 m/s^2 in facing direction
          // TODO: Add a multiplier?
          // TODO: Add per button press or per update?
-         this->vel.addMeters(SHIP_ACCELERATION, rotationAngle);
+         this->vel.addMeters(SHIP_ACCELERATION* time, rotationAngle);
 
          // ERROR: Adds velocity in a constant direction, doesn't take current facing into account
          // Increase velocity by 30 m/s^2. Calculate x and y velocity from total.

@@ -11,16 +11,18 @@
 #pragma once
 #include "part.h"
 
-class TestSatellite;
+class TestSatellite; // For test Cases
+
+
+#ifndef DEFECTIVE_VARIABLES
+#define DEFECTIVE_VARIABLES
+// There is a 1 / DEFECTIVE_CHANCE of a Satellite spinning wildly
+const int DEFECTIVE_CHANCE = 6;
 
 // The amount of spin added to a defective Satellite
-#ifndef DEFECTIVE_SPIN
-#define DEFECTIVE_SPIN
 const double DEFECTIVE_SPIN_ANGLE = 0.1;
 #endif
 
-// 1 / DEFECTIVE_CHANCE
-const int DEFECTIVE_CHANCE = 6;
 
 /*********************************************
  * Satellite
@@ -36,7 +38,7 @@ public:
 	{ 
 		this->radius = 10; // The Collision Object's radius in pixels
 		this->numFragments = 2;		// The number of Fragments to break apart into
-		this->defective = random(0, DEFECTIVE_CHANCE) > DEFECTIVE_CHANCE - 1 ? true : false;	// Randomly deciedes if the Satellite will spin (overriden for Ship)
+		this->defective = random(0, DEFECTIVE_CHANCE) >= DEFECTIVE_CHANCE - 1 ? true : false;	// Randomly deciedes if the Satellite will spin (overriden for Ship)
 	};
 
 	virtual void update(double time, double gravity, double planetRadius) {
@@ -52,8 +54,7 @@ public:
 		CollisionObject::update(time, gravity, planetRadius);
 	}
 
-	/* TODO: Uses Collision Object's version, not needed?
-	// The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)*/
+	// The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)
 	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {})
 	{
 		// Given a list of all the Parts this Satellite will break into,

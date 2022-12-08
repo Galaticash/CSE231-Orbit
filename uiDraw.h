@@ -48,13 +48,6 @@ private:
 };
 
 /************************************************************************
- * DRAW OBJECT
- * Draw an Object on the screen.
- *   INPUT  obj     The Object to draw
- *************************************************************************/
-void drawObject(const Object* obj);
-
-/************************************************************************
  * DRAW FRAGMENT
  * Draw a fragment on the screen.
  *   INPUT  pt     The location of the projectile
