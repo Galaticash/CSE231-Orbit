@@ -14,15 +14,18 @@
 
 /***********************************
 * NORMALIZE
-* When an angle is 2*PI or 360 degrees, subtract one of those two max values
+* When an angle is over 2*PI or 360 degrees, subtract one of those two max values
 * as many times as needed to be under the max.
 *************************************/
 void Angle::normalize()
 {
-   // cycleOffset is the number of full cycles the angle will need to be
-   // turned back to fit within the range
-   int cycleOffset = floor(radAngle / (2.0 * M_PI));
-   radAngle -= cycleOffset * (2.0 * M_PI);
+   if (radAngle > 2)
+   {
+      // cycleOffset is the number of full cycles the angle will need to be
+      // turned back to fit within the range
+      int cycleOffset = floor(radAngle / (2.0 * M_PI));
+      radAngle -= cycleOffset * (2.0 * M_PI);
+   }
 }
 
 // Keep these here so math isn't defined in multiple places.

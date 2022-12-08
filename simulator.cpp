@@ -33,7 +33,12 @@ void Simulator::getInput(const Interface* pUI)
 
       // Set if the ship's thruster is on (down arrow)
       if (pUI->isDown())
+      {/* TODO: Add per button press or per update?
+         Velocity v;
+         v.addMeters(SHIP_ACCELERATION * 120, ship->getRotation());
+         ship->addVelocity(v);        */
          ship->setThrust(true);
+      }
       else
          ship->setThrust(false);
 

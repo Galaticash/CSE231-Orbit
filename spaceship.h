@@ -14,7 +14,6 @@
 #pragma once
 #include "satellite.h"
 
-
 const double SHIP_ACCELERATION = 30.0;
 
 /*********************************************
@@ -25,9 +24,9 @@ class Spaceship : public Satellite
 {
 public:
    Spaceship(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Satellite(pos, vel, angle) {
-      this->defective = false; // The ship will never be defective
-      this->thrust = false;
-      this->radius = 10; // Radius in pixels;
+      this->defective = false;   // The ship will never be defective
+      this->thrust = false;      // Ship starts off not moving
+      this->radius = 10;         // Radius in pixels;
       this->numFragments = 4;
    };
 
@@ -61,6 +60,7 @@ public:
          
          // Accelerate 30.0 m/s^2 in facing direction
          // TODO: Add a multiplier?
+         // TODO: Add per button press or per update?
          this->vel.addMeters(SHIP_ACCELERATION, rotationAngle);
 
          // ERROR: Adds velocity in a constant direction, doesn't take current facing into account
@@ -76,9 +76,10 @@ public:
       CollisionObject::update(time, gravity, planetRadius);
    }
 
+   // Getter and setter for thrust
    void setThrust(bool t) {  this->thrust = t; }
    bool getThrust() { return this->thrust; };
 
 private:
-   bool thrust;
+   bool thrust;   // If the Ship's thruster is on (for visuals)
 };
