@@ -17,6 +17,10 @@
 #include <cassert>
 #endif  // To make assertions
 
+// TODO: Since including for random, should each Object have a "draw" method and just copy the methods in uiDraw?
+// (Would make it more cohesive, Objects draw themselves instead of using the typeID)
+#include "uiDraw.h" // To use random
+
 using namespace std;
 class TestSatellite;
 
@@ -91,28 +95,10 @@ protected:
    Velocity vel;  // The current Velocity of this Object
    Angle rotationAngle; // The current rotation of this Object
 
-   // TODO: duplicate code from uiDraw, errors with moving to another file
-   double random(double min, double max)
-   {
-      assert(min <= max);
-      double num = min + ((double)rand() / (double)RAND_MAX * (max - min));
-      assert(min <= num && num <= max);
-
-      return num;
-   }
-
-   int random(int min, int max)
-   {
-      assert(min < max);
-      int num = (rand() % (max - min)) + min;
-      assert(min <= num && num <= max);
-
-      return num;
-   }
-
    /*************************************************************************
     * GRAVITY DIRECTION
     * Calculates the angle at which an object is pulled by gravity.
+    * Assumes Earth is located at (0, 0)
     * Fromula: d = atan( xe - xs, ye - ys )
     * d = direction of the pull of gravity      (radians)
     * xe = horizontal position of the center of the earth : 0m
@@ -120,7 +106,6 @@ protected:
     * xs = horizontal position of the satellite (meters)
     * ys = vertical position of the satellite   (meters)
     *************************************************************************/
-    // TODO: Assumes Earth is located at (0, 0), calculate distance?
    double gravityDirection(double xs, double ys) {
       double d = atan2(xs, ys);
       return d;
@@ -129,13 +114,13 @@ protected:
    /*************************************************************************
     * HEIGHT ABOVE EARTH
     * Finds the height above the earth an object is.
+    * Assumes Earth is located at (0, 0)
     * Formula: h = sqrt(x * x + y * y) - r
     * h = distance between the surface of the earth and the object (meters)
     * x = horizontal position of object   (meters)
     * y = vertical position of object     (meters)
     * r = radius of earth                 (meters)
     *************************************************************************/
-    // TODO: Assumes Earth is located at (0, 0), calculate distance?
    double heightAbovePlanet(double x, double y, double radius) {
       double h = sqrt(x * x + y * y) - radius;
       return h;
@@ -151,7 +136,6 @@ protected:
     * h  = height above earth     (meters)
     *************************************************************************/
    double gravityEquation(double h, double radius, double gravity) {
-      // TODO: Figure out if it is better to repeat this equation or to use the square function
       double gh = gravity * pow((radius / (radius + h)), 2);
       return gh;
    }
@@ -228,5 +212,4 @@ protected:
       double v = vo + a * t;
       return v;
    }
-
 };
