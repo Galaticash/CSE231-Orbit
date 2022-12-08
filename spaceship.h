@@ -14,6 +14,9 @@
 #pragma once
 #include "satellite.h"
 
+
+const double SHIP_ACCELERATION = 30.0;
+
 /*********************************************
  * Spaceship
  * A type of satellite in the orbit simulator.
@@ -22,25 +25,53 @@ class Spaceship : public Satellite
 {
 public:
    Spaceship(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Satellite(pos, vel, angle) {
+      this->defective = false; // The ship will never be defective
       this->thrust = false;
       this->radius = 10; // Radius in pixels;
       this->numFragments = 4;
-      //shipVisual(); // TODO: Other way of drawing, remove if not used
    };
 
    void update(double time, double gravity, double planetRadius) {
+      // If the ship's thruster is on (from user input)
       if(thrust)
       {
-         // Increase velocity by 30 m/s^2. Calculate x and y velocity from total.
-         double ddx = this->horizontalAcceleration(30.0, rotationAngle.getDegree());
-         double ddy = this->verticalAcceleration(30.0, rotationAngle.getDegree());
+         // TODO: Acceleration math (**see instructions)
+         // 3600 (sim) to 1 seconds (real), 30FPS
 
-         this->vel.addMetersX(ddx);
-         this->vel.addMetersY(ddy);
+         /* INSTRUCTIONS
+          Pressing the down-arrow will accelerate the spaceplane by 30.0 m/s2.
+
+          Acceleration will be along the direction the Dream Chaser is pointed,
+          not the direction of travel.
+          
+          To determine how much the acceleration will affect the velocity of the ship,
+          it is necessary to take into account the direction the ship is pointed and
+          how many seconds the thrust counts in the simulation.
+
+          For example, if the simulation has 3600 seconds of simulation
+          time to 1 second of player time, and if the simulation is running
+          at 30 frames/second, then one depression of the button will accelerate
+          the ship for 120 seconds (or 2 minutes).
+
+          Thus vt = v0 + a t so the change in speed will be 600 m/s.
+
+          - - -
+          Add Meters is the a * t part of the equation, and a = 30m/s2, so t is the key part
+         */
+         
+         // Accelerate 30.0 m/s^2 in facing direction
+         // TODO: Add a multiplier?
+         this->vel.addMeters(SHIP_ACCELERATION, rotationAngle);
+
+         // ERROR: Adds velocity in a constant direction, doesn't take current facing into account
+         // Increase velocity by 30 m/s^2. Calculate x and y velocity from total.
+         //double ddx = this->horizontalAcceleration(30.0, rotationAngle.getDegree());
+         //double ddy = this->verticalAcceleration(30.0, rotationAngle.getDegree());
+
+         //this->vel.addMetersX(ddx);
+         //this->vel.addMetersY(ddy);
       }
 
-      // The spaceship never becomes defective.
-      defective = false;
       // Then update normally
       CollisionObject::update(time, gravity, planetRadius);
    }
@@ -50,196 +81,4 @@ public:
 
 private:
    bool thrust;
-   void shipVisual()
-   {
-      // draw the white part of the ship
-     
-      const PT pointsShipWhite[] =
-      {
-         {0,0},
-         {-3,-9}, {-12,-12}, {-14,-12}, {-13,-7}, {-8,-2}, {-6,3}, {-4,11}, {-4,14}, {-3,16}, {-1,18},
-         {1,18}, {3,16}, {4,14}, {4,11}, {6,3}, {8,-2}, {13,-7}, {14,-12}, {12,-12}, {3,-9}, {-3,-9}
-      };
-
-      for (int i = 0; i < sizeof(pointsShipWhite) / sizeof(PT); i++)
-      {
-         ColorRect rect{
-
-                  static_cast<int>(pointsShipWhite[i].x),
-                  static_cast<int>(pointsShipWhite[i].y),
-
-                  static_cast<int>(pointsShipWhite[i].x),
-                  static_cast<int>(pointsShipWhite[i].y),
-
-                  static_cast<int>(pointsShipWhite[i].x),
-                  static_cast<int>(pointsShipWhite[i].y),
-
-                  static_cast<int>(pointsShipWhite[i].x),
-                  static_cast<int>(pointsShipWhite[i].y), RGB_LIGHT_GREY };
-         visual.push_back(rect);
-      }
-
-      
-      /*
-      glBegin(GL_TRIANGLE_FAN);
-      for (int i = 0; i < sizeof(pointsShipWhite) / sizeof(PT); i++)
-         glVertexPoint(rotate(center, pointsShipWhite[i].x, pointsShipWhite[i].y, rotation));
-
-      */
-
-      
-      // draw the flame if necessary
-      if (thrust)
-      {
-         //glBegin(GL_TRIANGLES);
-
-         // TEMP TESTING
-         visual.push_back(ColorRect{ 1, 15, 2, 15, 1, 15, 2, 15, RGB_RED });
-
-         /*
-         glColor(RGB_RED);
-
-         glVertexPoint(rotate(center, -3.0, -9.0, rotation));
-         glVertexPoint(rotate(center, random(-5.0, 5.0), random(-25.0, -13.0), rotation));
-         glVertexPoint(rotate(center, 3.0, -9.0, rotation));
-         glVertexPoint(rotate(center, -3.0, -9.0, rotation));
-         glVertexPoint(rotate(center, random(-5.0, 5.0), random(-25.0, -13.0), rotation));
-         glVertexPoint(rotate(center, 3.0, -9.0, rotation));
-         */
-
-      }
-      
-
-      // draw the dark part of the ship      
-      /*
-      const PT pointsShipBlack[][4] =
-      {
-         {{-5,-8},  {-12,-11},{-11,-7},{-5,-2}}, // left wing
-         {{ 5,-8},  { 12,-11},{ 11,-7},{ 5,-2}}, // right wing
-         {{ 0,-13}, {-3,11},  {-1,15}, {1,15}},  // left canopy
-         {{ 0,-13}, { 3,11},  { 1,15}, {-1,15}}  // right canopy
-      };
-      */
-
-      // TEMP
-      visual.push_back(ColorRect{ -5, -13,  11, -11,  11, 15, -5, 15, RGB_LIGHT_GREY });
-
-      visual.push_back(ColorRect { -5,-8,  -12,-11,  -11,-7,  -5,-2, RGB_DEEP_BLUE }); // left wing
-      visual.push_back(ColorRect { 5,-8,  12,-11,  11,-7,  5,-2, RGB_DEEP_BLUE });   // right wing
-      visual.push_back(ColorRect { 0,-13, -3,11,  -1,15, 1,15, RGB_DEEP_BLUE });   // left canopy
-      visual.push_back(ColorRect { 0,-13,  3,11,   1,15, -1,15, RGB_DEEP_BLUE });  // right canopy
-}
-
-   void createVisual()
-   {
-      /*
-      // Translate the previous method into a vector of ColorRects
-
-      // The colors being used for the Earth
-      const int* colors[5] =
-      {
-         RGB_GREY,  // 0
-         RGB_BLUE,  // 1
-         RGB_GREEN, // 2
-         RGB_TAN,   // 3
-         RGB_WHITE  // 4
-      };
-
-      // All the color points that make up the Earth (1 x 1 Color Rects)
-      int earth[50][50] =
-      {
-      {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 1,1,1,1,1, 1,1,1,1,1, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,1,3,3, 3,2,2,1,1, 1,1,2,2,2, 3,1,1,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 1,1,1,2,2, 2,2,2,2,3, 3,3,3,3,3, 3,3,1,1,1, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 0,0,2,1,1, 1,2,2,2,2, 2,2,2,2,2, 2,2,2,2,3, 3,3,3,1,1, 1,1,1,0,0, 0,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 0,2,2,1,1, 2,2,2,2,2, 3,3,3,3,3, 3,3,3,3,3, 2,2,2,2,1, 1,1,1,1,1, 0,0,0,0,0, 0,0,0,0,0,},
-
-      {0,0,0,0,0, 0,0,0,0,2, 1,1,1,2,2, 3,3,3,3,3, 3,3,3,3,3, 3,3,3,3,4, 3,3,3,3,3, 3,1,3,3,1, 1,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,1,1, 1,1,1,1,3, 3,3,3,3,3, 3,3,3,3,3, 3,3,3,3,3, 4,3,3,3,3, 3,3,2,3,3, 1,1,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,1,1,1, 1,1,1,1,1, 3,3,3,3,3, 3,3,3,3,3, 3,3,3,3,3, 3,3,3,3,3, 3,3,3,1,3, 3,2,2,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,1,1,1,1, 1,1,1,1,1, 2,3,3,3,3, 3,3,3,3,3, 3,3,3,3,2, 3,3,3,3,3, 3,3,3,3,3, 3,3,2,3,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,1,1,1,1, 2,2,2,2,2, 3,3,3,3,3, 3,3,3,3,3, 2,3,3,3,3, 3,3,3,2,3, 3,2,2,3,2, 3,3,3,3,0, 0,0,0,0,0,},
-
-      {0,0,0,0,0, 1,1,1,1,1, 2,1,1,2,3, 3,3,3,3,2, 2,2,2,3,3, 3,2,3,3,3, 3,3,3,3,3, 3,1,3,3,3, 3,3,3,2,3, 0,0,0,0,0,},
-      {0,0,0,0,1, 1,1,1,1,1, 2,1,1,3,3, 3,3,3,3,3, 3,2,2,3,2, 2,3,3,3,3, 3,3,3,3,3, 1,1,3,3,3, 3,3,3,3,3, 3,0,0,0,0,},
-      {0,0,0,0,1, 1,1,1,1,2, 1,1,3,2,2, 3,2,3,3,3, 2,3,2,2,2, 2,2,2,3,3, 3,3,3,3,3, 3,3,3,3,3, 3,3,3,3,3, 3,3,0,0,0,},
-      {0,0,0,1,1, 1,1,1,1,1, 1,1,2,2,3, 3,3,3,3,3, 2,3,3,3,3, 2,3,3,3,3, 2,2,3,3,3, 3,2,3,2,1, 3,1,1,3,3, 3,3,0,0,0,},
-      {0,0,0,1,1, 1,1,1,1,1, 2,2,2,2,3, 3,3,2,2,2, 3,3,3,3,3, 3,3,3,3,2, 2,2,3,2,3, 3,3,3,2,1, 3,3,1,2,3, 3,3,0,0,0,},
-
-      {0,0,1,1,1, 1,1,1,1,1, 1,1,2,2,1, 2,2,2,3,2, 3,3,3,3,3, 3,3,3,3,3, 2,2,2,2,2, 3,3,3,3,2, 1,3,1,1,3, 3,3,3,0,0,},
-      {0,0,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 3,2,2,3,3, 3,3,3,3,3, 3,3,4,3,3, 3,2,2,2,2, 3,3,3,3,3, 1,1,3,3,1, 3,3,3,0,0,},
-      {0,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 3,3,3,3,3, 3,3,3,3,3, 3,3,3,1,1, 1,2,2,2,2, 2,2,3,3,3, 2,3,2,1,2, 3,3,3,2,0,},
-      {0,1,1,1,1, 1,1,1,1,1, 2,1,1,1,3, 3,3,3,3,3, 3,3,4,4,3, 1,1,1,1,4, 1,2,2,2,2, 2,2,3,3,3, 3,3,2,1,1, 3,3,3,3,0,},
-      {0,1,1,1,1, 1,1,1,1,1, 1,3,2,2,3, 3,3,3,3,1, 1,1,1,4,1, 1,1,1,4,1, 1,1,3,2,2, 2,2,3,3,3, 3,3,1,2,1, 3,3,3,3,0,},
-
-      {0,1,1,1,1, 1,1,1,1,1, 1,2,2,1,3, 3,3,3,3,4, 1,1,1,1,4, 1,1,1,1,1, 1,1,2,2,2, 2,2,1,2,3, 3,2,1,1,1, 3,3,3,3,0,},
-      {1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,3, 3,3,3,1,4, 1,1,1,1,1, 1,1,1,1,1, 1,1,2,2,2, 2,2,2,2,3, 3,3,3,1,2, 3,3,3,3,3,},
-      {1,1,1,1,1, 1,1,1,1,1, 1,1,1,3,3, 3,3,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,3, 3,2,2,2,3, 3,3,2,2,2, 3,3,3,2,2,},
-      {1,1,1,1,1, 1,1,1,1,1, 1,1,1,3,3, 3,4,1,1,1, 1,1,1,1,1, 1,1,1,4,4, 4,1,1,1,1, 1,3,3,1,1, 3,3,3,2,1, 3,3,3,3,2,},
-      {1,1,1,1,1, 1,1,1,1,1, 1,1,1,2,3, 3,1,1,1,1, 1,1,1,1,1, 1,1,4,4,4, 4,4,4,1,1, 1,1,1,1,1, 1,3,3,3,1, 3,3,3,3,2,},
-
-      {1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 3,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,2,3, 3,3,1,3,3, 3,3,3,3,2,},
-      {1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,4,4,1, 1,1,1,1,1, 1,1,1,1,2, 1,1,1,3,3, 3,3,3,3,2,},
-      {1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,4,1,1,1, 1,1,1,1,1, 1,1,4,4,4, 4,1,1,1,1, 1,1,1,1,2, 1,1,1,3,2, 3,3,3,3,2,},
-      {1,1,1,1,1, 1,1,1,1,1, 1,1,1,3,2, 2,2,2,1,1, 1,1,1,1,4, 4,4,4,4,4, 4,4,4,1,4, 1,1,1,1,1, 1,1,1,1,1, 1,3,3,3,3,},
-      {0,1,1,1,1, 1,1,1,1,1, 1,1,1,2,2, 2,3,3,1,1, 1,1,1,4,4, 4,1,4,4,4, 4,4,4,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,3,3,3,0,},
-
-      {0,1,1,1,1, 1,1,1,1,1, 1,1,1,3,2, 2,2,3,1,1, 1,1,4,1,1, 4,1,1,4,4, 4,4,4,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,2,3,3,0,},
-      {0,1,1,1,1, 1,1,1,1,1, 1,1,1,1,3, 2,2,2,2,4, 1,4,1,1,4, 4,1,1,1,1, 4,4,4,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,2,1,0,},
-      {0,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 3,2,2,2,2, 2,2,4,4,4, 2,4,4,1,1, 4,4,4,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,0,},
-      {0,0,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 2,2,2,3,2, 3,2,2,1,4, 2,4,4,4,1, 1,1,4,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,0,0,},
-      {0,0,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 3,3,3,3,3, 3,3,3,3,3, 2,2,2,4,4, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,0,0,},
-
-      {0,0,0,1,1, 1,1,1,1,1, 1,1,1,1,1, 2,3,2,2,2, 3,3,3,2,2, 2,1,2,2,2, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,0,0,0,},
-      {0,0,0,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,2,2,2,2, 3,1,3,2,2, 1,1,2,3,2, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,0,0,0,},
-      {0,0,0,0,1, 1,1,1,1,1, 1,1,1,1,1, 2,2,2,2,2, 3,3,3,3,2, 1,1,1,3,2, 2,3,2,2,1, 1,1,1,1,1, 1,1,1,1,1, 1,0,0,0,0,},
-      {0,0,0,0,1, 1,1,1,1,1, 1,1,1,1,1, 1,3,2,2,3, 3,3,3,3,3, 1,1,2,2,2, 2,2,2,2,3, 1,1,1,1,1, 1,1,1,1,1, 1,0,0,0,0,},
-      {0,0,0,0,0, 1,1,1,1,1, 1,1,1,1,1, 2,3,2,3,3, 3,3,3,3,3, 2,2,1,2,2, 2,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 0,0,0,0,0,},
-
-      {0,0,0,0,0, 0,1,1,1,1, 1,1,1,1,2, 3,2,2,3,3, 3,3,3,2,2, 2,2,2,2,2, 1,2,2,1,1, 1,1,1,1,1, 1,1,1,1,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,1,1,1, 1,1,1,1,2, 3,3,3,3,3, 3,1,3,2,2, 1,2,2,2,2, 2,2,1,1,1, 1,1,1,1,1, 1,1,1,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,1,1, 1,1,1,1,1, 3,3,3,3,3, 3,3,3,3,2, 2,2,2,2,2, 2,1,1,1,1, 1,1,1,1,1, 1,1,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,1, 1,1,1,1,1, 2,3,3,3,3, 3,3,3,3,3, 3,3,3,2,2, 1,1,1,1,1, 1,1,1,1,1, 1,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 1,1,1,1,1, 1,1,3,3,3, 3,3,3,3,3, 3,3,2,2,2, 1,1,1,1,1, 1,1,1,1,1, 0,0,0,0,0, 0,0,0,0,0,},
-
-      {0,0,0,0,0, 0,0,0,0,0, 0,1,1,1,1, 1,2,3,3,3, 3,3,3,2,3, 2,2,2,2,1, 1,1,1,1,1, 1,1,1,1,0, 0,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 0,0,0,1,1, 1,1,1,3,3, 3,3,3,2,1, 1,1,2,2,2, 1,1,1,1,2, 1,2,0,0,0, 0,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 1,1,1,1,3, 3,3,1,1,1, 1,1,1,2,2, 2,2,1,1,3, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,1,1,1, 1,2,2,2,2, 1,1,1,1,1, 1,2,3,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,},
-      {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,1,1,1,1, 1,1,1,1,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,},
-      };
-
-      const double SCALE = 2.0;
-
-      // For every color point that makes up the Earth,
-      for (int y = 0; y < 50; y++)
-         for (int x = 0; x < 50; x++)
-            if (earth[y][x])
-            {
-               //assert(earth[y][x] > 0 && earth[y][x] <= 4);
-
-               //Position pos;
-               //pos.setPixelsX(-25.0 * SCALE);
-               //pos.setPixelsY(-25.0 * SCALE);
-
-               // Note: Earth was easy since position is (0,0)
-               ColorRect rect =
-               {
-                  static_cast<int>(x * SCALE),
-                  static_cast<int>(y * SCALE),
-
-                  static_cast<int>(x * SCALE),
-                  static_cast<int>(y * SCALE + SCALE),
-
-                  static_cast<int>(x * SCALE + SCALE),
-                  static_cast<int>(y * SCALE + SCALE),
-
-                  static_cast<int>(x * SCALE + SCALE),
-                  static_cast<int>(y * SCALE), colors[earth[y][x]] };
-
-               // Add the created ColorRect to the Earth's visual
-               visual.push_back(rect);
-            }
-      */
-   };
 };

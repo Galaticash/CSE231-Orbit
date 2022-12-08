@@ -19,9 +19,6 @@ using namespace std;
 #include "spaceshipTest/testRunner.cpp" // Test cases, not a class
 //#include "testRunner.cpp" // Test cases, without folder
 
-// To show collision circles
-const bool SHOW_TESTING_VISUALS = false;
-
 /*************************************
 * Given an Object pointer, calls the correct draw function
 *  **************************************/
@@ -135,14 +132,17 @@ void callBack(const Interface* pUI, void* p)
       // Draw the Object based on its class type
       drawObjectFunc(*it);
 
-      // TEST: draw a circle around each Collision Obj
-      if (SHOW_TESTING_VISUALS)
+
+      // TEST: draw a collision circle around each Collision Obj
+      // and draw facing angle
+      //if (SHOW_TESTING_VISUALS)
+      if (pSim->getDebug())
       {         
          try
          {  
             // Radius: ((CollisionObject*)*it)->getRadius()
             string objType = typeid(*(*it)).name();
-            if (objType != "class Star" || objType != "class Fragment" || objType != "class Bullet" || objType != "class Earth")
+            if (objType != "class Star" && objType != "class Fragment" && objType != "class Bullet" && objType != "class Earth")
             {
                // Draw Direction and Radius
                drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction

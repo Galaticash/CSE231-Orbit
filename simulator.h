@@ -208,6 +208,9 @@ public:
 
    vector<Object*> getObjects(); // Get all Objects to be drawn
 
+   // Returns if debugging features should be shown
+   bool getDebug() { return this->debug; };
+
 protected:
    vector<CollisionObject*> collisionObjects;	// All Objects that can collide
    Spaceship* ship;	// The user-controlled Spaceship
@@ -215,19 +218,20 @@ protected:
    vector<Star> stars;	// All the stars to display
    double timeDialation;// Real-world seconds between frames
 
+   bool debug; // Toggle Debugging features on/off
+
    void updateCollisions() {
-      // DEGBUG: Checking efficiency of algorithm
+      // DEGBUG: Efficiency of this algorithm
       //int outerCount = 0; // 12 <-- 12 Objects total
       //int innerCount = 0; // 66 <-- comparisons (12 + 11 + 10 + 9..)
 
       // For every Collison Object in the Simulator's collisionObjects,
       for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
       {
-         //outerCount++;
          // Check against every object except itself
          for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
          {
-            //innerCount++;
+            // If neither object has been marked for destruction,
             if (!(*objOneIt)->getDestroyed() && !(*objTwoIt)->getDestroyed())
             {
                // Check if the two Objects have hit eachother,
@@ -237,13 +241,13 @@ protected:
                   (*objTwoIt)->setDestroyed(true);
                }
             }
-            // If ObjOne has not been hit, but ObjTwo has already been hit,
+            // If ObjOne has not been marked, but ObjTwo already has,
             else if ((!(*objOneIt)->getDestroyed() && (*objTwoIt)->getDestroyed()))
             {
                // Check if ObjOne has been hit, updates destroy bool
                (*objOneIt)->isHit(*(*objTwoIt));					
             }
-            // If ObjOne has not been hit, but ObjTwo has already been hit,
+            // If ObjTwo has not been marked, but ObjOne already has,
             else if ((!(*objTwoIt)->getDestroyed() && (*objOneIt)->getDestroyed()))
             {
                // Check if ObjTwo has been hit, updates destroy bool

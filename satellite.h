@@ -19,6 +19,9 @@ class TestSatellite;
 const double DEFECTIVE_SPIN_ANGLE = 0.1;
 #endif
 
+// 1 / DEFECTIVE_CHANCE
+const int DEFECTIVE_CHANCE = 6;
+
 /*********************************************
  * Satellite
  * An object in space that can collide with other objects in
@@ -33,7 +36,7 @@ public:
 	{ 
 		this->radius = 10; // The Collision Object's radius in pixels
 		this->numFragments = 2;		// The number of Fragments to break apart into
-		this->defective = false;	// If the Satellite will spin
+		this->defective = random(0, DEFECTIVE_CHANCE) > DEFECTIVE_CHANCE - 1 ? true : false;	// Randomly deciedes if the Satellite will spin (overriden for Ship)
 	};
 
 	virtual void update(double time, double gravity, double planetRadius) {
@@ -41,7 +44,8 @@ public:
 		if (defective)
 		{
 			// Add defective spin to the Satellite divided by simulator time.
-			this->rotationAngle += DEFECTIVE_SPIN_ANGLE / 48;
+			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
+				/// 48;
 		}
 
 		// Then update normally

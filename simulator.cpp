@@ -8,11 +8,9 @@
  ************************************************************************/
 #include "simulator.h"
 
-const double SHIP_ACCELERATION = 30.0; 
-
 /*********************************************
- * Simulator
- * Handles running the orbital simulation.
+ * GET INPUT
+ * Handles key input from the user, given the Interface
  *********************************************/
 void Simulator::getInput(const Interface* pUI)
 {
@@ -23,36 +21,23 @@ void Simulator::getInput(const Interface* pUI)
    // Check that the Spaceship is still in the Simulation
    if (this->ship != NULL)
    {
-      Velocity addedVelocity = Velocity();  // The Velocity to be added
       Angle shipRotation = 0.0;  // The change in rotation
 
-      // Get the user's input
-      // Ship turning
-      // TODO: Normalize not working properly?
+      // Ship turning (left and right arrows)
+      // TODO: Normalize not working properly? <-- That's why the ship is resetting to 0
       if (pUI->isLeft())
          shipRotation.setDegree(-0.1);
       if (pUI->isRight())
          shipRotation.setDegree(0.1);
       ship->addRotation(shipRotation);
 
-      // TODO: Acceleration math
-      // 3600 (sim) to 1 seconds (real), 30FPS
-
-      // Set if the ship's thruster is on
-      if (pUI->isDown()) {
-         // Accelerate 30.0 m/s^2 in facing direction
-         addedVelocity.addMeters(SHIP_ACCELERATION / TIME, ship->getRotation());
+      // Set if the ship's thruster is on (down arrow)
+      if (pUI->isDown())
          ship->setThrust(true);
-      }
       else
          ship->setThrust(false);
 
-      // Add Velocity to the Ship according to the user's input
-      // NewVel = InitialVel + acceleration * time
-      // AddedVel = acceleration * TIME
-      ship->addVelocity(addedVelocity);
-
-      // Check for Bullet shooting
+      // Check for Bullet shooting (spacebar)
       if (pUI->isSpace())
       {
          // Create a new bullet in front of the Spaceship
@@ -60,14 +45,9 @@ void Simulator::getInput(const Interface* pUI)
       }
    }
 
-   /* TESTING: toggle debug view <-- would have to add more key checks to Interface
-   * // Would also have to move debug bool to Simulator
-   if (pUI)
-   {
-      this->debug = true;
+   // EXTRA: Toggle debug view (up arrow)
+   if (pUI->isUp())
       this->debug = debug ? false : true;
-   }
-   */
 }
 
 vector<Object*> Simulator::getObjects() {
