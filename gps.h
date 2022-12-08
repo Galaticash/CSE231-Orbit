@@ -49,8 +49,12 @@ public:
    *********************************************/
    void update(double time, double gravity, double planetRadius)
    {
-      // GPS will rotate to face the Earth (direction of gravity)
-      this->rotationAngle.setDegree(gravityDirection(pos.getMetersX(), pos.getMetersY()) + GPS_ROTATION_OFFSET);
+      // Don't update rotation if the satellite has become defective.
+      if (!defective)
+      {
+         // GPS will rotate to face the Earth (direction of gravity)
+         this->rotationAngle.setDegree(gravityDirection(pos.getMetersX(), pos.getMetersY()) + GPS_ROTATION_OFFSET);
+      }
       Satellite::update(time, gravity, planetRadius);
    }
 };

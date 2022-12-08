@@ -13,16 +13,14 @@
 
 class TestSatellite; // For test Cases
 
-
 #ifndef DEFECTIVE_VARIABLES
 #define DEFECTIVE_VARIABLES
-// There is a 1 / DEFECTIVE_CHANCE of a Satellite spinning wildly
-const int DEFECTIVE_CHANCE = 6;
+// 1 in 10,000 creates a good amount of time between different satellites becoming defective.
+const int DEFECTIVE_CHANCE = 10000;
 
 // The amount of spin added to a defective Satellite
 const double DEFECTIVE_SPIN_ANGLE = 0.1;
 #endif
-
 
 /*********************************************
  * Satellite
@@ -36,18 +34,21 @@ public:
 
 	Satellite(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
 	{ 
-		this->radius = 10; // The Collision Object's radius in pixels
-		this->numFragments = 2;		// The number of Fragments to break apart into
-		this->defective = random(0, DEFECTIVE_CHANCE) >= DEFECTIVE_CHANCE - 1 ? true : false;	// Randomly deciedes if the Satellite will spin (overriden for Ship)
+		this->radius = 10;		// The Collision Object's radius in pixels
+		this->numFragments = 2; // The number of Fragments to break apart into
+		this->defective = 0;		// Satellites aren't initially defective
 	};
 
 	virtual void update(double time, double gravity, double planetRadius) {
+		// Becomes defective at a random time when running the sim.
+		if (!defective)
+			defective = random(0, DEFECTIVE_CHANCE) == DEFECTIVE_CHANCE -1 ? true : false;
+
 		// If the Satellite is defective,
 		if (defective)
 		{
-			// Add defective spin to the Satellite divided by simulator time.
+			// Add defective spin to the Satellite
 			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
-				/// 48;
 		}
 
 		// Then update normally
