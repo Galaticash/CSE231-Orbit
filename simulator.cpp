@@ -75,40 +75,25 @@ void Simulator::update()
       // If it has been marked for destruction,
       //  (either from a collision or a timer expiring)
       if ((*it)->getDestroyed())
-      {
          // Add to list of objects to break apart
          destroyObjs.push_back(*it);
-      }
 
       // Otherwise, has not been destroyed, update Position
+      //  (NOTE: Converts the Earth's radius from Pixels to Meters using zoom)
       else
-      {
-         // Update the position of the Collision Object
-         //   given the time passed, gravity, and Earth's radius.
-         //   Convert the Earth's radius from Pixels to Meters
-         (*it)->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * DEFAULT_ZOOM));
-      }
+         (*it)->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * Position().getZoom()));
    }
 
    // For every Collision Object that has been marked for destruction,
    for (vector<CollisionObject*>::iterator it = destroyObjs.begin(); it != destroyObjs.end(); it++)
-   {
       // Break the object apart, adding their subParts to the Simulator's list of collisionObjects
-      CollisionObject* obj = *it;
+      ((CollisionObject*)(*it))->breakApart(this);
 
-      // DEBUG: What objects have been destroyed
-      string objType = typeid(*obj).name();
-      cout << objType << " destroyed" << endl;
-
-      obj->breakApart(this);
-   }
-   destroyObjs.clear();
+   destroyObjs.clear(); // Clear the vector of Collision Objects
 
    // Updates the frame of all the Stars
    for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
-   {
       (*it).update(this->timeDialation);
-   }
 }
 
 /******************************
@@ -147,13 +132,13 @@ void Simulator::updateCollisions() {
    //int innerCount = 0; // 66 <-- comparisons (12 + 11 + 10 + 9..)
 
    // For every Collison Object in the Simulator's collisionObjects,
-   for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
+   for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++) 
    {
-      // Check against every object except itself
-      for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
+      // For every Collison Object in the Simulator's collisionObjects,
+      for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
       {
-         // If neither object has been marked for destruction,
-         if (!(*objOneIt)->getDestroyed() && !(*objTwoIt)->getDestroyed())
+         // Check against every object except itself
+         for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
          {
             // Check if the two Objects have hit eachother,
             if ((*objOneIt)->isHit(*(*objTwoIt)))
@@ -162,18 +147,6 @@ void Simulator::updateCollisions() {
                (*objTwoIt)->setDestroyed(true);
             }
          }
-         // If ObjOne has not been marked, but ObjTwo already has,
-         else if ((!(*objOneIt)->getDestroyed() && (*objTwoIt)->getDestroyed()))
-         {
-            // Check if ObjOne has been hit, updates destroy bool
-            (*objOneIt)->isHit(*(*objTwoIt));
-         }
-         // If ObjTwo has not been marked, but ObjOne already has,
-         else if ((!(*objTwoIt)->getDestroyed() && (*objOneIt)->getDestroyed()))
-         {
-            // Check if ObjTwo has been hit, updates destroy bool
-            (*objTwoIt)->isHit(*(*objOneIt));
-         }
       }
-   }
+   };
 };

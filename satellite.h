@@ -15,8 +15,8 @@ class TestSatellite; // For test Cases
 
 #ifndef DEFECTIVE_VARIABLES
 #define DEFECTIVE_VARIABLES
-// 1 in 10,000 creates a good amount of time between different satellites becoming defective.
-const int DEFECTIVE_CHANCE = 10000;
+// 1 in 5,000 creates a good amount of time between different satellites becoming defective.
+const int DEFECTIVE_CHANCE = 5000;
 
 // The amount of spin added to a defective Satellite
 const double DEFECTIVE_SPIN_ANGLE = 0.1;
@@ -45,18 +45,7 @@ public:
 	* Satellites that are defective will spin, and those
 	* that aren't defective have a random chance to beceome defective
 	********************************************/
-	virtual void update(double time, double gravity, double planetRadius) {
-		// If the Satellite is defective,
-		if (defective)
-			// Add defective spin to the Satellite
-			this->rotationAngle += DEFECTIVE_SPIN_ANGLE;
-		else
-			// Has a random chance of becoming defective when running the sim.
-			defective = random(0, DEFECTIVE_CHANCE) == DEFECTIVE_CHANCE - 1 ? true : false;
-
-		// Then update normally
-		CollisionObject::update(time, gravity, planetRadius);
-	}
+	virtual void update(double time, double gravity, double planetRadius);
 
 	// The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)
 	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {})
@@ -68,7 +57,7 @@ public:
 		//  to the simulator, then delete self
 		CollisionObject::breakApart(sim, subParts);	
 	}
-	*/
+	
 protected:
 	bool defective;	// If the Satellite will be given a defective spin
 };

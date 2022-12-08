@@ -47,20 +47,7 @@ public:
 	* Checks if this Collision Object has come
 	* in contact with a given Collision Object
 	********************************************/
-	bool isHit(const CollisionObject &other) {
-		// Check if the pixels between the two objects are 
-		//  less than their combined radii, destroy if colliding
-		double pixelsBetween = this->pos.pixelsBetween(other.pos);
-		bool collision = pixelsBetween <= (other.radius + this->radius);
-
-		// If the Object has not already been marked for destruction,
-		if (!destroyed)
-			// Mark this Object for destruction if there was a hit
-			this->destroyed = collision;
-
-		// Return if this Collision Object has collided with the other
-		return collision;
-	};
+	bool isHit(const CollisionObject& other);
 
 	// Getters and setters
 	void setDestroyed(bool destroy) { this->destroyed = destroy; };

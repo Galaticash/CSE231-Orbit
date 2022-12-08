@@ -16,20 +16,18 @@
 * Checks if this Collision Object has hit a given Collision Object
 ************************************/
 bool CollisionObject::isHit(const CollisionObject& other) {
-   // Check if the pixels between the two objects are 
-   //  less than their combined radii, destroy if colliding
-   double pixelsBetween = this->pos.pixelsBetween(other.pos);
-   bool collision = pixelsBetween <= (other.radius + this->radius);
+	// Check if the pixels between the two objects are 
+	//  less than their combined radii, destroy if colliding
+	double pixelsBetween = this->pos.pixelsBetween(other.pos);
+	bool collision = pixelsBetween <= (other.radius + this->radius);
 
-   // If the Object has not already been marked for destruction,
-   if (!destroyed)
-      // The current collision state defines if
-      //  the Object is to be destroyed
-      //  (prevents true --> false error)
-      this->destroyed = collision;
+	// If the Object has not already been marked for destruction,
+	if (!destroyed)
+		// Mark this Object for destruction if there was a hit
+		this->destroyed = collision;
 
-   // Return if this Collision Object has collided with other
-   return collision;
+	// Return if this Collision Object has collided with the other
+	return collision;
 };
 
 /******************************************

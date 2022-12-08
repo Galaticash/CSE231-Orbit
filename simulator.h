@@ -140,41 +140,7 @@ public:
    * Updates all items in the simulator, according to the amount of
    * time that has passed and the affect of Earth's gravity
    ********************************************/
-   void update()
-   {
-      // Collect all objects that are marked for destruction
-      vector<CollisionObject*> destroyObjs = {};
-
-      // Check for collisions between the Simulator's collisionObjects,
-      //  will update the destroyed bool for any that collide
-      updateCollisions();
-
-      // For every Collision Object in the Simulator,
-      for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
-      {
-         // If it has been marked for destruction,
-         //  (either from a collision or a timer expiring)
-         if ((*it)->getDestroyed())
-            // Add to list of objects to break apart
-            destroyObjs.push_back(*it);
-
-         // Otherwise, has not been destroyed, update Position
-         //  (NOTE: Converts the Earth's radius from Pixels to Meters using zoom)
-         else
-            (*it)->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * Position().getZoom()));
-      }
-
-      // For every Collision Object that has been marked for destruction,
-      for (vector<CollisionObject*>::iterator it = destroyObjs.begin(); it != destroyObjs.end(); it++)
-         // Break the object apart, adding their subParts to the Simulator's list of collisionObjects
-         ((CollisionObject*)(*it))->breakApart(this);
-      
-      destroyObjs.clear(); // Clear the vector of Collision Objects
-
-      // Updates the frame of all the Stars
-      for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
-         (*it).update(this->timeDialation);
-   }
+   void update();
 
    vector<Object*> getObjects(); // Get all Objects to be drawn
 
@@ -193,20 +159,5 @@ protected:
    * UPDATE COLLISIONS
    * Checks for collisions between this Simulator's collisionObjects
    ********************************************/
-   void updateCollisions() {
-      // For every Collison Object in the Simulator's collisionObjects,
-      for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
-      {
-         // Check against every object except itself
-         for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
-         {
-            // Check if the two Objects have hit eachother,
-            if ((*objOneIt)->isHit(*(*objTwoIt)))
-            {
-               // Tell the second object it was also hit
-               (*objTwoIt)->setDestroyed(true);
-            }
-         }
-      }
-   };
+   void updateCollisions(); 
 };
