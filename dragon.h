@@ -24,7 +24,7 @@ class Dragon : public Satellite
 public:
    Dragon(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Satellite(pos, vel, angle)
    {
-      this->radius = 12; // Radius in pixels;
+      this->radius = 7; // Radius in pixels;
       this->numFragments = 2;
    };
 

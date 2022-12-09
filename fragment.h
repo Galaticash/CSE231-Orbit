@@ -18,6 +18,8 @@
 const int FRAGMENT_LIFETIME_MIN = 50;
 const int FRAGMENT_LIFETIME_MAX = 100;
 
+const double FRAGMENT_ROTATION = .075;  // Fragments rotate wildly
+
 /*********************************************
  * Fragment
  * A piece from a destroyed satellite or a destroyed part.
@@ -33,6 +35,7 @@ public:
    Fragment(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
    { 
       this->lifetime =  random(FRAGMENT_LIFETIME_MIN, FRAGMENT_LIFETIME_MAX); // Give Fragment a random lifetime
+      this->rotationAngle = random(0.0, 2.0 * M_PI);
       this->radius = 2;
    };
 
@@ -45,7 +48,10 @@ public:
       if (isExpired())
          this->destroyed = true; // The object is to be destroyed
       else
+      {
+         this->rotationAngle += FRAGMENT_ROTATION;
          CollisionObject::update(time, gravity, radius); // Update normally
+      }
    }
 
    void breakApart(Simulator* sim);

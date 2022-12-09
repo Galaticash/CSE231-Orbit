@@ -10,8 +10,14 @@
 #pragma once
 #include "fragment.h"
 
+ // How far ahead a Bullet is placed in front of the Spaceship (in pixels)
 const double ADDED_POSITION = 19.0;
-const double ADDED_VELOCITY = 9000.0;
+
+// How much speed is added to a Bullet (in m/s)
+const double ADDED_VELOCITY = 9000.0; 
+
+// Lifetime of a Bullet (in frames)
+const int BULLET_LIFETIME = 70;
 
 class TestBullet;
 
@@ -22,34 +28,16 @@ class TestBullet;
 class Bullet : public Fragment
 {
 public:
-   friend TestBullet;
+   friend TestBullet;  // For testing
    Bullet(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : Fragment(pos, vel, angle) {
    
-      this->lifetime = 70; // Measured in frames.
+      this->lifetime = BULLET_LIFETIME; // Measured in frames.
       this->radius = 1;
+      this->rotationAngle = 0.0;
       
-      /*
-      TODO: Pyth theorem
-      this->pos.addPixels(ADDED_POSITION_PX);
-      this->pos.addPixelsX(ADDED_POSITION_PX);
-      this->pos.addPixelsY(ADDED_POSITION_PX);
-      
-      TODO: Pyth theorem
-      this->vel.addMeters(ADDED_VELOCITY_M);
-      this->vel.addMetersX(ADDED_VELOCITY_M);
-      this->vel.addMetersY(ADDED_VELOCITY_M);
-      */
-
-      // TODO: Move the pythagorean theorem out of object and into 2DPosition and rename.
-      // Add 9000.0 m/s to velocity from ship. Position is 19 pixels in front of the ship.
-      double dx = this->horizontalAcceleration(ADDED_VELOCITY, angle.getDegree());
-      double dy = this->verticalAcceleration(ADDED_VELOCITY, angle.getDegree());
-      double x = this->horizontalAcceleration(ADDED_POSITION, angle.getDegree());
-      double y = this->verticalAcceleration(ADDED_POSITION, angle.getDegree());
-
-      this->pos.addPixelsX(x);
-      this->pos.addPixelsY(y);
-      this->vel.addMetersX(dx);
-      this->vel.addMetersY(dy); 
+      // Place the Bullet 19 pixels ahead of the Spaceship (given Position)
+      //  and add 9000 m/s to the Spaceship's Velocity (given Velcoity)
+      this->pos.addPixels(ADDED_POSITION, angle);
+      this->vel.addMeters(ADDED_VELOCITY, angle);
    };
 };

@@ -9,25 +9,22 @@
  *		for collisions between objects.
  ************************************************************************/
 #pragma once
-#include "uiInteract.h"
+#include "uiInteract.h" // To get user input
+
+// Objects used in the Simulator
 #include "star.h"
 #include "earth.h"
 #include "bullet.h"
+#include "spaceship.h"
 
 // Specific types of Satellites
-#include "spaceship.h"
 #include "hubble.h"
 #include "starlink.h"
 #include "sputnik.h"
 #include "gps.h"
 #include "dragon.h"
 
-// Simulation Information
 const double TIME = 48;         // Real-world seconds between frames
-
-// Constants for GEO Orbit
-const double GEO_HEIGHT = 35786000.0 + EARTH_RADIUS; // GEO orbit, items here should match Earth's rotation
-const double GEO_VELOCITY_X = -3100.0;  // moving 3.1 km/s (to the left in this example)
 
 /*********************************************
  * Simulator
@@ -41,7 +38,9 @@ public:
 
       createStars(500); // Create a given number of Stars
 
-      this->timeDialation = TIME;
+      this->timeDialation = TIME;  // Set this Simulator's time dialation
+
+      this->debug = true; // TESTING
    };
 
    /*************************************
@@ -51,7 +50,7 @@ public:
    void addObjects()
    {
       // Create and add the user-controlled Spaceship
-      Position shipInitial = Position(); // Position given in pixels
+      Position shipInitial = Position(); // Set Position in pixels
       shipInitial.setPixelsX(-450);
       shipInitial.setPixelsY(450);
       this->ship = new Spaceship(shipInitial, Velocity(0.0, -2000.0));

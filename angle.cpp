@@ -19,7 +19,7 @@
 *************************************/
 void Angle::normalize()
 {
-   if (radAngle > 2)
+   if (radAngle > 2 * M_PI)
    {
       // cycleOffset is the number of full cycles the angle will need to be
       // turned back to fit within the range

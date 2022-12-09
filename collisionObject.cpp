@@ -122,7 +122,7 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 
 		// Give each subPart a slightly different angle from the initial
 		// Ex: +1/4PI, +2/4PI... etc or 1/3PI + 2/3PI.. etc
-		newAngle += Angle(((i * PI) / (subParts + numFragments)));
+		newAngle += Angle(((i * M_PI) / (subParts + numFragments)));
 
 		// Add bewteen 5000 and 9000 m/s to this subPart's velocity
 		newVel.addMeters(random(5000.0, 9000.0), newAngle);

@@ -17,9 +17,10 @@
 #include <cassert>
 #endif  // To make assertions
 
-// TODO: Since including for random, should each Object have a "draw" method and just copy the methods in uiDraw?
-// (Would make it more cohesive, Objects draw themselves instead of using the typeID)
-#include "uiDraw.h" // To use random
+#include "uiDraw.h" // To use random (TODO: Put in a separate file?)
+
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 using namespace std;
 class TestSatellite;
@@ -49,10 +50,6 @@ public:
    ********************************************/
    virtual void update(double time, double gravity, double planetRadius)
    {
-      // ** QUESTION ** //
-      // Would it be better to pass in Earth, or just the relevant attributes from Earth?
-      // TODO: Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
-
       // Calculates the current angle and distance from the Earth (0, 0)
       double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
       double height = heightAbovePlanet(this->pos.getMetersX(), this->pos.getMetersY(), planetRadius);
@@ -87,7 +84,7 @@ public:
    void addVelocity(double velX, double velY) { this->vel.addMetersX(velX); this->vel.addMetersY(velY); };
    
    // Add Rotation and get Rotation
-   void addRotation(Angle newRotation) { rotationAngle += newRotation; };
+   void addRotation(Angle change) { rotationAngle += change; };
    Angle getRotation()     const { return this->rotationAngle; }
    
 protected:

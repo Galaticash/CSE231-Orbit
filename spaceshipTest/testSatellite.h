@@ -179,9 +179,9 @@ private:
 		srand(randomSeed); // Seed the random
 
 		// IMPORTANT: Ensure seeded random is in the same place
-		// random() is also called within breakApart for every Fragment created
+		// random() is called when a Fragment is created (both for fragment lifetime and initial rotation)
 		for (int i = 0; i < testSatellite->numFragments; i++)
-			random(0, 1);
+			Fragment();
 
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
@@ -252,9 +252,9 @@ private:
 		srand(randomSeed); // Seed the random
 
 		// IMPORTANT: Ensure seeded random is in the same place
-		// random() is also called within breakApart for every Fragment created
+		// random() is called when a Fragment is created (both for fragment lifetime and initial rotation)
 		for (int i = 0; i < testSatellite->numFragments; i++)
-			random(0, 1);
+			Fragment();
 
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);
@@ -322,9 +322,9 @@ private:
 		srand(randomSeed); // Seed the random
 
 		// IMPORTANT: Ensure seeded random is in the same place
-		// random() is also called within breakApart for every Fragment created
+		// random() is called when a Fragment is created (both for fragment lifetime and initial rotation)
 		for (int i = 0; i < testSatellite->numFragments; i++)
-			random(0, 1);
+			Fragment();
 
 		// Find the expected part directions and positions
 		vector<Velocity> expectedDirections = testSatellite->getSubPartVel(expectedSubParts);

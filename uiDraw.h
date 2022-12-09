@@ -133,7 +133,7 @@ void drawShip(const Position& center, double rotation, bool thrust);
 
 void drawDirection(const Position& center, const double radius, const Angle angle);
 void drawCircle(const Position& center, const double raidus);
-void drawLine(const Position& one, const Position& two);
+void drawLine(const Position& one, const Position& two, const int* color);
 
 /************************************************************************
  * DRAW Earth

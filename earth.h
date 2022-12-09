@@ -15,18 +15,13 @@
 /*********************
 * CONSTANTS
 *************************/
-// Math Information
-const double PI = 3.1415926;            // The value of Pi
-
-// TODO: I'm sure there's a better way to calculate framerate
-//  (maybe using gl's framerate or something), but this will do for now
 // Simulator Information
 const double FPS = 30;                    // The number of frames drawn per second     
 const double TIME_DILATION = 24 * 60;     // One minute in simulator = One day in real world
 
 // Planet Information
 const double SECONDS_DAY = 24 * 60 * 60; // 24 hours * 60 minutes * 60 seconds
-const double ROTATION_SPEED = -(2 * PI / FPS) * TIME_DILATION / SECONDS_DAY;
+const double ROTATION_SPEED = -(2 * M_PI / FPS) * TIME_DILATION / SECONDS_DAY;
 
 const double GRAVITY = -9.8067;           // Gravity constant in m/s^2
 const double EARTH_RADIUS = 6378000.0;    // meters
