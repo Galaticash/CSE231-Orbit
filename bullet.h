@@ -27,18 +27,6 @@ public:
    
       this->lifetime = 70; // Measured in frames.
       this->radius = 1;
-      
-      /*
-      TODO: Pyth theorem
-      this->pos.addPixels(ADDED_POSITION_PX);
-      this->pos.addPixelsX(ADDED_POSITION_PX);
-      this->pos.addPixelsY(ADDED_POSITION_PX);
-      
-      TODO: Pyth theorem
-      this->vel.addMeters(ADDED_VELOCITY_M);
-      this->vel.addMetersX(ADDED_VELOCITY_M);
-      this->vel.addMetersY(ADDED_VELOCITY_M);
-      */
 
       // TODO: Move the pythagorean theorem out of object and into 2DPosition and rename.
       // Add 9000.0 m/s to velocity from ship. Position is 19 pixels in front of the ship.
@@ -46,7 +34,7 @@ public:
       double dy = this->verticalAcceleration(ADDED_VELOCITY, angle.getDegree());
       double x = this->horizontalAcceleration(ADDED_POSITION, angle.getDegree());
       double y = this->verticalAcceleration(ADDED_POSITION, angle.getDegree());
-
+      
       this->pos.addPixelsX(x);
       this->pos.addPixelsY(y);
       this->vel.addMetersX(dx);

@@ -16,7 +16,7 @@
 * CONSTANTS
 *************************/
 // Math Information
-const double PI = 3.1415926;            // The value of Pi
+const double PI = 3.1415926;              // The value of Pi
 
 // TODO: I'm sure there's a better way to calculate framerate
 //  (maybe using gl's framerate or something), but this will do for now
@@ -44,8 +44,12 @@ public:
       this->gravity = GRAVITY;
    };
    
+   /********************************
+   * UPDATE
+   * When the Earth gets updated, it will 
+   * not move. Only rotate.
+   ***************************************/
    void update(double time, double gravity = 0.0, double radius = 0.0) { 
-      // The Earth will not move, only rotate
       Angle test;
       test.setDegree(ROTATION_SPEED);
       this->rotationAngle += test.getRadian();

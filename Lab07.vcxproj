@@ -142,9 +142,12 @@
     <ClCompile Include="angle.cpp" />
     <ClCompile Include="collisionObject.cpp" />
     <ClCompile Include="fragment.cpp" />
+    <ClCompile Include="gps.cpp" />
     <ClCompile Include="Lab07.cpp" />
     <ClCompile Include="customRandom.h" />
+    <ClCompile Include="object.cpp" />
     <ClCompile Include="satellite.cpp" />
+    <ClCompile Include="spaceship.cpp" />
     <ClCompile Include="twoDValue.cpp" />
     <ClCompile Include="simulator.cpp" />
     <ClCompile Include="uiDraw.cpp" />

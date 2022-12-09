@@ -12,11 +12,25 @@
 #include "fragment.h"
 #include "simulator.h"
 
- /*****************************
- * BREAK APART
- * Gets rid of the fragment since
- * it doesn't break apart.
- ****************************/
+/*****************************
+* UPDATE
+* This update checks if the object has expired.
+* If they are, set that they need to be destroyed.
+* Update normally regardless of expiration.
+****************************/
+void Fragment::update(double time, double gravity, double radius) {
+   // Check if the timer has run out
+   if (isExpired())
+      this->destroyed = true; // The object is to be destroyed
+   else
+      CollisionObject::update(time, gravity, radius); // Update normally
+}
+
+/*****************************
+* BREAK APART
+* Gets rid of the fragment since
+* it doesn't break apart.
+****************************/
 void Fragment::breakApart(Simulator* sim) {
    sim->removeCollider(this); // Remove pointer to self
    delete this; // Delete self

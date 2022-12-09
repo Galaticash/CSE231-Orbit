@@ -47,14 +47,5 @@ public:
    * The GPS satelite will always point to the earth,
    * so it's rotation must match that of the earth.
    *********************************************/
-   void update(double time, double gravity, double planetRadius)
-   {
-      // Don't update rotation if the satellite has become defective.
-      if (!defective)
-      {
-         // GPS will rotate to face the Earth (direction of gravity)
-         this->rotationAngle.setDegree(gravityDirection(pos.getMetersX(), pos.getMetersY()) + GPS_ROTATION_OFFSET);
-      }
-      Satellite::update(time, gravity, planetRadius);
-   }
+   void update(double time, double gravity, double planetRadius);
 };

@@ -34,7 +34,6 @@ public:
    TwoDValue(const TwoDValue& pt) : TwoDValue(pt.x, pt.y) {};
 
    /* OPERATORS */
-
    TwoDValue& operator = (const TwoDValue& twoD) {
       this->x = twoD.x;
       this->y = twoD.y;
@@ -75,26 +74,14 @@ public:
    void setPixelsY(double yPixels) { y = yPixels * metersFromPixels; }
 
    // Given an overall change in Meters and an Angle (degrees), adjust x and y values
-   void addMeters(double change, Angle angle) {
-      double yVal = change * cos(angle.getDegree());
-      double xVal = change * sin(angle.getDegree());
-
-      this->addMetersX(xVal);
-      this->addMetersY(yVal);
-   };
+   void addMeters(double change, Angle angle);
 
    // Given Meters, adjusts the X or Y value
    void addMetersX(double dxMeters) { setMetersX(getMetersX() + dxMeters); }
    void addMetersY(double dyMeters) { setMetersY(getMetersY() + dyMeters); }
    
    // Given an overall change in Meters and an Angle (degrees), adjust x and y values
-   void addPixels(double change, Angle angle){
-      double yVal = change * cos(angle.getDegree());
-      double xVal = change * sin(angle.getDegree());
-
-      this->addPixelsX(xVal);
-      this->addPixelsY(yVal);
-   }
+   void addPixels(double change, Angle angle);
 
    // Given Pixels, adjusts the X or Y value
    void addPixelsX(double dxPixels) { setPixelsX(getPixelsX() + dxPixels); }
@@ -115,16 +102,7 @@ public:
    }
 
    // Get the angle between the x and y values
-   Angle getAngle() {
-      if (x == 0 && y == 0)
-      {
-         return Angle(0);
-      }
-
-      // Sin A = opposite / hyp
-      double sine = this->y / getTotal();
-      return Angle(asin(sine));
-   }
+   Angle getAngle();
 
 protected:
    double x;

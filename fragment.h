@@ -40,13 +40,7 @@ public:
    // Decrements whenever it is called, which should be once per frame.
    bool isExpired() { if (lifetime <= 0) return true; else { lifetime--; return false; } }
    
-   void update(double time, double gravity, double radius) {
-      // Check if the timer has run out
-      if (isExpired())
-         this->destroyed = true; // The object is to be destroyed
-      else
-         CollisionObject::update(time, gravity, radius); // Update normally
-   }
+   void update(double time, double gravity, double radius);
 
    void breakApart(Simulator* sim);
 

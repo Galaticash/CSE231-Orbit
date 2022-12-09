@@ -21,7 +21,4 @@ class Velocity : public TwoDValue
 {
 public:
    Velocity(double horizontal = 0.0, double vertical = 0.0) : TwoDValue(horizontal, vertical) {};
-
-private:
-
 };
