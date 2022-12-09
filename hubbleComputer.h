@@ -23,6 +23,4 @@ public:
       this->radius = 7; // Radius in pixels
       this->numFragments = 2;
    };
-/*private:
-   createVisual()*/
 };

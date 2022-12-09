@@ -30,34 +30,37 @@ const double DEFECTIVE_SPIN_ANGLE = 0.05;
 class Satellite : public CollisionObject
 {
 public:
-	friend TestSatellite; // For test cases
+   friend TestSatellite; // For test cases
 
-	Satellite(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
-	{ 
-		this->radius = 10;		// The Collision Object's radius in pixels
-		this->numFragments = 2; // The number of Fragments to break apart into
-		this->defective = 0;		// Satellites aren't initially defective
-	};
+   Satellite(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle) 
+   { 
+      this->radius = 10;		// The Collision Object's radius in pixels
+      this->numFragments = 2; // The number of Fragments to break apart into
+      this->defective = 0;		// Satellites aren't initially defective
+   };
 
-	/******************************************
-	* UPDATE
-	* Updates the position and velocity of the Object
-	* Satellites that are defective will spin, and those
-	* that aren't defective have a random chance to beceome defective
-	********************************************/
-	virtual void update(double time, double gravity, double planetRadius);
+   /******************************************
+   * UPDATE
+   * Updates the position and velocity of the Object
+   * Satellites that are defective will spin, and those
+   * that aren't defective have a random chance to beceome defective
+   ********************************************/
+   virtual void update(double time, double gravity, double planetRadius);
 
-	// The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)
-	virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {})
-	{
-		// Given a list of all the Parts this Satellite will break into,
-		//  where each type of Satellite has its own unique Parts list
-
-		// Add all the Parts and Fragments (from numFragments), 
-		//  to the simulator, then delete self
-		CollisionObject::breakApart(sim, subParts);	
-	}
+   /**************************************
+   * BREAK APART
+   * Is given a list of all the Parts this Satellite will break 
+   * into, where each type of Satellite has its own unique Parts 
+   * list (ex. Hubble breaks apart into a telescope, center, left, 
+   * and right). Add all the Parts and Fragments (from numFragments), 
+   * to the simulator, then delete self.
+   **********************************************/
+   // The Satellite will break into Parts (depends on type of Satellite: Hubble, Starlink)
+   virtual void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {})
+   {
+      CollisionObject::breakApart(sim, subParts);
+   }
 	
 protected:
-	bool defective;	// If the Satellite will be given a defective spin
+   bool defective;	// If the Satellite will be given a defective spin
 };

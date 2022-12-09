@@ -28,7 +28,7 @@ using namespace std;
 void drawObjectFunc(const Object* obj)
 {
    string objType = typeid(*obj).name();
-   //cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
+   // DEBUG: cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
 
    // TODO: Should colorRects/Shapes be used instead?
 
@@ -40,7 +40,6 @@ void drawObjectFunc(const Object* obj)
    else if (objType == "class Earth")
    {
       drawEarth(obj->getPosition(), obj->getRotation().getDegree());
-
       //drawObject(obj); // ERROR: rotates drawing around incorrect point
    }
    else if (objType == "class Star")
@@ -99,7 +98,8 @@ void drawObjectFunc(const Object* obj)
    // Draw Fragments
    else if (objType == "class Fragment")
       drawFragment(obj->getPosition(), obj->getRotation().getDegree());
-   
+
+   // Error case
    else
    {
       // ERROR: No drawing instance for object,

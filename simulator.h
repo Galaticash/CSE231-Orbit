@@ -35,7 +35,6 @@ public:
    Simulator()
    {
 	   addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
-
       createStars(500); // Create a given number of Stars
 
       this->timeDialation = TIME;  // Set this Simulator's time dialation
@@ -47,57 +46,13 @@ public:
    * ADD OBJECTS
    * Adds Objects to the simulator
    ***************************************/
-   void addObjects()
-   {
-      // Create and add the user-controlled Spaceship
-      Position shipInitial = Position(); // Set Position in pixels
-      shipInitial.setPixelsX(-450);
-      shipInitial.setPixelsY(450);
-      this->ship = new Spaceship(shipInitial, Velocity(0.0, -2000.0));
-      addCollider(ship);
-		
-      // Create and add the Earth at the center of the Simulation
-      this->planet = new Earth();
-      addCollider(planet);
-		
-      // Sputnik
-      addCollider(new Sputnik(Position(-36515095.13, 21082000.0), Velocity(2050.0, 2684.68)));
-
-      // GPS
-      addCollider(new GPS(Position(0.0, 26560000.0), Velocity(-3880.0, 0.0)));
-      addCollider(new GPS(Position(23001634.72, 13280000.0), Velocity(-1940.00, 3360.18)));
-      addCollider(new GPS(Position(23001634.72, -13280000.0), Velocity(1940.00, 3360.18)));
-      addCollider(new GPS(Position(0.0, -26560000.0), Velocity(3880.0, 0.0)));
-      addCollider(new GPS(Position(-23001634.72, -13280000.0), Velocity(1940.00, -3360.18)));
-      addCollider(new GPS(Position(-23001634.72, 13280000.0), Velocity(-1940.00, -3360.18)));
-
-      // Hubble
-      addCollider(new Hubble(Position(0.0, -42164000.0), Velocity(3100.0, 0.0)));
-
-      // Dragon
-      addCollider(new Dragon(Position(0.0, 8000000.0), Velocity(-7900.0, 0.0)));
-
-      // StarLink
-      addCollider(new Starlink(Position(0.0, -13020000.0), Velocity(5800.0, 0.0)));	
-   }
+   void addObjects();
 
    /******************************************
    * CREATE STARS
    * Given a number of Stars, creates and scatters them across the screen
    ********************************************/
-   void createStars(int numStars) 
-   {
-      // Create the given number of stars
-      for (int i = 0; i < numStars; i++)
-      {
-         // screen is 1,000 x 1,000 pixels.
-         Position initial;
-         initial.setPixelsX(random(-500, 500));
-         initial.setPixelsY(random(-500, 500));
-         
-         this->stars.push_back(Star(initial));
-      }
-   };
+   void createStars(int numStars);
 
    /******************************************
    * ADD COLLIDER
@@ -109,15 +64,7 @@ public:
    * REMOVE COLLIDER
    * Removes a pointer to a given Collision Object from the Simulators's collection
    ********************************************/
-   void removeCollider(CollisionObject* removeObj) { 
-      // If the given pointer is in the vector, remove it
-      vector<CollisionObject*>::iterator removeIt = find(collisionObjects.begin(), collisionObjects.end(), removeObj);
-      if (removeIt != collisionObjects.end())
-      {
-         //delete* removeIt; // Not in charge of deleting the object
-         this->collisionObjects.erase(removeIt);
-      }
-   };
+   void removeCollider(CollisionObject* removeObj);
 
    /******************************************
    * CREATE BULLET

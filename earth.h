@@ -39,8 +39,12 @@ public:
       this->gravity = GRAVITY;
    };
    
+   /********************************
+   * UPDATE
+   * When the Earth gets updated, it will 
+   * not move. Only rotate.
+   ***************************************/
    void update(double time, double gravity = 0.0, double radius = 0.0) { 
-      // The Earth will not move, only rotate
       Angle test;
       test.setDegree(ROTATION_SPEED);
       this->rotationAngle += test.getRadian();

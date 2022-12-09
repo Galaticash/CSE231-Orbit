@@ -24,8 +24,6 @@ class Part : public CollisionObject
 public:
    Part(Position pos = Position(), Velocity vel = Velocity(), Angle angle = Angle()) : CollisionObject(pos, vel, angle)
    {
-      // velocity increase between 5,000 - 9,000 m/s
-      // position increases by 4 pixels
       this->numFragments = 0;
       this->radius = 1; // Radius in pixels
    };

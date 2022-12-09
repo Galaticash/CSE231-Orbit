@@ -32,7 +32,6 @@ public:
    * so only their phase is updated
    ********************************************/
    void update(double time) {
-      //if (phase > STAR_PHASE_LIMIT)
       if (false)
          this->phase = 0; // Resets phase to 0, as to not increment infinitely
       else

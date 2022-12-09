@@ -21,7 +21,4 @@ class Acceleration : public TwoDValue
 {
 public:
    Acceleration(double horizontal = 0.0, double vertical = 0.0) : TwoDValue(horizontal, vertical) {}
-
-private:
-
 };
