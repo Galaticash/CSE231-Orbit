@@ -117,9 +117,8 @@ std::istream& operator >> (std::istream& in, TwoDValue& twoD);
 /*********************************************
  * PT
  * Trivial point
+ * A simpler version of Position, used in UIDraw
  *********************************************/
-// TODO: Remove? smaller version of Position class
-// Currenlty used in draw, can't remove until changed there
 struct PT
 {
    double x;

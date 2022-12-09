@@ -39,7 +39,7 @@ public:
 
       this->timeDialation = TIME;  // Set this Simulator's time dialation
 
-      this->debug = true; // TESTING
+      this->debug = false; // DEBUG: Show debug tools at the start
    };
 
    /*************************************

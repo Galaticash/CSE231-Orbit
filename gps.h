@@ -16,8 +16,8 @@
 #include "gpsLeft.h"
 #include "gpsRight.h"
 
-// Rotation offset in degrees, 'facing' direction of drawing isn't correct
-const double GPS_ROTATION_OFFSET = 67.5;
+// The 'facing' direction of GPS drawing is off by 90 degrees
+const double GPS_ROTATION_OFFSET = 90;
 
 /*********************************************
  * GPS
@@ -38,7 +38,7 @@ public:
    * parts, add them to the simulator, then delete self.
    ****************************************************/
    void breakApart(Simulator* sim, vector<CollisionObject*> subParts = {}) {
-      // Add all the parts, add them to the simulator, then delete self
+      // Add all the GPS parts, add them to the simulator, then delete self
       Satellite::breakApart(sim, { new GPSCenter(), new GPSLeft(), new GPSRight() });
    }
 

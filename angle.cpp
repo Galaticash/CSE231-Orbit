@@ -19,7 +19,7 @@
 *************************************/
 void Angle::normalize()
 {
-   if (radAngle > 2 * M_PI)
+   if (abs(radAngle) > 2 * M_PI)
    {
       // cycleOffset is the number of full cycles the angle will need to be
       // turned back to fit within the range
@@ -30,24 +30,11 @@ void Angle::normalize()
 
 // Keep these here so math isn't defined in multiple places.
 void Angle::setDegree(double degree) { this->radAngle = degree * M_PI / 180.0; }
+void Angle::addDegree(double degree) { this->radAngle += degree * M_PI / 180.0; };
 double Angle::getDegree() const { return radAngle * 180.0 / M_PI; }
-
-Angle& Angle::operator+=(const double rhs)
-{
-   radAngle += rhs;
-   normalize();
-   return *this;
-}
 
 Angle& Angle::operator += (const Angle& twoD) {
    this->radAngle += twoD.radAngle;
-   normalize();
-   return *this;
-}
-
-Angle& Angle::operator-=(const double rhs)
-{
-   radAngle -= rhs;
    normalize();
    return *this;
 }

@@ -709,17 +709,9 @@ void drawShip(const Position& center, double rotation, bool thrust)
 
 void drawDirection(const Position& center, const double radius, const Angle angle)
 {
-
    Position outer = Position(center.getMetersX(), center.getMetersY());
    outer.addPixels(radius * 2, angle);
-   
-   const int* color = RGB_RED;
-   if (angle.getRadian() >= 6)
-   {
-      color = RGB_GOLD;
-   }
-
-   drawLine(center, outer, color);
+   drawLine(center, outer, RGB_GOLD);
 };
 
 /************************************************************************
@@ -737,6 +729,7 @@ void drawLine(const Position& one, const Position& two, const int* color)
     glVertex2f(one.getPixelsX(), one.getPixelsY());
     glVertex2f(two.getPixelsX(), two.getPixelsY());
 
+    glResetColor();
     glEnd();
 }
 
@@ -768,6 +761,7 @@ void drawCircle(const Position& center, const double radius)
         );
     }
 
+    glResetColor();
     glEnd();
     
 }

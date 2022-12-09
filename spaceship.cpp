@@ -44,10 +44,10 @@ void Spaceship::update(double time, double gravity, double planetRadius) {
        Add Meters is the a * t part of the equation, and a = 30m/s2, so t is the key part
       */
 
-      // TODO: Add a multiplier?
+      // TODO: Add a multiplier? 
       // TODO: Add per button press or per update?
       // Accelerate 30.0 m/s^2 in facing direction
-      this->vel.addMeters(SHIP_ACCELERATION * time, rotationAngle);
+      //this->vel.addMeters(SHIP_ACCELERATION * (time / 4), rotationAngle);
    }
 
    // Then update normally

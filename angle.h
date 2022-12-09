@@ -22,20 +22,14 @@ public:
       this->radAngle = twoD.radAngle;
       return *this;
    };
-   Angle& operator = (const double twoD) {
-      this->radAngle = twoD;
-      return *this;
-   };
 
    // Addition operators for both Angles and doubles
-   Angle& operator +=(const double rhs);
    Angle& operator += (const Angle& twoD);
 
    // Scale an Angle
    Angle& operator *= (const double scale);
 
    // Subtraction operators for both Angles and doubles
-   Angle& operator -=(const double rhs); 
    Angle& operator -= (const Angle& twoD);
 
    // If two Angle's radAngle values are the same, same angle
@@ -45,10 +39,12 @@ public:
 
    // Getters and Setters for Radians
    void setRadian(double radians) { this->radAngle = radians; };
+   void addRadian(double radians) { this->radAngle += radians; normalize(); };
    double getRadian() const { return radAngle; }
    
    // Getters and Setters for Degrees
    void setDegree(double degrees);
+   void addDegree(double degrees);
    double getDegree() const;
 
 private:

@@ -17,10 +17,6 @@
 ********************************************/
 void Object::update(double time, double gravity, double planetRadius)
 {
-   // ** QUESTION ** //
-   // Would it be better to pass in Earth, or just the relevant attributes from Earth?
-   // TODO: Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
-
    // Calculates the current angle and distance from the Earth (0, 0)
    double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
    double height = heightAbovePlanet(this->pos.getMetersX(), this->pos.getMetersY(), planetRadius);

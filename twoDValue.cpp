@@ -29,12 +29,12 @@ Angle TwoDValue::getAngle() {
 * Given an overall change in Meters and an 
 * Angle (degrees), adjust x and y values.
 **********************************************/
-void TwoDValue::addMeters(double change, Angle angle) {
-   double yVal = change * cos(angle.getDegree());
-   double xVal = change * sin(angle.getDegree());
+void TwoDValue::addMeters(double totalMeters, Angle angle) {
+   double xMeters = totalMeters * sin(angle.getRadian());
+   double yMeters = totalMeters * cos(angle.getRadian());
 
-   this->addMetersX(xVal);
-   this->addMetersY(yVal);
+   this->addMetersX(xMeters);
+   this->addMetersY(yMeters);
 };
 
 /**********************************
@@ -42,12 +42,12 @@ void TwoDValue::addMeters(double change, Angle angle) {
 * Given an overall change in Meters and an 
 * Angle (degrees), adjust x and y values
 ********************************************/
-void TwoDValue::addPixels(double change, Angle angle) {
-   double yVal = change * cos(angle.getDegree());
-   double xVal = change * sin(angle.getDegree());
+void TwoDValue::addPixels(double totalPixels, Angle angle) {
+   double xPixels = totalPixels * sin(angle.getRadian());
+   double yPixels = totalPixels * cos(angle.getRadian());
 
-   this->addPixelsX(xVal);
-   this->addPixelsY(yVal);
+   this->addPixelsX(xPixels);
+   this->addPixelsY(yPixels);
 }
 
 /******************************************

@@ -25,79 +25,120 @@ using namespace std;
 /*************************************
 * Given an Object pointer, calls the correct draw function
 *  **************************************/
-void drawObjectFunc(const Object* obj)
+void drawObjectFunc(const Object* obj, bool debug = false)
 {
    string objType = typeid(*obj).name();
    // DEBUG: cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
 
-   // TODO: Should colorRects/Shapes be used instead?
+   // DEBUG: To draw Debug tools (collision Radius and Rotation Angle)
+   if (debug)
+   {
+      // Don't draw for smaller Objects or the Earth
+      if (objType != "class Star" && objType != "class Fragment" && objType != "class Bullet" && objType != "class Earth")
+      {
+         // Draw Direction and Radius
+         drawDirection((obj)->getPosition(), 15, (obj)->getRotation()); // Line of direction
+         drawCircle((obj)->getPosition(), ((CollisionObject*)obj)->getRadius()); // Collision Circle
+      }
+   }
 
    // Draws based on obj type, instead of rewriting the entire Draw class
-   if (objType == "class Spaceship") 
-      drawShip(obj->getPosition(), obj->getRotation().getDegree(), ((Spaceship*)obj)->getThrust());
+   if (objType == "class Spaceship")
+   {
+      // DEBUG: Show Position, Velocity, and Rotation Angle
+      if (debug)
+      {
+         Position textPos;
+         double buffer = 10;
+         double textSize = 12;
+         textPos.setPixelsX(-(SCREEN_SIZE_X / 2) + buffer);
+         textPos.setPixelsY((SCREEN_SIZE_Y / 2) - buffer - textSize);
+
+         /*
+         string posX = to_string(obj->getPosition().getMetersX());
+         string posY = to_string(obj->getPosition().getMetersY());
+         string pos = "Position: (" + posX.substr(0, posX.find(".") + 3) + ", " + posY.substr(0, posY.find(".") + 3) + ")";
+         drawText(textPos, (pos).c_str());
+
+         textPos.addPixelsY(-textSize * 2.0);
+
+         string velX = to_string(obj->getVelocity().getMetersX());
+         string velY = to_string(obj->getVelocity().getMetersY());
+         string vel = "Velocity: (" + velX.substr(0, velX.find(".") + 3) + ", " + velY.substr(0, velY.find(".") + 3) + ")";
+         drawText(textPos, (vel).c_str());
+
+         textPos.addPixelsY(-textSize * 2.0);*/
+
+         string rRad = to_string(obj->getRotation().getRadian());
+         string rDeg = to_string(obj->getRotation().getDegree());
+         string rotation = "Rotation: " + rRad.substr(0, rRad.find(".") + 3) + " radians or " + rDeg.substr(0, rDeg.find(".") + 3) + " degrees";
+         drawText(textPos, (rotation).c_str());
+      }
+
+      drawShip(obj->getPosition(), obj->getRotation().getRadian(), ((Spaceship*)obj)->getThrust());
+   }
    else if (objType == "class Bullet")
       drawProjectile(obj->getPosition());
    else if (objType == "class Earth")
-   {
-      drawEarth(obj->getPosition(), obj->getRotation().getDegree());
-      //drawObject(obj); // ERROR: rotates drawing around incorrect point
-   }
+      drawEarth(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class Star")
       drawStar(obj->getPosition(), ((Star*)obj)->getPhase());
 
    // Draw Sputnik
    else if (objType == "class Sputnik")
-      drawSputnik(obj->getPosition(), obj->getRotation().getDegree());
+      drawSputnik(obj->getPosition(), obj->getRotation().getRadian());
 
-   // Draw StarLink and it's Parts
+   // Draw StarLink and its Parts
    else if (objType == "class Starlink")
-      drawStarlink(obj->getPosition(), obj->getRotation().getDegree());
+      drawStarlink(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class StarlinkBody")
-      drawStarlinkBody(obj->getPosition(), obj->getRotation().getDegree());
+      drawStarlinkBody(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class StarlinkArray")
-      drawStarlinkArray(obj->getPosition(), obj->getRotation().getDegree());
+      drawStarlinkArray(obj->getPosition(), obj->getRotation().getRadian());
 
-   // Draw Hubble and it's Parts
+   // Draw Hubble and its Parts
    else if (objType == "class Hubble")
-      drawHubble(obj->getPosition(), obj->getRotation().getDegree());
+      drawHubble(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class HubbleTelescope")
-      drawHubbleTelescope(obj->getPosition(), obj->getRotation().getDegree());
+      drawHubbleTelescope(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class HubbleComputer")
-      drawHubbleComputer(obj->getPosition(), obj->getRotation().getDegree());
+      drawHubbleComputer(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class HubbleLeft")
-      drawHubbleLeft(obj->getPosition(), obj->getRotation().getDegree());
+      drawHubbleLeft(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class HubbleRight")
-      drawHubbleRight(obj->getPosition(), obj->getRotation().getDegree());
+      drawHubbleRight(obj->getPosition(), obj->getRotation().getRadian());
 
-   // Draw Dragon and it's Parts
+   // Draw Dragon and its Parts
    else if (objType == "class Dragon")
-      drawCrewDragon(obj->getPosition(), obj->getRotation().getDegree());
+      drawCrewDragon(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class DragonCenter")
-      drawCrewDragonCenter(obj->getPosition(), obj->getRotation().getDegree());
+      drawCrewDragonCenter(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class DragonLeft")
-      drawCrewDragonLeft(obj->getPosition(), obj->getRotation().getDegree());
+      drawCrewDragonLeft(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class DragonRight")
-      drawCrewDragonRight(obj->getPosition(), obj->getRotation().getDegree());
+      drawCrewDragonRight(obj->getPosition(), obj->getRotation().getRadian());
 
-   // Draw GPS and it's Parts
+   // Draw GPS and its Parts
    else if (objType == "class GPS")
-      drawGPS(obj->getPosition(), obj->getRotation().getDegree());
+      drawGPS(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class GPSCenter")
-      drawGPSCenter(obj->getPosition(), obj->getRotation().getDegree());
+      drawGPSCenter(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class GPSLeft")
-      drawGPSLeft(obj->getPosition(), obj->getRotation().getDegree());
+      drawGPSLeft(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class GPSRight")
-      drawGPSRight(obj->getPosition(), obj->getRotation().getDegree());
+      drawGPSRight(obj->getPosition(), obj->getRotation().getRadian());
 
    // Generic drawings, shouldn't be used
+   /*
    else if (objType == "class Satellite")
-      drawHubble(obj->getPosition(), obj->getRotation().getDegree());
+      drawHubble(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class Part")
-      drawHubbleTelescope(obj->getPosition(), obj->getRotation().getDegree());
+      drawHubbleTelescope(obj->getPosition(), obj->getRotation().getRadian());
+   */
    
    // Draw Fragments
    else if (objType == "class Fragment")
-      drawFragment(obj->getPosition(), obj->getRotation().getDegree());
+      drawFragment(obj->getPosition(), obj->getRotation().getRadian());
 
    // Error case
    else
@@ -118,11 +159,10 @@ void drawObjectFunc(const Object* obj)
  **************************************/
 void callBack(const Interface* pUI, void* p)
 {
-   // the first step is to cast the void pointer into a game object. This
-   // is the first step of every single callback function in OpenGL. 
+   // The first step is to cast the void pointer into a game object.
    Simulator* pSim = (Simulator*)p;
 
-   // Get user input
+   // Pass the Simulator user input
    pSim->getInput(pUI);
  
    // Update all Objects in the Simulation
@@ -131,25 +171,8 @@ void callBack(const Interface* pUI, void* p)
    // Draw every item in the simulator
    vector<Object*> simObjects = pSim->getObjects();
    for (vector<Object*>::iterator it = simObjects.begin(); it != simObjects.end(); it++)
-   {
       // Draw the Object based on its class type
-      drawObjectFunc(*it);
-
-      // DEBUG: Draw a collision circle around each
-      //  Collision Obj and draw facing direction/angle
-      if (pSim->getDebug())
-      {
-         string objType = typeid(*(*it)).name(); // Get the type of the Object
-
-         // Don't draw for smaller Objects or the Earth
-         if (objType != "class Star" && objType != "class Fragment" && objType != "class Bullet" && objType != "class Earth")
-         {
-            // Draw Direction and Radius
-            drawDirection((*it)->getPosition(), 15, (*it)->getRotation()); // Line of direction
-            drawCircle((*it)->getPosition(), ((CollisionObject*)*it)->getRadius()); // Collision Circle
-         }
-      }
-   }
+      drawObjectFunc(*it, pSim->getDebug());
 }
 
 double TwoDValue::metersFromPixels = 40.0;

@@ -18,7 +18,7 @@
 const int FRAGMENT_LIFETIME_MIN = 50;
 const int FRAGMENT_LIFETIME_MAX = 100;
 
-const double FRAGMENT_ROTATION = .075;  // Fragments rotate wildly
+const double FRAGMENT_ROTATION = .005;  // Fragments rotate wildly
 
 /*********************************************
  * Fragment

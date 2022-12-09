@@ -91,26 +91,29 @@ void Simulator::getInput(const Interface* pUI)
    // Check that the Spaceship is still in the Simulation
    if (this->ship != NULL)
    {
-      Angle shipRotation = 0.0;  // The change in rotation
+      Angle shipRotation;  // The change in rotation
 
       // Ship turning (left and right arrows)
-      // TODO: Normalize not working properly? <-- That's why the ship is resetting to 0
       if (pUI->isLeft())
-         shipRotation.setDegree(-0.1);
+         shipRotation.setRadian(-0.1);
       if (pUI->isRight())
-         shipRotation.setDegree(0.1);
+         shipRotation.setRadian(0.1);
       ship->addRotation(shipRotation);
 
       // Set if the ship's thruster is on (down arrow)
       if (pUI->isDown())
-      {/* TODO: Add per button press or per update?
-         Velocity v;
-         v.addMeters(SHIP_ACCELERATION * 120, ship->getRotation());
-         ship->addVelocity(v);        */
          ship->setThrust(true);
-      }
       else
          ship->setThrust(false);
+
+      // TODO: Add per button press or per update?
+      if (ship->getThrust())
+      {
+         Velocity v;
+         double accelerationTime = 30; // TODO: Fix time
+         v.addMeters(SHIP_ACCELERATION * accelerationTime, ship->getRotation());
+         ship->addVelocity(v);
+      }
 
       // Check for Bullet shooting (spacebar)
       if (pUI->isSpace())

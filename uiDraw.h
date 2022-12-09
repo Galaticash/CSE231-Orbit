@@ -47,6 +47,8 @@ private:
    Position pt;
 };
 
+void drawText(const Position& topLeft, const char* text);
+
 /************************************************************************
  * DRAW FRAGMENT
  * Draw a fragment on the screen.

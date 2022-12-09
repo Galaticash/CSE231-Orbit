@@ -28,6 +28,7 @@ public:
       this->thrust = false;      // Ship starts off not moving
       this->radius = 10;         // Radius in pixels;
       this->numFragments = 4;
+      this->rotationAngle.setDegree(90);  // Initial rotation of Spaceship
    };
 
    void update(double time, double gravity, double planetRadius);

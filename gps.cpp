@@ -22,7 +22,8 @@ void GPS::update(double time, double gravity, double planetRadius)
    if (!defective)
    {
       // GPS will rotate to face the Earth (direction of gravity)
-      this->rotationAngle.setDegree(gravityDirection(pos.getMetersX(), pos.getMetersY()) + GPS_ROTATION_OFFSET);
+      this->rotationAngle.setRadian(gravityDirection(pos.getMetersX(), pos.getMetersY()));
+      this->rotationAngle.addDegree(GPS_ROTATION_OFFSET);
    }
    Satellite::update(time, gravity, planetRadius);
 }
