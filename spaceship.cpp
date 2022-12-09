@@ -47,7 +47,7 @@ void Spaceship::update(double time, double gravity, double planetRadius) {
       // TODO: Add a multiplier?
       // TODO: Add per button press or per update?
       // Accelerate 30.0 m/s^2 in facing direction
-      this->vel.addMeters(SHIP_ACCELERATION * time, rotationAngle);
+      this->vel.addMeters(SHIP_ACCELERATION * time, this->rotationAngle);
    }
 
    // Then update normally

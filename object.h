@@ -94,52 +94,48 @@ protected:
     * Finds the height above the earth an object is.
     * Assumes Earth is located at (0, 0)
     * Formula: h = sqrt(x * x + y * y) - r
-    * h = distance between the surface of the earth and the object (meters)
+    * Returns the distance between the surface of the earth and the object (meters)
     * x = horizontal position of object   (meters)
     * y = vertical position of object     (meters)
     * r = radius of earth                 (meters)
     *************************************************************************/
-   double heightAbovePlanet(double x, double y, double radius) {
-      double h = sqrt(x * x + y * y) - radius;
-      return h;
+   double heightAbovePlanet(const double x, const double y, const double r) {
+      return sqrt(x * x + y * y) - r;
    }
 
    /*************************************************************************
     * GRAVITY EQUATION
     * This calculates the total acceleration due to earth's gravity
     * Formula: g * ( r / ( r + h ) ) ^ 2 = gh
-    * gh = magnitude of acceleration due to gravity at altitude h (m/s^2)
+    * Returns the magnitude of acceleration due to gravity at altitude h (m/s^2)
     * g  = gravity at sea level   (m/s^2)
     * r  = radius of earth        (meters)
     * h  = height above earth     (meters)
     *************************************************************************/
-   double gravityEquation(double h, double radius, double gravity) {
-      double gh = gravity * pow((radius / (radius + h)), 2);
-      return gh;
+   double gravityEquation(const double h, const double r, const double g) {
+      return g * pow((r / (r + h)), 2);
    }
 
    /*************************************************************************
     * HORIZONTAL ACCELERATION
     * ddx = a * sin( angle )
-    * ddx = horizontal component of acceleration      (m/s^2)
-    * a = total acceleration                          (m/s^2)
+    * Returns the horizontal component of acceleration      (m/s^2)
+    * acc = total acceleration                          (m/s^2)
     * angle = angle of the direction of acceleration  (0 degrees is up)
     *************************************************************************/
-   double horizontalAcceleration(double a, double angle) {
-      double ddx = a * sin(angle);
-      return ddx;
+   double horizontalAcceleration(const double acc, const double angle) {
+      return acc * sin(angle);
    }
 
    /*************************************************************************
     * VERTICAL ACCELERATION
     * ddy = a * cos( angle )
-    * ddy = vertical component of acceleration        (m/s^2)
-    * a = total acceleration                          (m/s^2)
+    * Returns the vertical component of acceleration        (m/s^2)
+    * acc = total acceleration                          (m/s^2)
     * angle = angle of the direction of acceleration  (0 degrees is up)
     *************************************************************************/
-   double verticalAcceleration(double a, double angle) {
-      double ddy = a * cos(angle);
-      return ddy;
+   double verticalAcceleration(const double acc, const double angle) {
+      return acc * cos(angle);
    }
 
    /*************************************************************************
@@ -148,15 +144,14 @@ protected:
     * Can be used for both vertical and horizontal distance.
     * Formula: s = so + (v * t) + (.5 * a * t * t)
     *     ex. (x = xo + (dx * t) + (.5 * ddx * t * t))
-    * s = distance            (meters)
+    * Returns the new distance   (meters)
     * so = initial distance   (meters)
     * v = velocity            (m/s)
     * t = time                (seconds)
     * a = acceleration        (m/s^2)
     *************************************************************************/
-   double distanceFormula(double so, double v, double a, double t) {
-      double s = so + (v * t) + (.5 * a * t * t);
-      return s;
+   double distanceFormula(const double so, const double v, const double a, const double t) {
+      return so + (v * t) + (.5 * a * t * t);
    }
 
    /*************************************************************************
@@ -165,14 +160,13 @@ protected:
     * Can be used for both horizontal and vertical distance.
     * Formula: s = so + v * t
     *     ex. (x = xo + dx * t)
-    * s  = distance           (meters)
+    * Returns the new distance   (meters)
     * so = initial position   (meters)
     * v  = velocity           (m/s)
     * t  = time               (seconds)
     *************************************************************************/
-   double verticalConstantVelocity(double so, double v, double t) {
-      double s = so + v * t;
-      return s;
+   double verticalConstantVelocity(const double so, const double v, const double t) {
+      return so + v * t;
    }
 
    /*************************************************************************
@@ -181,13 +175,12 @@ protected:
     * Can be used for both horizontal and vertical velocity.
     * Formula: v = vo + a * t
     *    ex. (dx = dxo + ddx * t)
-    * v = velocity            (m/s)
+    * Returns the new velocity   (m/s)
     * vo = initial velocity   (m/s)
     * a = acceleration        (m/s^2)
     * t = time                (seconds)
     *************************************************************************/
-   double velocityConstantAcceleration(double vo, double a, double t) {
-      double v = vo + a * t;
-      return v;
+   double velocityConstantAcceleration(const double vo, const double a, const double t) {
+      return vo + a * t;
    }
 };

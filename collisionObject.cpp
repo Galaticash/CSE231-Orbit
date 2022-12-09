@@ -149,7 +149,7 @@ vector<Position> CollisionObject::getSubPartPos(vector<Velocity> directions) {
 		Position newPos = Position(this->pos);
 
 		// Have each object move 4 pixels in direction of travel.		
-		double buffer = 20; // Default 4
+		double buffer = 10; // Default 4
 		
 		// ERROR: Parts are colliding immediately
 		// TESTING: -1, maybe they were going together then apart?

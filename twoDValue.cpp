@@ -27,14 +27,24 @@ Angle TwoDValue::getAngle() {
 /******************************************
 * ADD METERS
 * Given an overall change in Meters and an 
-* Angle (degrees), adjust x and y values.
+* Angle (Degrees), adjust x and y values.
 **********************************************/
-void TwoDValue::addMeters(double change, Angle angle) {
-   double yVal = change * cos(angle.getDegree());
-   double xVal = change * sin(angle.getDegree());
+void TwoDValue::addMeters(const double totalMeters, const Angle angle) {
+   // NOTE: Used in Spaceship, Bullet, Explosions
+   // 'Working' version
+   /*
+   double xMeters = totalMeters * sin(angle.getDegree()); // TODO: Radians in other equation, degrees here??
+   double yMeters = totalMeters * cos(angle.getDegree());
+   */
+   
+   // 'Correct' version 
+   // ERROR: Ship.. doesn't move in facing direction???
+   /**/
+   double xMeters = totalMeters * sin(angle.getRadian());
+   double yMeters = totalMeters * cos(angle.getRadian()); 
 
-   this->addMetersX(xVal);
-   this->addMetersY(yVal);
+   this->addMetersX(xMeters);
+   this->addMetersY(yMeters);
 };
 
 /**********************************
@@ -43,8 +53,20 @@ void TwoDValue::addMeters(double change, Angle angle) {
 * Angle (degrees), adjust x and y values
 ********************************************/
 void TwoDValue::addPixels(double change, Angle angle) {
+   // NOTE: Used in Bullet and Explosion
+   // 'Working' version
+   /*
    double yVal = change * cos(angle.getDegree());
    double xVal = change * sin(angle.getDegree());
+   */
+
+   // Wait... Pixels is set up the same HEH?
+   // And when I 'fix' this, it messes up rotation??? HOW???
+   // Display is correct, but debug shows incorrect???
+   // 'Correct' version
+   /**/
+   double yVal = change * cos(angle.getRadian());
+   double xVal = change * sin(angle.getRadian());
 
    this->addPixelsX(xVal);
    this->addPixelsY(yVal);

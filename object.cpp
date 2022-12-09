@@ -17,18 +17,25 @@
 ********************************************/
 void Object::update(double time, double gravity, double planetRadius)
 {
-   // ** QUESTION ** //
-   // Would it be better to pass in Earth, or just the relevant attributes from Earth?
-   // TODO: Assumes Planet is located at Position(0.0, 0.0) <-- could have that also be a parameter
-
    // Calculates the current angle and distance from the Earth (0, 0)
-   double angle = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
+   double angleRad = gravityDirection(this->pos.getMetersX(), this->pos.getMetersY());
    double height = heightAbovePlanet(this->pos.getMetersX(), this->pos.getMetersY(), planetRadius);
 
    // Calculate the current acceleration
    double totalAcc = gravityEquation(height, planetRadius, gravity);
-   double vAcc = verticalAcceleration(totalAcc, angle);
-   double hAcc = horizontalAcceleration(totalAcc, angle);
+
+   Angle a;
+   //a.setDegree(angleRad);
+   a.setRadian(angleRad); // Treated as a Radian across the board
+   TwoDValue acc;  
+   acc.addMeters(totalAcc, a); // Works when using Radians (currenlty degrees)
+
+   double vAcc = 
+      //acc.getMetersY();
+      verticalAcceleration(totalAcc, angleRad);
+   double hAcc = 
+      //acc.getMetersX();
+      horizontalAcceleration(totalAcc, angleRad);
 
    // Update the current velocity with the current acceleration
    this->vel.setMetersX(velocityConstantAcceleration(this->vel.getMetersX(), hAcc, time));
