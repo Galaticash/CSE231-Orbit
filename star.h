@@ -11,7 +11,7 @@
 #include "object.h"
 #include "uiDraw.h"
 
-const int STAR_PHASE_LIMIT = 200; // TODO: figure out max
+const int STAR_PHASE_LIMIT = 250; // The max star phase
 
 /*********************************************
  * Star
@@ -32,13 +32,17 @@ public:
    * so only their phase is updated
    ********************************************/
    void update(double time) {
-      if (false)
+      if (phase > STAR_PHASE_LIMIT)
          this->phase = 0; // Resets phase to 0, as to not increment infinitely
       else
-         this->phase++;
+         this->phase++; // Increment phase
    };
 
-   int getPhase() { return this->phase; }; // Returns the Star's current phase
+   /******************************************
+   * GET PHASE
+   * Returns the Star's current phase
+   ********************************************/
+   int getPhase() { return this->phase; };
 
 private:
    int phase;  // The current phase of the Star, used to draw a Star differently

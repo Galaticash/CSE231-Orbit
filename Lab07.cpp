@@ -26,53 +26,13 @@ using namespace std;
 * DRAW OBJECT
 * Given an Object pointer, calls the correct draw function in uiDraw
 ***************************************/
-void drawObject(const Object* obj, bool debug = false)
+void drawObject(const Object* obj)
 {
    // Draws based on obj type, instead of rewriting the entire Draw class
    string objType = typeid(*obj).name();
 
    if (objType == "class Spaceship")
-   {
-      // DEBUG: Show Position, Velocity, and Rotation Angle
-      if (debug)
-      {
-         // DEBUG: Extra debug for Spaceship's Position, Velocity, Rotation, etc
-         Position textPos;
-         double buffer = 10;
-         double textSize = 12;
-         textPos.setPixelsX(-(SCREEN_SIZE_X / 2) + buffer);
-         textPos.setPixelsY((SCREEN_SIZE_Y / 2) - buffer - textSize);
-
-         /*
-         string posX = to_string(obj->getPosition().getMetersX());
-         string posY = to_string(obj->getPosition().getMetersY());
-         string pos = "Position: (" + posX.substr(0, posX.find(".") + 3) + ", " + posY.substr(0, posY.find(".") + 3) + ")";
-         drawText(textPos, (pos).c_str());
-
-         textPos.addPixelsY(-textSize * 2.0);
-
-         string velX = to_string(obj->getVelocity().getMetersX());
-         string velY = to_string(obj->getVelocity().getMetersY());
-         string vel = "Velocity: (" + velX.substr(0, velX.find(".") + 3) + ", " + velY.substr(0, velY.find(".") + 3) + ")";
-         drawText(textPos, (vel).c_str());
-
-         textPos.addPixelsY(-textSize * 2.0);
-
-         string rRad = to_string(obj->getRotation().getRadian());
-         string rDeg = to_string(obj->getRotation().getDegree());
-         string rotation = "Rotation: " + rRad.substr(0, rRad.find(".") + 3) + " radians or " + rDeg.substr(0, rDeg.find(".") + 3) + " degrees";
-         drawText(textPos, (rotation).c_str());
-
-         textPos.addPixelsY(-textSize * 2.0);
-
-         string vRad = to_string(obj->getVelocity().getAngle().getRadian());
-         string vDeg = to_string(obj->getVelocity().getAngle().getDegree());
-         string vRotation = "Velocity Angle: " + vRad.substr(0, vRad.find(".") + 3) + " radians or " + vDeg.substr(0, vDeg.find(".") + 3) + " degrees";
-         drawText(textPos, (vRotation).c_str());*/
-      }
-
       drawShip(obj->getPosition(), obj->getRotation().getRadian(), ((Spaceship*)obj)->getThrust());
-   }
    else if (objType == "class Bullet")
       drawProjectile(obj->getPosition());
    else if (objType == "class Earth")
@@ -136,25 +96,6 @@ void drawObject(const Object* obj, bool debug = false)
       cout << "Unidentified " << objType << endl;
       assert(false);
    }
-
-   // DEBUG: To draw Debug tools (collision Radius and Rotation Angle)
-   if (debug)
-   {
-      // Don't draw for smaller Objects or the Earth
-      if (objType != "class Star"
-         //&& objType != "class Fragment" 
-         && objType != "class Bullet" && objType != "class Earth")
-      {
-         // Draw Direction and Radius
-         double radius = objType == "class Fragment" ? 10 : 15;
-         //double radius = 15;
-
-         //drawDirection((obj)->getPosition(), 15, (obj)->getRotation()); // Facing direction
-         //drawDirection((obj)->getPosition(), radius, (obj)->getVelocity().getAngle()); // Velocity direction
-         drawCircle((obj)->getPosition(), ((CollisionObject*)obj)->getRadius()); // Object's Collision
-      }
-   }
-
 }
 
 /*************************************
@@ -177,7 +118,7 @@ void callBack(const Interface* pUI, void* p)
 
    for (Object* obj : pSim->getObjects())
       // Draw the Object based on its class type
-      drawObject(obj, pSim->getDebug());
+      drawObject(obj);
 }
 
 double TwoDValue::metersFromPixels = 40.0;

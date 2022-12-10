@@ -111,14 +111,7 @@ vector<Velocity> CollisionObject::getSubPartVel(int subParts) {
 		Angle newAngle = Angle(newVel.getAngle().getRadian());
 
 		// Give each subPart a slightly different angle from the initial
-		double totalSpread = 360;
-		
-		//Angle spread;
-		//spread.addDegree((totalSpread / (subParts + 1)) * i);
-
-		newAngle += 
-			//spread;
-			Angle(((i * 2 *  M_PI) / (subParts + 1)));
+		newAngle += Angle(((i * 2 *  M_PI) / (subParts + 1)));
 
 		// Add bewteen 5000 and 9000 m/s to this subPart's velocity
 		newVel.addMeters(random(5000.0, 9000.0), newAngle);
@@ -145,8 +138,7 @@ vector<Position> CollisionObject::getSubPartPos(vector<Velocity> directions) {
 		Position newPos = Position(this->pos);
 
 		// Have each object move 4 pixels in direction of travel.		
-		double buffer = 10;
-			//30;
+		double buffer = 24; // NOTE: Raised to 24 since Parts's radii were too large (7 ~ 12)
 
 		// Find X and Y from Angle of the current Velocity
 		newPos.addPixels(buffer, (*it).getAngle());

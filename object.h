@@ -17,7 +17,7 @@
 #include <cassert>
 #endif  // To make assertions
 
-#include "uiDraw.h" // To use random (TODO: Put in a separate file?)
+#include "uiDraw.h" // To use random
 
 #define _USE_MATH_DEFINES
 #include <math.h>

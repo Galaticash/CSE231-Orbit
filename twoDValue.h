@@ -29,7 +29,6 @@ public:
    friend TestTwoDValue;
 
    // If no value given, assumes equals 0
-   // Sets Zoom to Default, can be adjusted later with setZoom()
    TwoDValue(double newX = 0.0, double newY = 0.0) { this->x = newX; this->y = newY; };
    TwoDValue(const TwoDValue& pt) : TwoDValue(pt.x, pt.y) {};
 
@@ -105,9 +104,9 @@ public:
    Angle getAngle();
 
 protected:
-   double x;
-   double y;
-   static double metersFromPixels;
+   double x;   // The x or horizonal value
+   double y;   // The y or vertical value
+   static double metersFromPixels;  // The ratio of meters to pixels
 };
 
 // stream I/O useful for debugging

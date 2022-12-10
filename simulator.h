@@ -26,7 +26,7 @@
 #include "gps.h"
 #include "dragon.h"
 
-const double TIME = 48;         // Real-world seconds between frames
+const double TIME = (HOURS_PER_DAY * MINUTES_PER_HOUR / FPS);  // Real-world seconds between frames
 
 /*********************************************
  * Simulator
@@ -77,10 +77,7 @@ public:
    * CREATE BULLET
    * Creates a Bullet in front of the Simulator's Spaceship
    ********************************************/
-   void createBullet(Position pos, Velocity vel, Angle angle) 
-   {
-      this->collisionObjects.push_back(new Bullet(pos, vel, angle));	
-   };
+   void createBullet(Position pos, Velocity vel, Angle angle) { this->collisionObjects.push_back(new Bullet(pos, vel, angle)); };
 	
    /******************************************
    * GET INPUT
@@ -95,9 +92,12 @@ public:
    ********************************************/
    void update();
 
-   list<Object*> getObjects(); // Get all Objects to be drawn
-
-   bool getDebug() { return this->debug; }; // DEBUG: Returns if debugging features should be shown
+   /******************************************
+   * GET OBJECTS
+   * Returns a list of pointers to all Objects (Stars and
+   * Collision Objects) that are in the Simulator
+   ********************************************/
+   list<Object*> getObjects(); 
 
 protected:
    list<CollisionObject*> collisionObjects; // All Objects that can collide
@@ -105,8 +105,6 @@ protected:
    Earth* planet;		   // The planet at the center (0, 0) of the Simulation
    list<Star*> stars; // All the stars to display
    double timeDialation;// Real-world seconds between frames
-
-   bool debug; // Toggle Debugging features on/off
 
    /******************************************
    * UPDATE COLLISIONS

@@ -48,6 +48,6 @@ public:
    double getDegree() const;
 
 private:
-   double radAngle;
+   double radAngle;  // The Angle (in radians)
    void normalize();
 };

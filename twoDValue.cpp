@@ -16,9 +16,7 @@
 Angle TwoDValue::getAngle() {
    // Returns 0 if both values are 0
    if (x == 0 && y == 0)
-   {
       return Angle(0);
-   }
 
    // Uses same equation as getting Gravity direction
    return Angle(atan2(this->x, this->y));

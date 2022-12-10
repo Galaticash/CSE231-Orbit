@@ -19,7 +19,7 @@ class TestSatellite; // For test Cases
 const int DEFECTIVE_CHANCE = 5000;
 
 // The amount of spin added to a defective Satellite
-const double DEFECTIVE_SPIN_ANGLE = 0.075;
+const double DEFECTIVE_SPIN_ANGLE = .1;
 #endif
 
 /*********************************************

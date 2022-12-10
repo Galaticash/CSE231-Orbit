@@ -104,7 +104,7 @@ void Simulator::getInput(const Interface* pUI)
       if (ship->getThrust())
       {
          Velocity v;
-         double accelerationTime = 30; // TODO: Fix time
+         double accelerationTime = 30;
          v.addMeters(SHIP_ACCELERATION * accelerationTime, ship->getRotation());
          ship->addVelocity(v);
       }
@@ -114,10 +114,6 @@ void Simulator::getInput(const Interface* pUI)
          // Create a new bullet in front of the Spaceship
          createBullet(this->ship->getPosition(), this->ship->getVelocity(), this->ship->getRotation());
    }
-
-   // DEBUG: Toggle debug view (up arrow)
-   if (pUI->isUp())
-      this->debug = debug ? false : true;
 }
 
 /********************************************

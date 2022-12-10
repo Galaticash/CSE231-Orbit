@@ -28,13 +28,15 @@ public:
    Position(double x = 0.0, double y = 0.0) : TwoDValue(x, y) {};
    Position(const Position& pt) : TwoDValue(pt.x, pt.y) {};
 
-   // Calculates the number of pixels between two Positions
-   double pixelsBetween(const Position& other) {
-      return sqrt(pow((this->getPixelsX() - other.getPixelsX()), 2) + pow((this->getPixelsY() - other.getPixelsY()), 2));
-   }
+   /******************************************
+   * PIXELS BETWEEN
+   * Calculates the number of pixels between two Positions
+   ********************************************/
+   double pixelsBetween(const Position& other) { return sqrt(pow((this->getPixelsX() - other.getPixelsX()), 2) + pow((this->getPixelsY() - other.getPixelsY()), 2)); }
 
-   // Calculates the number of meters between two Positions
-   double distanceBetween(const Position& other) {
-      return sqrt(pow((this->x - other.x), 2) + pow((this->y - other.y), 2));
-   }
+   /******************************************
+   * PIXELS BETWEEN
+   * Calculates the number of meters between two Positions
+   ********************************************/
+   double distanceBetween(const Position& other) { return sqrt(pow((this->x - other.x), 2) + pow((this->y - other.y), 2)); }
 };

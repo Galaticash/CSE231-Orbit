@@ -31,7 +31,11 @@ public:
       this->rotationAngle.setDegree(90);  // Initial rotation of Spaceship
    };
 
-   void update(double time, double gravity, double planetRadius);
+   /*********************************************
+    * UPDATE
+    * A Spaceship will not become defunct like other Satellites
+    *********************************************/
+   void update(double time, double gravity, double planetRadius) { CollisionObject::update(time, gravity, planetRadius); };
 
    // Getter and setter for thrust
    void setThrust(bool t) {  this->thrust = t; }
