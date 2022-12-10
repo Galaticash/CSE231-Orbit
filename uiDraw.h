@@ -21,8 +21,6 @@ using std::min;
 using std::max;
 
 #include <sstream>
-#include "object.h"
-
 
 #define GL_SILENCE_DEPRECATION
 

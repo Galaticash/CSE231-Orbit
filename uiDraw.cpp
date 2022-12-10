@@ -143,6 +143,7 @@ void glDrawRect(const Position & center, const Position & offset,
  ************************************************************************/
 void drawText(const Position& topLeft, const char* text)
 {
+   glResetColor();
    void* pFont = GLUT_BITMAP_HELVETICA_12;  // also try _18
 
    // prepare to draw the text from the top-left corner
@@ -716,7 +717,6 @@ void drawShip(const Position& center, double rotation, bool thrust)
    glResetColor();
    glEnd();
 }
-
 
 void drawDirection(const Position& center, const double radius, const Angle angle)
 {

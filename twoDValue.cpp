@@ -14,14 +14,14 @@
 * Get the angle between the x and y values
  ****************************************/
 Angle TwoDValue::getAngle() {
+   // Returns 0 if both values are 0
    if (x == 0 && y == 0)
    {
       return Angle(0);
    }
 
-   // Sin A = opposite / hyp
-   double sine = this->y / getTotal();
-   return Angle(asin(sine));
+   // Uses same equation as getting Gravity direction
+   return Angle(atan2(this->x, this->y));
 }
 
 /******************************************

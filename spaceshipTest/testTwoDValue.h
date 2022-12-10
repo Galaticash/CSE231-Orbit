@@ -161,14 +161,14 @@ private:
    }
 
    // Get Angle
-   void getAngle30()
+   void getAngle60()
    {
       // SETUP
       TwoDValue test;
 
       double value = 400.0;
 
-      // x to x sqrt(3) = 30 degree angle
+      // x to x sqrt(3) = 30 60 90 Triangle
       test.x = value * sqrt(3); // Adjacent
       test.y = value; // Opposite
 
@@ -177,7 +177,7 @@ private:
       Angle testA = test.getAngle();
 
       // VERIFY
-      assert(closeEnough(30.0, testA.getDegree(), .001));
+      assert(closeEnough(60.0, testA.getDegree(), .001));
 
       // TEARDOWN
    }
@@ -201,14 +201,15 @@ private:
 
       // TEARDOWN
    }
-   void getAngle60()
+
+   void getAngle30()
    {
       // SETUP
       TwoDValue test;
 
       double value = 400.0;
 
-      // x to x sqrt(3) = 30 degree angle
+      // x to x sqrt(3) = 30 60 90 Triangle
       test.x = value; // Adjacent
       test.y = value * sqrt(3); // Opposite
 
@@ -217,7 +218,7 @@ private:
       Angle testA = test.getAngle();
 
       // VERIFY
-      assert(closeEnough(60.0, testA.getDegree(), .001));
+      assert(closeEnough(30.0, testA.getDegree(), .001));
 
       // TEARDOWN
    }

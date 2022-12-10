@@ -23,9 +23,10 @@ const double SCREEN_SIZE_Y = SCREEN_SIZE; // The vertical length of the window
 using namespace std;
 
 /*************************************
-* Given an Object pointer, calls the correct draw function
-*  **************************************/
-void drawObjectFunc(const Object* obj, bool debug = false)
+* DRAW OBJECT
+* Given an Object pointer, calls the correct draw function in uiDraw
+***************************************/
+void drawObject(const Object* obj, bool debug = false)
 {
    string objType = typeid(*obj).name();
    // DEBUG: cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
@@ -34,20 +35,27 @@ void drawObjectFunc(const Object* obj, bool debug = false)
    if (debug)
    {
       // Don't draw for smaller Objects or the Earth
-      if (objType != "class Star" && objType != "class Fragment" && objType != "class Bullet" && objType != "class Earth")
+      if (objType != "class Star" 
+         //&& objType != "class Fragment" 
+         && objType != "class Bullet" && objType != "class Earth")
       {
          // Draw Direction and Radius
-         drawDirection((obj)->getPosition(), 15, (obj)->getRotation()); // Line of direction
-         drawCircle((obj)->getPosition(), ((CollisionObject*)obj)->getRadius()); // Collision Circle
+         double radius = objType == "class Fragment" ? 10 : 15;
+         //double radius = 15;
+
+         //drawDirection((obj)->getPosition(), 15, (obj)->getRotation()); // Facing direction
+         drawDirection((obj)->getPosition(), radius, (obj)->getVelocity().getAngle()); // Velocity direction
+         drawCircle((obj)->getPosition(), 1); // Object's Position Point
       }
    }
-
+   
    // Draws based on obj type, instead of rewriting the entire Draw class
    if (objType == "class Spaceship")
    {
       // DEBUG: Show Position, Velocity, and Rotation Angle
       if (debug)
       {
+         // DEBUG: Extra debug for Spaceship's Position, Velocity, Rotation, etc
          Position textPos;
          double buffer = 10;
          double textSize = 12;
@@ -67,12 +75,19 @@ void drawObjectFunc(const Object* obj, bool debug = false)
          string vel = "Velocity: (" + velX.substr(0, velX.find(".") + 3) + ", " + velY.substr(0, velY.find(".") + 3) + ")";
          drawText(textPos, (vel).c_str());
 
-         textPos.addPixelsY(-textSize * 2.0);*/
+         textPos.addPixelsY(-textSize * 2.0);
 
          string rRad = to_string(obj->getRotation().getRadian());
          string rDeg = to_string(obj->getRotation().getDegree());
          string rotation = "Rotation: " + rRad.substr(0, rRad.find(".") + 3) + " radians or " + rDeg.substr(0, rDeg.find(".") + 3) + " degrees";
          drawText(textPos, (rotation).c_str());
+
+         textPos.addPixelsY(-textSize * 2.0);
+
+         string vRad = to_string(obj->getVelocity().getAngle().getRadian());
+         string vDeg = to_string(obj->getVelocity().getAngle().getDegree());
+         string vRotation = "Velocity Angle: " + vRad.substr(0, vRad.find(".") + 3) + " radians or " + vDeg.substr(0, vDeg.find(".") + 3) + " degrees";
+         drawText(textPos, (vRotation).c_str());*/        
       }
 
       drawShip(obj->getPosition(), obj->getRotation().getRadian(), ((Spaceship*)obj)->getThrust());
@@ -127,14 +142,6 @@ void drawObjectFunc(const Object* obj, bool debug = false)
       drawGPSLeft(obj->getPosition(), obj->getRotation().getRadian());
    else if (objType == "class GPSRight")
       drawGPSRight(obj->getPosition(), obj->getRotation().getRadian());
-
-   // Generic drawings, shouldn't be used
-   /*
-   else if (objType == "class Satellite")
-      drawHubble(obj->getPosition(), obj->getRotation().getRadian());
-   else if (objType == "class Part")
-      drawHubbleTelescope(obj->getPosition(), obj->getRotation().getRadian());
-   */
    
    // Draw Fragments
    else if (objType == "class Fragment")
@@ -172,7 +179,7 @@ void callBack(const Interface* pUI, void* p)
    vector<Object*> simObjects = pSim->getObjects();
    for (vector<Object*>::iterator it = simObjects.begin(); it != simObjects.end(); it++)
       // Draw the Object based on its class type
-      drawObjectFunc(*it, pSim->getDebug());
+      drawObject(*it, pSim->getDebug());
 }
 
 double TwoDValue::metersFromPixels = 40.0;
