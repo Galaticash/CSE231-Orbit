@@ -36,7 +36,7 @@ class Simulator {
 public:
    Simulator()
    {
-	   addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
+      addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
       createStars(500); // Create a given number of Stars
 
       this->timeDialation = TIME;  // Set this Simulator's time dialation

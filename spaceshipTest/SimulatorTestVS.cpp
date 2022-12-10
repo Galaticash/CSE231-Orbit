@@ -12,16 +12,16 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace SatelliteTest
 {
-	TEST_CLASS(SimulatorTest)
-	{
-	public:
+   TEST_CLASS(SimulatorTest)
+   {
+   public:
 
-		// TODO: Put copied code for testing in another file, include in all test files
+      // TODO: Put copied code for testing in another file, include in all test files
 		
-		// Tolerance of floating point approximation
-		const double tolerance = 100.0;
+      // Tolerance of floating point approximation
+      const double tolerance = 100.0;
 
-		const double GRAVITY_TEST_TIME = 10;
+      const double GRAVITY_TEST_TIME = 10;
 		const double GRAVITY_DISTANCE = 40000000.0;
 
 		// utility funciton because floating point numbers are approximations
