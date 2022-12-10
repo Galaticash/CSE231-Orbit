@@ -26,7 +26,7 @@
 #include "gps.h"
 #include "dragon.h"
 
-const double TIME = 48;         // Real-world seconds between frames
+const double TIME = 200;         // Real-world seconds between frames
 
 /*********************************************
  * Simulator
@@ -36,7 +36,7 @@ class Simulator {
 public:
    Simulator()
    {
-	   addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
+      addObjects();  // Create all Collision Objects (Earth, Spaceship, Satellites, etc)
       createStars(500); // Create a given number of Stars
 
       this->timeDialation = TIME;  // Set this Simulator's time dialation
