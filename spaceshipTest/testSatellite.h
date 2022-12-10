@@ -94,9 +94,10 @@ private:
 			/* Ignore stars */
 
 			// Update the position of each CollisionObject
-			for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
+			for (CollisionObject* obj : collisionObjects)
+			//for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
 			{
-				CollisionObject* obj = *it;
+				//CollisionObject* obj = *it;
 
 				// If gravity is turned off, passes 0 values
 				double gravity = gravityOn ? GRAVITY : 0.0;
@@ -107,10 +108,10 @@ private:
 		};
 		
 		// Returns a list of Collision Object pointers
-		vector<CollisionObject*> getCollisionObjects() { return this->collisionObjects; };
+		list<CollisionObject*> getCollisionObjects() { return this->collisionObjects; };
 
 		// To clear the current list of Collision Objects
-		void clearObjects() { this->collisionObjects.clear(); this->collisionObjects = vector<CollisionObject*>{}; };
+		void clearObjects() { this->collisionObjects.clear(); this->collisionObjects = list<CollisionObject*>{}; };
 	};
 
 	// Check that the Satellite is breaking apart into the proper number of objects
@@ -193,7 +194,7 @@ private:
 		testSatellite->breakApart(&fakeSim, parts);
 
 		// VERIFY
-		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
+		list<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
 		assert(collisionObjects.size() == expectedSubParts);
 		
 		// Check that all objects are travelling in different directions (Satellite's velocity added)
@@ -201,10 +202,11 @@ private:
 		vector<Velocity>::iterator dir = expectedDirections.begin();
 		
 		
-		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
+		for (CollisionObject* testing : collisionObjects)
+		//for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
 			// Iterators changed into their classes
-			CollisionObject* testing = (*obj);
+			//CollisionObject* testing = (*obj);
 			Position expectedPos = *pos;
 			Velocity expectedVel = *dir;
 
@@ -266,17 +268,18 @@ private:
 		testSatellite->breakApart(&fakeSim, parts);
 
 		// VERIFY
-		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
+		list<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
 		assert(collisionObjects.size() == expectedSubParts);
 
 		// Check that all objects are travelling in different directions (Satellite's velocity added)
 		vector<Position>::iterator pos = expectedPositions.begin();
 		vector<Velocity>::iterator dir = expectedDirections.begin();
 		
-		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
+		for (CollisionObject* testingX : collisionObjects)
+		//for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
 			// Iterators changed into their classes
-			CollisionObject* testingX = (*obj);
+			//CollisionObject* testingX = (*obj);
 			Position expectedPos = *pos;
 			Velocity expectedVel = *dir;
 			
@@ -336,16 +339,17 @@ private:
 		testSatellite->breakApart(&fakeSim, parts);
 
 		// VERIFY
-		vector<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
+		list<CollisionObject*> collisionObjects = fakeSim.getCollisionObjects();
 		assert(collisionObjects.size() == expectedSubParts);
 
 		// Check that all objects are travelling in different directions (Satellite's velocity added)
 		vector<Position>::iterator pos = expectedPositions.begin();
 		vector<Velocity>::iterator dir = expectedDirections.begin();
 
-		for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
+		for (CollisionObject* testingY : collisionObjects)
+		//for (vector<CollisionObject*>::iterator obj = collisionObjects.begin(); obj != collisionObjects.end(); obj++)
 		{
-			CollisionObject* testingY = (*obj);
+			//CollisionObject* testingY = (*obj);
 			Position expectedPos = *pos;
 			Velocity expectedVel = *dir;
 

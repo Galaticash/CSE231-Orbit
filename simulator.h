@@ -11,6 +11,8 @@
 #pragma once
 #include "uiInteract.h" // To get user input
 
+#include <list> // To store a collection of Collision Object pointers
+
 // Objects used in the Simulator
 #include "star.h"
 #include "earth.h"
@@ -38,9 +40,14 @@ public:
       createStars(500); // Create a given number of Stars
 
       this->timeDialation = TIME;  // Set this Simulator's time dialation
-
-      this->debug = false; // DEBUG: Show debug tools at the start
    };
+
+   ~Simulator()
+   {
+      // Delete all Collsion Objects and Stars
+      while (!collisionObjects.empty()) delete collisionObjects.front(), collisionObjects.pop_front();
+      while (!stars.empty()) delete stars.front(), stars.pop_front();
+   }
 
    /*************************************
    * ADD OBJECTS
@@ -88,15 +95,15 @@ public:
    ********************************************/
    void update();
 
-   vector<Object*> getObjects(); // Get all Objects to be drawn
+   list<Object*> getObjects(); // Get all Objects to be drawn
 
    bool getDebug() { return this->debug; }; // DEBUG: Returns if debugging features should be shown
 
 protected:
-   vector<CollisionObject*> collisionObjects;	// All Objects that can collide
+   list<CollisionObject*> collisionObjects; // All Objects that can collide
    Spaceship* ship;	   // The user-controlled Spaceship
    Earth* planet;		   // The planet at the center (0, 0) of the Simulation
-   vector<Star> stars;	// All the stars to display
+   list<Star*> stars; // All the stars to display
    double timeDialation;// Real-world seconds between frames
 
    bool debug; // Toggle Debugging features on/off

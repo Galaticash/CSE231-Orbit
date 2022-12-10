@@ -28,28 +28,9 @@ using namespace std;
 ***************************************/
 void drawObject(const Object* obj, bool debug = false)
 {
-   string objType = typeid(*obj).name();
-   // DEBUG: cout << typeid(*obj).name() << ": " << sizeof(obj->getVisual()) << ' ';
-
-   // DEBUG: To draw Debug tools (collision Radius and Rotation Angle)
-   if (debug)
-   {
-      // Don't draw for smaller Objects or the Earth
-      if (objType != "class Star" 
-         //&& objType != "class Fragment" 
-         && objType != "class Bullet" && objType != "class Earth")
-      {
-         // Draw Direction and Radius
-         double radius = objType == "class Fragment" ? 10 : 15;
-         //double radius = 15;
-
-         //drawDirection((obj)->getPosition(), 15, (obj)->getRotation()); // Facing direction
-         drawDirection((obj)->getPosition(), radius, (obj)->getVelocity().getAngle()); // Velocity direction
-         drawCircle((obj)->getPosition(), 1); // Object's Position Point
-      }
-   }
-   
    // Draws based on obj type, instead of rewriting the entire Draw class
+   string objType = typeid(*obj).name();
+
    if (objType == "class Spaceship")
    {
       // DEBUG: Show Position, Velocity, and Rotation Angle
@@ -87,7 +68,7 @@ void drawObject(const Object* obj, bool debug = false)
          string vRad = to_string(obj->getVelocity().getAngle().getRadian());
          string vDeg = to_string(obj->getVelocity().getAngle().getDegree());
          string vRotation = "Velocity Angle: " + vRad.substr(0, vRad.find(".") + 3) + " radians or " + vDeg.substr(0, vDeg.find(".") + 3) + " degrees";
-         drawText(textPos, (vRotation).c_str());*/        
+         drawText(textPos, (vRotation).c_str());*/
       }
 
       drawShip(obj->getPosition(), obj->getRotation().getRadian(), ((Spaceship*)obj)->getThrust());
@@ -155,6 +136,25 @@ void drawObject(const Object* obj, bool debug = false)
       cout << "Unidentified " << objType << endl;
       assert(false);
    }
+
+   // DEBUG: To draw Debug tools (collision Radius and Rotation Angle)
+   if (debug)
+   {
+      // Don't draw for smaller Objects or the Earth
+      if (objType != "class Star"
+         //&& objType != "class Fragment" 
+         && objType != "class Bullet" && objType != "class Earth")
+      {
+         // Draw Direction and Radius
+         double radius = objType == "class Fragment" ? 10 : 15;
+         //double radius = 15;
+
+         //drawDirection((obj)->getPosition(), 15, (obj)->getRotation()); // Facing direction
+         //drawDirection((obj)->getPosition(), radius, (obj)->getVelocity().getAngle()); // Velocity direction
+         drawCircle((obj)->getPosition(), ((CollisionObject*)obj)->getRadius()); // Object's Collision
+      }
+   }
+
 }
 
 /*************************************
@@ -175,11 +175,9 @@ void callBack(const Interface* pUI, void* p)
    // Update all Objects in the Simulation
    pSim->update();
 
-   // Draw every item in the simulator
-   vector<Object*> simObjects = pSim->getObjects();
-   for (vector<Object*>::iterator it = simObjects.begin(); it != simObjects.end(); it++)
+   for (Object* obj : pSim->getObjects())
       // Draw the Object based on its class type
-      drawObject(*it, pSim->getDebug());
+      drawObject(obj, pSim->getDebug());
 }
 
 double TwoDValue::metersFromPixels = 40.0;

@@ -16,11 +16,17 @@
 * CONSTANTS
 *************************/
 // Simulator Information
-const double FPS = 30;                    // The number of frames drawn per second     
-const double TIME_DILATION = 24 * 60;     // One minute in simulator = One day in real world
+const double FPS = 30.0;                    // The number of frames drawn per second   
+
+// Time on Earth
+const double SECONDS_PER_MIN = 60.0;
+const double MINUTES_PER_HOUR = 60.0;
+const double HOURS_PER_DAY = 24.0;
+
+const double TIME_DILATION = HOURS_PER_DAY * SECONDS_PER_MIN;     // One minute in simulator = One day in real world
 
 // Planet Information
-const double SECONDS_DAY = 24 * 60 * 60; // 24 hours * 60 minutes * 60 seconds
+const double SECONDS_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MIN; // 24 hours * 60 minutes * 60 seconds
 const double ROTATION_SPEED = -(2 * M_PI / FPS) * TIME_DILATION / SECONDS_DAY;
 
 const double GRAVITY = -9.8067;           // Gravity constant in m/s^2

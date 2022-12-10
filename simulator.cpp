@@ -60,7 +60,7 @@ void Simulator::createStars(int numStars)
       initial.setPixelsX(random(-500, 500));
       initial.setPixelsY(random(-500, 500));
 
-      this->stars.push_back(Star(initial));
+      this->stars.push_back(new Star(initial));
    }
 };
 
@@ -69,13 +69,8 @@ void Simulator::createStars(int numStars)
 * Removes a pointer to a given Collision Object from the Simulators's collection
 ********************************************/
 void Simulator::removeCollider(CollisionObject* removeObj) {
-   // If the given pointer is in the vector, remove it
-   vector<CollisionObject*>::iterator removeIt = find(collisionObjects.begin(), collisionObjects.end(), removeObj);
-   if (removeIt != collisionObjects.end())
-   {
-      //delete* removeIt; // Not in charge of deleting the object
-      this->collisionObjects.erase(removeIt);
-   }
+   // Removes the given pointer from the list
+   this->collisionObjects.remove(removeObj);
 };
 
 /*********************************************
@@ -106,7 +101,6 @@ void Simulator::getInput(const Interface* pUI)
       else
          ship->setThrust(false);
 
-      // TODO: Add per button press or per update?
       if (ship->getThrust())
       {
          Velocity v;
@@ -117,13 +111,11 @@ void Simulator::getInput(const Interface* pUI)
 
       // Check for Bullet shooting (spacebar)
       if (pUI->isSpace())
-      {
          // Create a new bullet in front of the Spaceship
          createBullet(this->ship->getPosition(), this->ship->getVelocity(), this->ship->getRotation());
-      }
    }
 
-   // EXTRA: Toggle debug view (up arrow)
+   // DEBUG: Toggle debug view (up arrow)
    if (pUI->isUp())
       this->debug = debug ? false : true;
 }
@@ -136,59 +128,59 @@ void Simulator::getInput(const Interface* pUI)
 void Simulator::update()
 {
    // Collect all objects that are marked for destruction
-   vector<CollisionObject*> destroyObjs = {};
+   list<CollisionObject*> destroyObjsL;
 
    // Check for collisions between the Simulator's collisionObjects,
    //  will update the destroyed bool for any that collide
    updateCollisions();
 
-   // For every Collision Object in the Simulator,
-   for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
+   // For every Collision Object in the Simulator's list,
+   for (CollisionObject* obj : collisionObjects)
    {
       // If it has been marked for destruction,
       //  (either from a collision or a timer expiring)
-      if ((*it)->getDestroyed())
+      if (obj->getDestroyed())
          // Add to list of objects to break apart
-         destroyObjs.push_back(*it);
+         destroyObjsL.push_back(obj);
 
-      // Otherwise, has not been destroyed, update Position
+      // Otherwise, has not been destroyed, update the Collision Object's Position
       //  (NOTE: Converts the Earth's radius from Pixels to Meters using zoom)
       else
-         (*it)->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * Position().getZoom()));
+         obj->update(this->timeDialation, this->planet->getGravity(), (this->planet->getRadius() * Position().getZoom()));
    }
 
    // For every Collision Object that has been marked for destruction,
-   for (vector<CollisionObject*>::iterator it = destroyObjs.begin(); it != destroyObjs.end(); it++)
+   for (CollisionObject* obj : destroyObjsL)
       // Break the object apart, adding their subParts to the Simulator's list of collisionObjects
-      ((CollisionObject*)(*it))->breakApart(this);
+      obj->breakApart(this);
 
-   destroyObjs.clear(); // Clear the vector of Collision Objects
+   destroyObjsL.clear(); // Clear the list of Collision Objects
 
    // Updates the frame of all the Stars
-   for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
-      (*it).update(this->timeDialation);
+   for (Star* star : stars)
+      star->update(this->timeDialation);
 }
 
 /******************************
 * GET OBJECTS
 * Creates a list of all objects in the simulator.
 **************************************/
-vector<Object*> Simulator::getObjects() {
+list<Object*> Simulator::getObjects() {
    // Returns the pointers for all the Objects to be drawn
-   vector<Object*> objects;
+   list<Object*> objects;
 
    // Get pointers for all the Stars
-   for (vector<Star>::iterator it = this->stars.begin(); it != this->stars.end(); it++)
+   for (Object* star : stars)
    {
       // Add a pointer to the Star (cast to Object*)
-      objects.push_back(&(*it));
+      //Object* objectP = &star;
+      objects.push_back(star);
    }
+
    // Get pointers for all of the Collision Objects
-   for (vector<CollisionObject*>::iterator it = this->collisionObjects.begin(); it != this->collisionObjects.end(); it++)
-   {
+   for(Object* obj : collisionObjects)
       // Add the Collision Object pointer (cast to Object*)
-      objects.push_back(*it);
-   }
+      objects.push_back(obj);
 
    return objects;
 }
@@ -200,26 +192,16 @@ vector<Object*> Simulator::getObjects() {
 * the inner loop having one less than the outer loop.
 *******************************************/
 void Simulator::updateCollisions() {
-   // DEGBUG: Efficiency of this algorithm
-   //int outerCount = 0; // 12 <-- 12 Objects total
-   //int innerCount = 0; // 66 <-- comparisons (12 + 11 + 10 + 9..)
 
    // For every Collison Object in the Simulator's collisionObjects,
-   for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++) 
-   {
-      // For every Collison Object in the Simulator's collisionObjects,
-      for (vector<CollisionObject*>::iterator objOneIt = this->collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
-      {
-         // Check against every object except itself
-         for (vector<CollisionObject*>::iterator objTwoIt = objOneIt + 1; objTwoIt != this->collisionObjects.end(); objTwoIt++)
-         {
-            // Check if the two Objects have hit eachother,
-            if ((*objOneIt)->isHit(*(*objTwoIt)))
-            {
-               // Tell the second object it was also hit
-               (*objTwoIt)->setDestroyed(true);
-            }
-         }
-      }
-   };
+   for (list<CollisionObject*>::const_iterator objOneIt = collisionObjects.begin(); objOneIt != this->collisionObjects.end(); objOneIt++)
+
+      // Check against every object except itself
+      for (list<CollisionObject*>::const_iterator objTwoIt = next(objOneIt); objTwoIt != this->collisionObjects.end(); objTwoIt++)
+
+         // Check if the two Objects have hit eachother,
+         if ((*objOneIt)->isHit(*(*objTwoIt)))
+
+            // Tell the second object it was also hit
+            (*objTwoIt)->setDestroyed(true);
 };
