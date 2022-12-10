@@ -93,7 +93,7 @@ public:
 
    // Get the hypotenuse of the x and y values
    double getTotal() {
-      // Returns 0 if the x or y value is 0
+      // Returns 0 if the x and y values are 0
       if (x == 0 && y == 0)
          return 0;
 
@@ -113,14 +113,3 @@ protected:
 // stream I/O useful for debugging
 std::ostream& operator << (std::ostream& out, const TwoDValue& twoD);
 std::istream& operator >> (std::istream& in, TwoDValue& twoD);
-
-/*********************************************
- * PT
- * Trivial point
- * A simpler version of Position, used in UIDraw
- *********************************************/
-struct PT
-{
-   double x;
-   double y;
-};

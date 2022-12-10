@@ -41,6 +41,17 @@
 
 using namespace std;
 
+/*********************************************
+ * PT
+ * Trivial point
+ * A simpler version of TwoDValue/Position
+ *********************************************/
+struct PT
+{
+   double x;
+   double y;
+};
+
 /************************************************************************
  * ROTATE
  * Rotate a given point (point) around a given origin (center) by a given
