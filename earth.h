@@ -52,7 +52,7 @@ public:
    ***************************************/
    void update(double time, double gravity = 0.0, double radius = 0.0) { 
       Angle test;
-      test.setDegree(ROTATION_SPEED);
+      test.addRadian(ROTATION_SPEED);
       this->rotationAngle += test.getRadian();
    }
 
